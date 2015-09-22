@@ -1,18 +1,22 @@
 #!/bin/sh
 
-[[ -z "$1" ]] && TEMPLATE="c#" || a="$1"
-[[ -z "$2" ]] && FOLDER="MyApp" || a="$2"
-[[ -z "$3" ]] && NAME="MyApp" || a="$3"
-[[ -z "$4" ]] && PACKAGE="MyPackage" || a="$4"
-[[ -z "$5" ]] && VERSION="v4.5" || a="$5"
-[[ -z "$6" ]] && TYPE="WinExe" || a="$6"
-[[ -z "$7" ]] && ASSEMBLYVERSION="1.0.0.0" || a="$7"
-[[ -z "$8" ]] && ASSEMBLYVERSIONQUALIFIER="-SNAPSHOT" || a="$7"
+echo usage Examples
+echo iwant c# MyExecutable Com.Company.MySuite v4.5 WinExe 1.0.0.0 -SNAPSHOT
+echo iwant c# MyLibrary Com.Company.MySuite v4.5 Library 1.0.0.0 -SNAPSHOT
+
+[[ -z "$1" ]] && TEMPLATE="c#" || TEMPLATE="$1"
+[[ -z "$2" ]] && NAME="MyApp" || NAME="$2"
+[[ -z "$3" ]] && PACKAGE="MyPackage" || PACKAGE="$3"
+[[ -z "$4" ]] && VERSION="v4.5" || VERSION="$4"
+[[ -z "$5" ]] && TYPE="WinExe" || TYPE="$5"
+[[ -z "$6" ]] && ASSEMBLYVERSION="1.0.0.0" || ASSEMBLYVERSION="$6"
+[[ -z "$7" ]] && ASSEMBLYVERSIONQUALIFIER="-SNAPSHOT" || ASSEMBLYVERSIONQUALIFIER="$7"
 
 PROJECTGUID=`uuidgen`
 COMGUID=`uuidgen`
 
 TEMPLATEDIR=templates/${TEMPLATE}
+FOLDER=${NAME}
 echo using template ${TEMPLATE}
 echo using folder ${FOLDER}
 echo using name ${NAME}

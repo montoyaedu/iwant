@@ -6,6 +6,9 @@ Create a new project.
 
 `````
     ./iwant
+    usage Examples
+    iwant c# MyExecutable Com.Company.MySuite v4.5 WinExe 1.0.0.0 -SNAPSHOT
+    iwant c# MyLibrary Com.Company.MySuite v4.5 Library 1.0.0.0 -SNAPSHOT
     using template c#
     using folder MyApp
     using name MyApp

@@ -10,6 +10,7 @@ set VERSION=%4
 set TYPE=%5
 set ASSEMBLYVERSION=%6
 set ASSEMBLYVERSIONQUALIFIER=%7
+set ARTIFACTEXTENSION=%8
 
 if "%TEMPLATE%"=="" set TEMPLATE=c#
 if "%NAME%"=="" set NAME=MyApp
@@ -18,6 +19,7 @@ if "%VERSION%"=="" set VERSION=v4.0
 if "%TYPE%"=="" set TYPE=Exe
 if "%ASSEMBLYVERSION%"=="" set ASSEMBLYVERSION=1.0.0.0
 if "%ASSEMBLYVERSIONQUALIFIER%"=="" set ASSEMBLYVERSIONQUALIFIER=-SNAPSHOT
+if "%ARTIFACTEXTENSION%"=="" set ARTIFACTEXTENSION=exe
 
 Uuidgen.exe>tmp
 set /p PROJECTGUID=<tmp
@@ -46,6 +48,7 @@ echo using COM guid %COMGUID%
 echo using solution guid %SOLUTIONGUID%
 echo using assembly version %ASSEMBLYVERSION%
 echo using assembly version qualifier %ASSEMBLYVERSIONQUALIFIER%
+echo using artifact extension %ARTIFACTEXTENSION%
 
 rmdir /Q /S %FOLDER%
 
@@ -57,6 +60,7 @@ echo s/${AssemblyName}/%NAME%/ > tmp
 echo s/${RootNamespace}/%PACKAGE%/ >> tmp
 echo s/${TargetFrameworkVersion}/%VERSION%/ >> tmp
 echo s/${OutputType}/%TYPE%/ >> tmp
+echo s/${ArtifactExtension}/%ARTIFACTEXTENSION%/ >> tmp
 echo s/${ProjectName}/%PROJECTNAME%/ >> tmp
 echo s/${ProjectGuid}/%PROJECTGUID%/ >> tmp
 echo s/${ComGuid}/%COMGUID%/ >> tmp
@@ -70,6 +74,9 @@ sed.exe -f tmp %FOLDER%\App.cs>%FOLDER%\%NAME%.cs
 sed.exe -f tmp %FOLDER%\Properties\AssemblyInfo.cstemplate>%FOLDER%\Properties\AssemblyInfo.cs
 sed.exe -f tmp %FOLDER%\pom.xmltemplate>%FOLDER%\pom.xml
 sed.exe -f tmp %FOLDER%\version.txttemplate>%FOLDER%\version.txt
+sed.exe -f tmp %FOLDER%\buildsetup.isstemplate>%FOLDER%\buildsetup.iss
+sed.exe -f tmp %FOLDER%\release.template>%FOLDER%\release
+sed.exe -f tmp %FOLDER%\release.battemplate>%FOLDER%\release.bat
 
 copy %FOLDER%\app_%VERSION%.configtemplate %FOLDER%\app.config
 
@@ -81,5 +88,9 @@ del /Q %FOLDER%\Properties\AssemblyInfo.cstemplate
 del /Q %FOLDER%\pom.xmltemplate
 del /Q %FOLDER%\*.configtemplate
 del /Q %FOLDER%\version.txttemplate
+del /Q %FOLDER%\buildsetup.isstemplate
+del /Q %FOLDER%\release.template
+del /Q %FOLDER%\release.battemplate
+
 
 dir %FOLDER%

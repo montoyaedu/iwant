@@ -72,6 +72,8 @@ ${SEDXX} buildsetup.isstemplate > buildsetup.iss
 ${SEDXX} release.template > release
 ${SEDXX} release.battemplate > release.bat
 
+chmod +x release
+
 cp app_${VERSION}.configtemplate app.config
 
 rm App_vs2010.sln

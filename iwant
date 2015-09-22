@@ -17,7 +17,9 @@ COMGUID=`uuidgen`
 SOLUTIONGUID=`uuidgen`
 
 TEMPLATEDIR=templates/${TEMPLATE}
-FOLDER=${NAME}
+PROJECTNAME=${PACKAGE}.${NAME}
+FOLDER=${PROJECTNAME}
+
 echo using template ${TEMPLATE}
 echo using folder ${FOLDER}
 echo using name ${NAME}
@@ -42,8 +44,6 @@ fi
 
 cp -R ${TEMPLATEDIR} ${FOLDER}
 cd ${FOLDER}
-
-PROJECTNAME=${PACKAGE}.${NAME}
 
 SEDXX='sed 
  -e s/\${AssemblyName}/'${NAME}'/ 

@@ -32,7 +32,9 @@ set /p SOLUTIONGUID=<tmp
 rm tmp
 
 set TEMPLATEDIR=templates\%TEMPLATE%
-set FOLDER=%NAME%
+set PROJECTNAME=%PACKAGE%.%NAME%
+set FOLDER=%PROJECTNAME%
+
 echo using template %TEMPLATE%
 echo using folder %FOLDER%
 echo using name %NAME%
@@ -50,8 +52,6 @@ rmdir /Q /S %FOLDER%
 md %FOLDER%
 
 xcopy /E /Y /Q %TEMPLATEDIR% %FOLDER%
-
-set PROJECTNAME=%PACKAGE%.%NAME%
 
 echo s/${AssemblyName}/%NAME%/ > tmp
 echo s/${RootNamespace}/%PACKAGE%/ >> tmp

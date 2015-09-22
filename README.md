@@ -20,8 +20,8 @@ Create a new project.
 `````
     iwant
     usage Examples
-    iwant c# MyExecutable Com.Company.MySuite v4.0 WinExe 1.0.0.0 -SNAPSHOT
-    iwant c# MyLibrary Com.Company.MySuite v4.0 Library 1.0.0.0 -SNAPSHOT
+    iwant c# MyExecutable Com.Company.MySuite v4.0 WinExe 1.0.0.0 -SNAPSHOT exe
+    iwant c# MyLibrary Com.Company.MySuite v4.0 Library 1.0.0.0 -SNAPSHOT dll
     using template c#
     using folder MyApp
     using name MyApp

@@ -152,10 +152,15 @@ Add file to staging area and commit.
 Acknowledgements.
 =================
 
-Thanks to all developers involved in:
+Thanks to (but not limited to) all developers involved in:
 
-http://gnuwin32.sourceforge.net/packages/sed.htm
-https://gist.github.com/derekstavis/8288379
-https://github.com/ethiclab/dotnet-maven-plugin
-http://www.mojohaus.org/versions-maven-plugin/
-http://www.jrsoftware.org/files/is/license.txt
+1. http://gnuwin32.sourceforge.net/packages/sed.htm
+1. https://gist.github.com/derekstavis/8288379
+1. https://github.com/ethiclab/dotnet-maven-plugin
+1. http://www.mojohaus.org/versions-maven-plugin/
+1. http://www.jrsoftware.org/files/is/license.txt
+1. https://maven.apache.org/
+1. https://github.com/
+1. https://git-scm.com/
+1. https://www.visualstudio.com/
+

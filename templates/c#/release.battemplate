@@ -8,7 +8,7 @@ for /f "skip=2 tokens=2,*" %%A in ('reg.exe query "HKLM\SOFTWARE\Microsoft\MSBui
 IF NOT EXIST %MSBUILDDIR%nul goto BuildError
 IF NOT EXIST %MSBUILDDIR%msbuild.exe goto BuildError
 rem pre-build project
-"%MSBUILDDIR%msbuild.exe" /t:Rebuild /p:Configuration=Debug
+"%MSBUILDDIR%msbuild.exe" /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
 if ERRORLEVEL 1 goto BuildError
 rem pre-create setup package.
 iscc.exe buildsetup.iss
@@ -41,7 +41,7 @@ for /F "tokens=*" %%A in (version.txt) do (
 git tag --file=version.txt %var1%
 if ERRORLEVEL 1 goto BuildError
 rem build project after tag
-"%MSBUILDDIR%msbuild.exe" /t:Rebuild /p:Configuration=Debug
+"%MSBUILDDIR%msbuild.exe" /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
 if ERRORLEVEL 1 goto BuildError
 rem create setup package.
 iscc.exe buildsetup.iss

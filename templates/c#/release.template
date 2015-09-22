@@ -1,6 +1,6 @@
 #!/bin/sh
 
-xbuild /t:Rebuild /p:Configuration=Debug *.sln
+xbuild /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
 #iscc.exe buildsetup.iss
 mvn dotnet:release
 VERSION=`cat version.txt`
@@ -9,7 +9,7 @@ mvn versions:commit
 mvn dotnet:version
 git commit -a -m "[RELEASE] - released version ${VERSION}"
 git tag --file=version.txt ${VERSION}
-xbuild /t:Rebuild /p:Configuration=Debug *.sln
+xbuild /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
 #iscc.exe buildsetup.iss
 mvn dotnet:next
 #mvn dotnet:next -DversionQualifier=RC

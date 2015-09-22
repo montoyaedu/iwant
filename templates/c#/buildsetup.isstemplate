@@ -1,7 +1,7 @@
-#define MyAppName "${AssemblyName}"
-#define MyAppVersion GetStringFileInfo('${ProjectName}\bin\Debug\${ProjectName}.${ArtifactExtension}', 'ProductVersion' )
-#define MyAppPublisher "${PublisherName}"
-#define MyAppURL "${PublisherSite}"
+#define MyAppName "${ProjectName}"
+#define MyAppVersion GetStringFileInfo('bin\Debug\${ProjectName}.${ArtifactExtension}', 'ProductVersion' )
+#define MyAppPublisher "Your Company Inc."
+#define MyAppURL "http://www.yourcompany.com"
 #define MyAppExeName "${ProjectName}.${ArtifactExtension}"
 
 [Setup]
@@ -17,7 +17,7 @@ DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=dist
 OutputBaseFilename={#MyAppName}-{#MyAppVersion}-Setup
-SetupIconFile=company.ico
+SetupIconFile=setup.ico
 Compression=lzma
 SolidCompression=yes
 ShowTasksTreeLines=True
@@ -26,11 +26,10 @@ ShowTasksTreeLines=True
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "${ProjectName}\bin\Debug\*.exe"; DestDir: "{app}"; Flags: replacesameversion
-Source: "${ProjectName}\bin\Debug\*.pdb"; DestDir: "{app}"; Flags: replacesameversion
-Source: "${ProjectName}\bin\Debug\*.config"; DestDir: "{app}"; Flags: onlyifdoesntexist
-Source: "${ProjectName}\bin\Debug\log4net.xml"; DestDir: "{app}"; Flags: onlyifdoesntexist
-Source: "${ProjectName}\bin\Debug\*.dll"; DestDir: "{app}"; Flags: replacesameversion
+Source: "bin\Debug\*.exe"; DestDir: "{app}"; Flags: replacesameversion
+Source: "bin\Debug\*.pdb"; DestDir: "{app}"; Flags: replacesameversion
+Source: "bin\Debug\*.config"; DestDir: "{app}"; Flags: onlyifdoesntexist
+Source: "bin\Debug\*.dll"; DestDir: "{app}"; Flags: replacesameversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

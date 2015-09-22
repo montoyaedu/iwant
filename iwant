@@ -11,10 +11,12 @@ echo iwant c# MyLibrary Com.Company.MySuite v4.0 Library 1.0.0.0 -SNAPSHOT
 [[ -z "$5" ]] && TYPE="Exe" || TYPE="$5"
 [[ -z "$6" ]] && ASSEMBLYVERSION="1.0.0.0" || ASSEMBLYVERSION="$6"
 [[ -z "$7" ]] && ASSEMBLYVERSIONQUALIFIER="-SNAPSHOT" || ASSEMBLYVERSIONQUALIFIER="$7"
+[[ -z "$8" ]] && ARTIFACTEXTENSION="exe" || TYPE="$8"
 
 PROJECTGUID=`uuidgen`
 COMGUID=`uuidgen`
 SOLUTIONGUID=`uuidgen`
+SETUPGUID=`uuidgen`
 
 TEMPLATEDIR=templates/${TEMPLATE}
 PROJECTNAME=${PACKAGE}.${NAME}
@@ -29,8 +31,10 @@ echo using type ${TYPE}
 echo using project guid ${PROJECTGUID}
 echo using COM guid ${COMGUID}
 echo using solution guid ${SOLUTIONGUID}
+echo using setup guid ${SETUPGUID}
 echo using assembly version ${ASSEMBLYVERSION}
 echo using assembly version qualifier ${ASSEMBLYVERSIONQUALIFIER}
+echo using artifact extension ${ARTIFACTEXTENSION}
 
 if [ ! -d "$TEMPLATEDIR" ]; then
   echo template ${TEMPLATE} does not exist.
@@ -50,10 +54,12 @@ SEDXX='sed
  -e s/\${RootNamespace}/'${PACKAGE}'/ 
  -e s/\${TargetFrameworkVersion}/'${VERSION}'/ 
  -e s/\${OutputType}/'${TYPE}'/ 
+ -e s/\${ArtifactExtension}/'${ARTIFACTEXTENSION}'/ 
  -e s/\${ProjectName}/'${PROJECTNAME}'/ 
  -e s/\${ProjectGuid}/'${PROJECTGUID}'/ 
  -e s/\${ComGuid}/'${COMGUID}'/ 
  -e s/\${SolutionGuid}/'${SOLUTIONGUID}'/ 
+ -e s/\${SetupGuid}/'${SETUPGUID}'/ 
  -e s/\${AssemblyVersion}/'${ASSEMBLYVERSION}'/ 
  -e s/\${AssemblyVersionQualifier}/'${ASSEMBLYVERSIONQUALIFIER}'/'
 
@@ -65,6 +71,9 @@ ${SEDXX} App.cs > ${NAME}.cs
 ${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
 ${SEDXX} pom.xmltemplate > pom.xml
 ${SEDXX} version.txttemplate > version.txt
+${SEDXX} buildsetup.isstemplate > buildsetup.iss
+${SEDXX} release.template > release
+${SEDXX} release.battemplate > release.bat
 
 cp app_${VERSION}.configtemplate app.config
 
@@ -75,3 +84,6 @@ rm Properties/AssemblyInfo.cstemplate
 rm pom.xmltemplate
 rm *.configtemplate
 rm version.txttemplate
+rm buildsetup.isstemplate
+rm release.template
+rm release.battemplate

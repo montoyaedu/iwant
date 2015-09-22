@@ -1,6 +1,14 @@
 # iwant
 An effort to create a simple programming project starter. (Something like mvn archetype:generate but easier)
 
+Requirements.
+=============
+
+1. Unix or Windows system.
+1. maven 3.x
+1. git
+1. https://github.com/ethiclab/dotnet-maven-plugin
+
 Install.
 ========
 
@@ -8,10 +16,11 @@ Download the latest project version and add the folder to your PATH environment 
 
 set the IWANT_HOME environment variable with the path of the iwant folder.
 
+https://github.com/montoyaedu/iwant/releases/download/v1.0.0.0/iwant-app.zip
+
 `````
-git clone https://github.com/montoyaedu/iwant
-export PATH=$PATH:<iwant path>
-export IWANT_HOME=<iwant path>
+export PATH=$PATH:<iwant-app path>
+export IWANT_HOME=<iwant-app path>
 `````
 
 Create a new project.

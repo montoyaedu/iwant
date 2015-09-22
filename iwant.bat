@@ -33,7 +33,7 @@ Uuidgen.exe>tmp
 set /p SOLUTIONGUID=<tmp
 rm tmp
 
-set TEMPLATEDIR=templates\%TEMPLATE%
+set TEMPLATEDIR=%IWANT_HOME%\templates\%TEMPLATE%
 set PROJECTNAME=%PACKAGE%.%NAME%
 set FOLDER=%PROJECTNAME%
 

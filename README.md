@@ -1,11 +1,24 @@
 # iwant
 An effort to create a simple programming project starter. (Something like mvn archetype:generate but easier)
 
+Install.
+========
+
+Download the latest project version and add the folder to your PATH environment variable.
+
+set the IWANT_HOME environment variable with the path of the iwant folder.
+
+`````
+git clone https://github.com/montoyaedu/iwant
+export PATH=$PATH:<iwant path>
+export IWANT_HOME=<iwant path>
+`````
+
 Create a new project.
 =====================
 
 `````
-    ./iwant
+    iwant
     usage Examples
     iwant c# MyExecutable Com.Company.MySuite v4.0 WinExe 1.0.0.0 -SNAPSHOT
     iwant c# MyLibrary Com.Company.MySuite v4.0 Library 1.0.0.0 -SNAPSHOT
@@ -135,3 +148,14 @@ Add file to staging area and commit.
     git add Properties/AssemblyInfo.cs
     git commit -m "[RELEASE] - released version 2.0.0.1"
 `````
+
+Acknowledgements.
+=================
+
+Thanks to all developers involved in:
+
+http://gnuwin32.sourceforge.net/packages/sed.htm
+https://gist.github.com/derekstavis/8288379
+https://github.com/ethiclab/dotnet-maven-plugin
+http://www.mojohaus.org/versions-maven-plugin/
+http://www.jrsoftware.org/files/is/license.txt

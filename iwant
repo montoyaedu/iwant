@@ -64,6 +64,7 @@ ${SEDXX} App.csproj > ${PROJECTNAME}.csproj
 ${SEDXX} App.cs > ${NAME}.cs
 ${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
 ${SEDXX} pom.xmltemplate > pom.xml
+${SEDXX} version.txttemplate > version.txt
 
 cp app_${VERSION}.configtemplate app.config
 
@@ -73,3 +74,4 @@ rm App.cs
 rm Properties/AssemblyInfo.cstemplate
 rm pom.xmltemplate
 rm *.configtemplate
+rm version.txttemplate

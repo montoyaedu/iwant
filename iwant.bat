@@ -69,6 +69,7 @@ sed.exe -f tmp %FOLDER%\App.csproj>%FOLDER%\%PROJECTNAME%.csproj
 sed.exe -f tmp %FOLDER%\App.cs>%FOLDER%\%NAME%.cs
 sed.exe -f tmp %FOLDER%\Properties\AssemblyInfo.cstemplate>%FOLDER%\Properties\AssemblyInfo.cs
 sed.exe -f tmp %FOLDER%\pom.xmltemplate>%FOLDER%\pom.xml
+sed.exe -f tmp %FOLDER%\version.txttemplate>%FOLDER%\version.txt
 
 copy %FOLDER%\app_%VERSION%.configtemplate %FOLDER%\app.config
 
@@ -79,5 +80,6 @@ del /Q %FOLDER%\App.cs
 del /Q %FOLDER%\Properties\AssemblyInfo.cstemplate
 del /Q %FOLDER%\pom.xmltemplate
 del /Q %FOLDER%\*.configtemplate
+del /Q %FOLDER%\version.txttemplate
 
 dir %FOLDER%

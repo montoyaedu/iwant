@@ -43,11 +43,14 @@ fi
 cp -R ${TEMPLATEDIR} ${FOLDER}
 cd ${FOLDER}
 
+PROJECTNAME=${PACKAGE}.${NAME}
+
 SEDXX='sed 
  -e s/\${AssemblyName}/'${NAME}'/ 
  -e s/\${RootNamespace}/'${PACKAGE}'/ 
  -e s/\${TargetFrameworkVersion}/'${VERSION}'/ 
  -e s/\${OutputType}/'${TYPE}'/ 
+ -e s/\${ProjectName}/'${PROJECTNAME}'/ 
  -e s/\${ProjectGuid}/'${PROJECTGUID}'/ 
  -e s/\${ComGuid}/'${COMGUID}'/ 
  -e s/\${SolutionGuid}/'${SOLUTIONGUID}'/ 
@@ -56,8 +59,8 @@ SEDXX='sed
 
 echo using substitution command ${SEDXX}
 
-${SEDXX} App_vs2010.sln > ${PACKAGE}.${NAME}_vs2010.sln
-${SEDXX} App.csproj > ${PACKAGE}.${NAME}.csproj
+${SEDXX} App_vs2010.sln > ${PROJECTNAME}_vs2010.sln
+${SEDXX} App.csproj > ${PROJECTNAME}.csproj
 ${SEDXX} App.cs > ${NAME}.cs
 ${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
 ${SEDXX} pom.xmltemplate > pom.xml

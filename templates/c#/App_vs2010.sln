@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{${SolutionGuid}}") = "${RootNamespace}.${AssemblyName}", "${RootNamespace}.${AssemblyName}.csproj", "{${ProjectGuid}}"
+Project("{${SolutionGuid}}") = "${RootNamespace}.${AssemblyName}", "${ProjectName}.csproj", "{${ProjectGuid}}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

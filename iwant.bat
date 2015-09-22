@@ -51,18 +51,21 @@ md %FOLDER%
 
 xcopy /E /Y /Q %TEMPLATEDIR% %FOLDER%
 
+set PROJECTNAME=%PACKAGE%.%NAME%
+
 echo s/${AssemblyName}/%NAME%/ > tmp
 echo s/${RootNamespace}/%PACKAGE%/ >> tmp
 echo s/${TargetFrameworkVersion}/%VERSION%/ >> tmp
 echo s/${OutputType}/%TYPE%/ >> tmp
+echo s/${ProjectName}/%PROJECTNAME%/ >> tmp
 echo s/${ProjectGuid}/%PROJECTGUID%/ >> tmp
 echo s/${ComGuid}/%COMGUID%/ >> tmp
 echo s/${SolutionGuid}/%SOLUTIONGUID%/ >> tmp
 echo s/${AssemblyVersion}/%ASSEMBLYVERSION%/ >> tmp
 echo s/${AssemblyVersionQualifier}/%ASSEMBLYVERSIONQUALIFIER%/ >> tmp
 
-sed.exe -f tmp %FOLDER%\App_vs2010.sln>%FOLDER%\%PACKAGE%.%NAME%_vs2010.sln
-sed.exe -f tmp %FOLDER%\App.csproj>%FOLDER%\%PACKAGE%.%NAME%.csproj
+sed.exe -f tmp %FOLDER%\App_vs2010.sln>%FOLDER%\%PROJECTNAME%_vs2010.sln
+sed.exe -f tmp %FOLDER%\App.csproj>%FOLDER%\%PROJECTNAME%.csproj
 sed.exe -f tmp %FOLDER%\App.cs>%FOLDER%\%NAME%.cs
 sed.exe -f tmp %FOLDER%\Properties\AssemblyInfo.cstemplate>%FOLDER%\Properties\AssemblyInfo.cs
 sed.exe -f tmp %FOLDER%\pom.xmltemplate>%FOLDER%\pom.xml

@@ -17,6 +17,12 @@ Create a new project.
     using assembly version 1.0.0.0
     using assembly version qualifier -SNAPSHOT
     using substitution command sed -e s/\${AssemblyName}/MyApp/ -e s/\${RootNamespace}/MyPackage/ -e s/\${TargetFrameworkVersion}/v4.5/ -e s/\${OutputType}/WinExe/ -e s/\${ProjectGuid}/BAF96FB3-374D-4EE2-AB7C-0768F393FB5F/ -e s/\${ComGuid}/BC103D59-4F9E-46E8-996A-E2663360A278/ -e s/\${AssemblyVersion}/1.0.0.0/ -e s/\${AssemblyVersionQualifier}/-SNAPSHOT/
+`````
+
+Show created project.
+=====================
+
+`````
     tree MyApp
     MyApp
     ├── MyApp.cs
@@ -36,16 +42,28 @@ Install dotnet-maven-plugin.
     cd ..
 `````
 
-Use maven for version management.
-=================================
+Version control. (git)
+======================
 
 `````
     cd MyApp
     git init
     git add '*'
     git commit -m "Initial commit"
+`````
+
+Change pom.xml version with maven versions plugin.
+===================================================
+
+`````
+    cd MyApp
     mvn versions:set -DnewVersion=2.0.0.1
-    git diff
+`````
+
+Show modified version.
+======================
+
+`````diff
     diff --git a/pom.xml b/pom.xml
     index c3283fc..a8b9ff3 100644
     --- a/pom.xml
@@ -59,9 +77,33 @@ Use maven for version management.
        <packaging>dotnet:library</packaging>
        <build>
          <plugins>
+`````
+
+Add file with modified version to staging area.
+===============================================
+
+`````
     git add pom.xml
+`````
+
+Remove backup files.
+====================
+
+`````
     mvn versions:commit
+`````
+
+Apply version to Properties/AssemblyInfo.cs.
+============================================
+
+`````
     mvn dotnet:version
+`````
+
+Show modified file.
+===================
+
+`````diff
     git diff
     diff --git a/Properties/AssemblyInfo.cs b/Properties/AssemblyInfo.cs
     index 10d7622..4f1d643 100644
@@ -80,7 +122,12 @@ Use maven for version management.
 
      // The following attributes are used to specify the signing key for the assembly,
      // if desired. See the Mono documentation for more information about signing.
+`````
+
+Add file to staging area and commit.
+====================================
+
+`````
     git add Properties/AssemblyInfo.cs
     git commit -m "[RELEASE] - released version 2.0.0.1"
-
 `````

@@ -1,0 +1,60 @@
+#!/bin/sh
+
+[[ -z "$1" ]] && TEMPLATE="c#" || a="$1"
+[[ -z "$2" ]] && FOLDER="MyApp" || a="$2"
+[[ -z "$3" ]] && NAME="MyApp" || a="$3"
+[[ -z "$4" ]] && PACKAGE="MyPackage" || a="$4"
+[[ -z "$5" ]] && VERSION="v4.5" || a="$5"
+[[ -z "$6" ]] && TYPE="WinExe" || a="$6"
+[[ -z "$7" ]] && ASSEMBLYVERSION="1.0.0.0" || a="$7"
+[[ -z "$8" ]] && ASSEMBLYVERSIONQUALIFIER="-SNAPSHOT" || a="$7"
+
+PROJECTGUID=`uuidgen`
+COMGUID=`uuidgen`
+
+TEMPLATEDIR=templates/${TEMPLATE}
+echo using template ${TEMPLATE}
+echo using folder ${FOLDER}
+echo using name ${NAME}
+echo using package ${PACKAGE}
+echo using version ${VERSION}
+echo using type ${TYPE}
+echo using project guid ${PROJECTGUID}
+echo using COM guid ${COMGUID}
+echo using assembly version ${ASSEMBLYVERSION}
+echo using assembly version qualifier ${ASSEMBLYVERSIONQUALIFIER}
+
+if [ ! -d "$TEMPLATEDIR" ]; then
+  echo template ${TEMPLATE} does not exist.
+  exit 1
+fi
+
+if [ -d "$FOLDER" ]; then
+  echo destination ${FOLDER} already exists.
+  exit 1
+fi
+
+cp -R ${TEMPLATEDIR} ${FOLDER}
+cd ${FOLDER}
+
+SEDXX='sed 
+ -e s/\${AssemblyName}/'${NAME}'/ 
+ -e s/\${RootNamespace}/'${PACKAGE}'/ 
+ -e s/\${TargetFrameworkVersion}/'${VERSION}'/ 
+ -e s/\${OutputType}/'${TYPE}'/ 
+ -e s/\${ProjectGuid}/'${PROJECTGUID}'/ 
+ -e s/\${ComGuid}/'${COMGUID}'/ 
+ -e s/\${AssemblyVersion}/'${ASSEMBLYVERSION}'/ 
+ -e s/\${AssemblyVersionQualifier}/'${ASSEMBLYVERSIONQUALIFIER}'/'
+
+echo using substitution command ${SEDXX}
+
+${SEDXX} App.csproj > ${PACKAGE}.${NAME}.csproj
+${SEDXX} App.cs > ${NAME}.cs
+${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
+${SEDXX} pom.xmltemplate > pom.xml
+
+rm App.csproj
+rm App.cs
+rm Properties/AssemblyInfo.cstemplate
+rm pom.xmltemplate

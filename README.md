@@ -7,19 +7,20 @@ Create a new project.
 `````
     ./iwant
     usage Examples
-    iwant c# MyExecutable Com.Company.MySuite v4.5 WinExe 1.0.0.0 -SNAPSHOT
-    iwant c# MyLibrary Com.Company.MySuite v4.5 Library 1.0.0.0 -SNAPSHOT
+    iwant c# MyExecutable Com.Company.MySuite v4.0 WinExe 1.0.0.0 -SNAPSHOT
+    iwant c# MyLibrary Com.Company.MySuite v4.0 Library 1.0.0.0 -SNAPSHOT
     using template c#
     using folder MyApp
     using name MyApp
     using package MyPackage
-    using version v4.5
-    using type WinExe
-    using project guid BAF96FB3-374D-4EE2-AB7C-0768F393FB5F
-    using COM guid BC103D59-4F9E-46E8-996A-E2663360A278
+    using version v4.0
+    using type Exe
+    using project guid F8EB9112-8331-4454-8720-8DDCF1A9347C
+    using COM guid 443B8F8F-1622-4B23-821E-84D6D1CBC12F
+    using solution guid 2EC9C0BB-2685-4D6D-8030-AFE16A56E6F3
     using assembly version 1.0.0.0
     using assembly version qualifier -SNAPSHOT
-    using substitution command sed -e s/\${AssemblyName}/MyApp/ -e s/\${RootNamespace}/MyPackage/ -e s/\${TargetFrameworkVersion}/v4.5/ -e s/\${OutputType}/WinExe/ -e s/\${ProjectGuid}/BAF96FB3-374D-4EE2-AB7C-0768F393FB5F/ -e s/\${ComGuid}/BC103D59-4F9E-46E8-996A-E2663360A278/ -e s/\${AssemblyVersion}/1.0.0.0/ -e s/\${AssemblyVersionQualifier}/-SNAPSHOT/
+    using substitution command sed -e s/\${AssemblyName}/MyApp/ -e s/\${RootNamespace}/MyPackage/ -e s/\${TargetFrameworkVersion}/v4.0/ -e s/\${OutputType}/Exe/ -e s/\${ProjectName}/MyPackage.MyApp/ -e s/\${ProjectGuid}/F8EB9112-8331-4454-8720-8DDCF1A9347C/ -e s/\${ComGuid}/443B8F8F-1622-4B23-821E-84D6D1CBC12F/ -e s/\${SolutionGuid}/2EC9C0BB-2685-4D6D-8030-AFE16A56E6F3/ -e s/\${AssemblyVersion}/1.0.0.0/ -e s/\${AssemblyVersionQualifier}/-SNAPSHOT/
 `````
 
 Show created project.

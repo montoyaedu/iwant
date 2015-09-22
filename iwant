@@ -11,7 +11,7 @@ echo iwant c# MyLibrary Com.Company.MySuite v4.0 Library 1.0.0.0 -SNAPSHOT dll
 [[ -z "$5" ]] && TYPE="Exe" || TYPE="$5"
 [[ -z "$6" ]] && ASSEMBLYVERSION="1.0.0.0" || ASSEMBLYVERSION="$6"
 [[ -z "$7" ]] && ASSEMBLYVERSIONQUALIFIER="-SNAPSHOT" || ASSEMBLYVERSIONQUALIFIER="$7"
-[[ -z "$8" ]] && ARTIFACTEXTENSION="exe" || TYPE="$8"
+[[ -z "$8" ]] && ARTIFACTEXTENSION="exe" || ARTIFACTEXTENSION="$8"
 
 PROJECTGUID=`uuidgen`
 COMGUID=`uuidgen`

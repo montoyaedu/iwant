@@ -5,7 +5,7 @@
 #define MyAppExeName "${ProjectName}.${ArtifactExtension}"
 
 [Setup]
-AppId={{${SetupGuid}}
+AppId={{{#MyAppName}-{#MyAppVersion}}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
@@ -26,10 +26,7 @@ ShowTasksTreeLines=True
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "bin\Debug\*.exe"; DestDir: "{app}"; Flags: replacesameversion
-Source: "bin\Debug\*.pdb"; DestDir: "{app}"; Flags: replacesameversion
-Source: "bin\Debug\*.config"; DestDir: "{app}"; Flags: onlyifdoesntexist
-Source: "bin\Debug\*.dll"; DestDir: "{app}"; Flags: replacesameversion
+Source: "bin\Debug\*"; DestDir: "{app}"; Flags: replacesameversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

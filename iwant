@@ -16,7 +16,6 @@ echo iwant c# MyLibrary Com.Company.MySuite v4.0 Library 1.0.0.0 -SNAPSHOT
 PROJECTGUID=`uuidgen`
 COMGUID=`uuidgen`
 SOLUTIONGUID=`uuidgen`
-SETUPGUID=`uuidgen`
 
 TEMPLATEDIR=templates/${TEMPLATE}
 PROJECTNAME=${PACKAGE}.${NAME}
@@ -31,7 +30,6 @@ echo using type ${TYPE}
 echo using project guid ${PROJECTGUID}
 echo using COM guid ${COMGUID}
 echo using solution guid ${SOLUTIONGUID}
-echo using setup guid ${SETUPGUID}
 echo using assembly version ${ASSEMBLYVERSION}
 echo using assembly version qualifier ${ASSEMBLYVERSIONQUALIFIER}
 echo using artifact extension ${ARTIFACTEXTENSION}
@@ -59,7 +57,6 @@ SEDXX='sed
  -e s/\${ProjectGuid}/'${PROJECTGUID}'/ 
  -e s/\${ComGuid}/'${COMGUID}'/ 
  -e s/\${SolutionGuid}/'${SOLUTIONGUID}'/ 
- -e s/\${SetupGuid}/'${SETUPGUID}'/ 
  -e s/\${AssemblyVersion}/'${ASSEMBLYVERSION}'/ 
  -e s/\${AssemblyVersionQualifier}/'${ASSEMBLYVERSIONQUALIFIER}'/'
 

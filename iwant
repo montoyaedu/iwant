@@ -14,6 +14,7 @@ echo iwant c# MyLibrary Com.Company.MySuite v4.5 Library 1.0.0.0 -SNAPSHOT
 
 PROJECTGUID=`uuidgen`
 COMGUID=`uuidgen`
+SOLUTIONGUID=`uuidgen`
 
 TEMPLATEDIR=templates/${TEMPLATE}
 FOLDER=${NAME}
@@ -25,6 +26,7 @@ echo using version ${VERSION}
 echo using type ${TYPE}
 echo using project guid ${PROJECTGUID}
 echo using COM guid ${COMGUID}
+echo using solution guid ${SOLUTIONGUID}
 echo using assembly version ${ASSEMBLYVERSION}
 echo using assembly version qualifier ${ASSEMBLYVERSIONQUALIFIER}
 
@@ -48,16 +50,19 @@ SEDXX='sed
  -e s/\${OutputType}/'${TYPE}'/ 
  -e s/\${ProjectGuid}/'${PROJECTGUID}'/ 
  -e s/\${ComGuid}/'${COMGUID}'/ 
+ -e s/\${SolutionGuid}/'${SOLUTIONGUID}'/ 
  -e s/\${AssemblyVersion}/'${ASSEMBLYVERSION}'/ 
  -e s/\${AssemblyVersionQualifier}/'${ASSEMBLYVERSIONQUALIFIER}'/'
 
 echo using substitution command ${SEDXX}
 
+${SEDXX} App_vs2010.sln > ${PACKAGE}.${NAME}_vs2010.sln
 ${SEDXX} App.csproj > ${PACKAGE}.${NAME}.csproj
 ${SEDXX} App.cs > ${NAME}.cs
 ${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
 ${SEDXX} pom.xmltemplate > pom.xml
 
+rm App_vs2010.sln
 rm App.csproj
 rm App.cs
 rm Properties/AssemblyInfo.cstemplate

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>${ProjectGuid}</ProjectGuid>
+    <ProjectGuid>{${ProjectGuid}}</ProjectGuid>
     <OutputType>${OutputType}</OutputType>
     <RootNamespace>${RootNamespace}</RootNamespace>
     <AssemblyName>${AssemblyName}</AssemblyName>

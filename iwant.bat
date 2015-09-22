@@ -15,7 +15,7 @@ if "%TEMPLATE%"=="" set TEMPLATE=c#
 if "%NAME%"=="" set NAME=MyApp
 if "%PACKAGE%"=="" set PACKAGE=MyPackage
 if "%VERSION%"=="" set VERSION=v4.0
-if "%TYPE%"=="" set TYPE=WinExe
+if "%TYPE%"=="" set TYPE=Exe
 if "%ASSEMBLYVERSION%"=="" set ASSEMBLYVERSION=1.0.0.0
 if "%ASSEMBLYVERSIONQUALIFIER%"=="" set ASSEMBLYVERSIONQUALIFIER=-SNAPSHOT
 

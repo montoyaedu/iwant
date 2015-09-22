@@ -8,7 +8,7 @@ echo iwant c# MyLibrary Com.Company.MySuite v4.0 Library 1.0.0.0 -SNAPSHOT
 [[ -z "$2" ]] && NAME="MyApp" || NAME="$2"
 [[ -z "$3" ]] && PACKAGE="MyPackage" || PACKAGE="$3"
 [[ -z "$4" ]] && VERSION="v4.0" || VERSION="$4"
-[[ -z "$5" ]] && TYPE="WinExe" || TYPE="$5"
+[[ -z "$5" ]] && TYPE="Exe" || TYPE="$5"
 [[ -z "$6" ]] && ASSEMBLYVERSION="1.0.0.0" || ASSEMBLYVERSION="$6"
 [[ -z "$7" ]] && ASSEMBLYVERSIONQUALIFIER="-SNAPSHOT" || ASSEMBLYVERSIONQUALIFIER="$7"
 

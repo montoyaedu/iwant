@@ -16,7 +16,7 @@ Download the latest project version and add the folder to your PATH environment 
 
 set the IWANT_HOME environment variable with the path of the iwant folder.
 
-https://github.com/montoyaedu/iwant/releases/download/v1.0.0.0/iwant-app.zip
+https://github.com/montoyaedu/iwant/releases/download/v1.0.0.1/iwant-app.zip
 
 `````
 export PATH=$PATH:<iwant-app path>

@@ -201,3 +201,20 @@ rm buildonly.battemplate
 git init
 git add '*'
 git commit -m "Initial commit"
+
+while :
+do
+    echo "Enter Your bitbucket username"
+    read USERNAME
+    if [[ "${USERNAME}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
+       echo "${USERNAME} is valid."
+       break
+    else
+       echo "Invalid identifier ${USERNAME}"
+    fi
+done
+
+curl --user ${USERNAME} https://api.bitbucket.org/1.0/repositories/ --data name=${PROJECTNAME} --data has_wiki=true --data has_issues=true --data is_private=true
+
+git remote add origin git@bitbucket.org:${USERNAME}/${PROJECTNAME}.git
+git push -u origin --all

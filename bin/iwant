@@ -179,6 +179,7 @@ ${SEDXX} buildonly.template > buildonly
 ${SEDXX} buildonly.battemplate > buildonly.bat
 
 chmod +x release
+chmod +x buildonly
 
 cp app_${VERSION}.configtemplate app.config
 

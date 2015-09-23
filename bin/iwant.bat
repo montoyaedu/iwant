@@ -74,6 +74,8 @@ sed.exe -f tmp %FOLDER%\version.txttemplate>%FOLDER%\version.txt
 sed.exe -f tmp %FOLDER%\buildsetup.isstemplate>%FOLDER%\buildsetup.iss
 sed.exe -f tmp %FOLDER%\release.template>%FOLDER%\release
 sed.exe -f tmp %FOLDER%\release.battemplate>%FOLDER%\release.bat
+sed.exe -f tmp %FOLDER%\buildonly.template>%FOLDER%\buildonly
+sed.exe -f tmp %FOLDER%\buildonly.battemplate>%FOLDER%\buildonly.bat
 
 copy %FOLDER%\app_%VERSION%.configtemplate %FOLDER%\app.config
 
@@ -88,6 +90,14 @@ del /Q %FOLDER%\version.txttemplate
 del /Q %FOLDER%\buildsetup.isstemplate
 del /Q %FOLDER%\release.template
 del /Q %FOLDER%\release.battemplate
+del /Q %FOLDER%\buildonly.template
+del /Q %FOLDER%\buildonly.battemplate
 
 
 dir %FOLDER%
+
+cd %FOLDER%
+git init
+git add *
+git commit -m "Initial commit"
+cd ..

@@ -1,0 +1,22 @@
+@echo on
+
+reg.exe query "HKLM\SOFTWARE\Microsoft\MSBuild\ToolsVersions\4.0" /v MSBuildToolsPath > nul 2>&1
+if ERRORLEVEL 1 goto BuildError
+
+for /f "skip=2 tokens=2,*" %%A in ('reg.exe query "HKLM\SOFTWARE\Microsoft\MSBuild\ToolsVersions\4.0" /v MSBuildToolsPath') do SET MSBUILDDIR=%%B
+
+IF NOT EXIST %MSBUILDDIR%nul goto BuildError
+IF NOT EXIST %MSBUILDDIR%msbuild.exe goto BuildError
+rem pre-build project
+"%MSBUILDDIR%msbuild.exe" /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
+if ERRORLEVEL 1 goto BuildError
+rem pre-create setup package.
+issc\iscc.exe buildsetup.iss
+if ERRORLEVEL 1 goto BuildError
+goto:eof
+
+::ERRORS
+::---------------------
+:BuildError
+echo BuildError. Verify Console Output.
+goto:eof

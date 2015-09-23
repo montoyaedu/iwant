@@ -4,7 +4,6 @@ An effort to create a simple programming project starter. (Something like mvn ar
 Requirements.
 =============
 
-1. Unix or Windows system.
 1. maven 3.x
 1. git
 
@@ -35,7 +34,7 @@ Create a new project.
 =====================
 
 `````
-    iwant c# MyApp MyPackage v4.0 Exe 1.0.0.0 -SNAPSHOT exe
+    iwant c# MyApp MyPackage v4.0 Exe 1.0.0 -SNAPSHOT exe
 `````
 
 Arguments.
@@ -66,7 +65,9 @@ MyPackage.MyApp
 │   └── ... innosetup files and folders.
 ├── pom.xml
 ├── release
+├── buildonly
 ├── release.bat
+├── buildonly.bat
 ├── setup.ico
 └── version.txt
 `````
@@ -86,7 +87,7 @@ On unix systems Xamarin can be used. Just replace msbuild with xbuild.
 Git.
 ====
 
-It is a good idea to create always a local git repository and add all generated files, so you can keep track of your modifications.
+iwant initializes an empty git repository and adds all files. If something goes wrong you can make it yourself.
 
 `````
     cd MyPackage.MyApp
@@ -142,6 +143,7 @@ Try undocumented scripts.
 `````
     cd MyPackage.MyApp
     ./release
+    ./buildonly
 `````
 
 `````

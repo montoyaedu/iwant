@@ -1,9 +1,117 @@
 #!/bin/sh
 
-[[ -z "$1" ]] && TEMPLATE="c#" || TEMPLATE="$1"
-[[ -z "$2" ]] && NAME="MyApp" || NAME="$2"
-[[ -z "$3" ]] && PACKAGE="MyPackage" || PACKAGE="$3"
-[[ -z "$4" ]] && VERSION="v4.0" || VERSION="$4"
+DIALOG=${DIALOG=dialog}
+INPUT=/tmp/menu.sh.$$
+
+$DIALOG --clear --title "iWant Project Generator" --yesno "Hello, this program will guide you on generating a new project from a template. Do you want to continue?" 10 30
+
+case $? in
+  0)
+    echo "Yes chosen.";;
+  1)
+    exit 1;;
+  255)
+    exit 1;;
+esac
+
+get_script_dir () {
+     SOURCE="${BASH_SOURCE[0]}"
+     # While $SOURCE is a symlink, resolve it
+     while [ -h "$SOURCE" ]; do
+          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+          SOURCE="$( readlink "$SOURCE" )"
+          # If $SOURCE was a relative symlink (so no "/" as prefix, need to resolve it relative to the symlink base directory
+          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+     done
+     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+     echo "$DIR"
+}
+
+echo script directory should be "$(get_script_dir)"
+
+if [ -z "${IWANT_HOME}" ]; then
+    echo "IWANT_HOME environment variable is not set."
+    echo "using $(get_script_dir)"
+    IWANT_HOME=$(get_script_dir)/..
+fi
+
+if [ ! -d ${IWANT_HOME} ]; then
+    echo "IWANT_HOME point to an invalid path ${IWANT_HOME}"
+    echo "using $(get_script_dir)"
+    IWANT_HOME=$(get_script_dir)/..
+fi
+
+if [ ! -d ${IWANT_HOME} ]; then
+    echo "IWANT_HOME point to an invalid path ${IWANT_HOME}"
+    exit 1
+fi
+
+IWANT_HOME=`cd ${IWANT_HOME}; pwd -P`
+
+if [ -z "$1" ]; then
+while :
+do
+$DIALOG --clear --title "iWant Project Generator" --menu "Select template" 40 40 1 c# "CSharp Project Template" 2>"${INPUT}"
+TEMPLATE=$(<"${INPUT}")
+echo $TEMPLATE
+break
+done
+else
+    TEMPLATEDIR=${IWANT_HOME}/templates/${TEMPLATE}
+    if [ ! -d ${TEMPLATEDIR} ]; then
+        echo "Template ${TEMPLATEDIR} does not exist."
+	exit 1
+    fi
+fi
+
+if [ -z "$2" ]; then
+while :
+do
+    echo "Enter Artifact Name"
+    read NAME
+    if [[ "${NAME}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
+       echo "${NAME} is valid."
+       break
+    else
+       echo "Invalid identifier ${NAME}"
+    fi
+done
+else
+    NAME=$2
+    if [[ "${NAME}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
+       echo "${NAME} is valid."
+    else
+       echo "Invalid identifier ${NAME}"
+       exit 1
+    fi
+fi
+
+if [ -z "$3" ]; then
+while :
+do
+    echo "Enter Package Name"
+    read PACKAGE
+    if [[ "${PACKAGE}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
+       echo "${PACKAGE} is valid."
+       break
+    else
+       echo "Invalid identifier ${PACKAGE}"
+    fi
+done
+else
+    PACKAGE=$3
+    if [[ "${PACKAGE}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
+       echo "${PACKAGE} is valid."
+    else
+       echo "Invalid identifier ${PACKAGE}"
+       exit 1
+    fi
+fi
+
+$DIALOG --clear --title "iWant Project Generator" --menu "Select .NET framework version" 40 40 6 v2.0 v2.0 v3.0 v3.0 v3.5 v3.5 v4.0 v4.0 v4.5 v4.5 2>"${INPUT}"
+VERSION=$(<"${INPUT}")
+echo $VERSION
+
 [[ -z "$5" ]] && TYPE="Exe" || TYPE="$5"
 [[ -z "$6" ]] && ASSEMBLYVERSION="1.0.0" || ASSEMBLYVERSION="$6"
 [[ -z "$7" ]] && ASSEMBLYVERSIONQUALIFIER="-SNAPSHOT" || ASSEMBLYVERSIONQUALIFIER="$7"
@@ -67,6 +175,8 @@ ${SEDXX} version.txttemplate > version.txt
 ${SEDXX} buildsetup.isstemplate > buildsetup.iss
 ${SEDXX} release.template > release
 ${SEDXX} release.battemplate > release.bat
+${SEDXX} buildonly.template > buildonly
+${SEDXX} buildonly.battemplate > buildonly.bat
 
 chmod +x release
 
@@ -82,3 +192,9 @@ rm version.txttemplate
 rm buildsetup.isstemplate
 rm release.template
 rm release.battemplate
+rm buildonly.template
+rm buildonly.battemplate
+
+git init
+git add '*'
+git commit -m "Initial commit"

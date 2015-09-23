@@ -1,0 +1,4 @@
+#!/bin/sh
+
+xbuild /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
+./issc/iscc buildsetup.iss

@@ -13,10 +13,10 @@ if ERRORLEVEL 1 goto BuildError
 rem pre-create setup package.
 issc\iscc.exe buildsetup.iss
 if ERRORLEVEL 1 goto BuildError
-rem change file version.txt from A.B.C.D-qualifierN-SNAPSHOT to A.B.C.D-qualifierN
+rem change file version.txt from A.B.C-qualifierN-SNAPSHOT to A.B.C-qualifierN
 call mvn dotnet:release
 if ERRORLEVEL 1 goto BuildError
-rem change file version.txt from A.B.C.D-qualifierN-SNAPSHOT to A.B.C.D
+rem change file version.txt from A.B.C-qualifierN-SNAPSHOT to A.B.C
 rem mvn dotnet:release -DremoveQualifier=true
 set /p VERSION=< version.txt
 rem set pom versions to VERSION.
@@ -48,10 +48,10 @@ issc\iscc.exe buildsetup.iss
 if ERRORLEVEL 1 goto BuildError
 rem deploy setup package to repository.
 rem TODO
-rem change file version.txt from A.B.C.D+1[-qualifierN+1] to A.B.C.D+1[-qualifierN+1]-SNAPSHOT
+rem change file version.txt from A.B.C+1[-qualifierN+1] to A.B.C+1[-qualifierN+1]-SNAPSHOT
 call mvn dotnet:next
 if ERRORLEVEL 1 goto BuildError
-rem change file version.txt from A.B.C.D to A.B.C.D-qualifier1
+rem change file version.txt from A.B.C to A.B.C-qualifier1
 rem mvn dotnet:next -DversionQualifier=RC
 set /p VERSION=< version.txt
 rem set pom versions to VERSION.

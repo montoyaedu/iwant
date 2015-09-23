@@ -16,4 +16,4 @@ if [ -z "${PACKAGE_NAME}" ]; then
     exit 1
 fi
 
-iwant c# ${APP_NAME} ${PACKAGE_NAME} v4.0 WinExe 1.0.0.0 -SNAPSHOT exe
+iwant c# ${APP_NAME} ${PACKAGE_NAME} v4.0 WinExe 1.0.0 -SNAPSHOT exe

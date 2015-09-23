@@ -1,7 +1,4 @@
 @echo off
-echo usage Examples
-echo iwant c# MyExecutable Com.Company.MySuite v4.0 WinExe 1.0.0.0 -SNAPSHOT exe
-echo iwant c# MyLibrary Com.Company.MySuite v4.0 Library 1.0.0.0 -SNAPSHOT dll
 
 set TEMPLATE=%1
 set NAME=%2

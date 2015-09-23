@@ -67,6 +67,7 @@ echo s/${AssemblyVersionQualifier}/%ASSEMBLYVERSIONQUALIFIER%/ >> tmp
 
 sed.exe -f tmp %FOLDER%\App_vs2010.sln>%FOLDER%\%PROJECTNAME%_vs2010.sln
 sed.exe -f tmp %FOLDER%\App.csproj>%FOLDER%\%PROJECTNAME%.csproj
+sed.exe -f tmp %FOLDER%\App.nuspec>%FOLDER%\%PROJECTNAME%.nuspec
 sed.exe -f tmp %FOLDER%\App.cs>%FOLDER%\%NAME%.cs
 sed.exe -f tmp %FOLDER%\Properties\AssemblyInfo.cstemplate>%FOLDER%\Properties\AssemblyInfo.cs
 sed.exe -f tmp %FOLDER%\pom.xmltemplate>%FOLDER%\pom.xml
@@ -82,6 +83,7 @@ copy %FOLDER%\app_%VERSION%.configtemplate %FOLDER%\app.config
 del /Q tmp
 del /Q %FOLDER%\App_vs2010.sln
 del /Q %FOLDER%\App.csproj
+del /Q %FOLDER%\App.nuspec
 del /Q %FOLDER%\App.cs
 del /Q %FOLDER%\Properties\AssemblyInfo.cstemplate
 del /Q %FOLDER%\pom.xmltemplate

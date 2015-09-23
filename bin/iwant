@@ -168,6 +168,7 @@ echo using substitution command ${SEDXX}
 
 ${SEDXX} App_vs2010.sln > ${PROJECTNAME}_vs2010.sln
 ${SEDXX} App.csproj > ${PROJECTNAME}.csproj
+${SEDXX} App.nuspec > ${PROJECTNAME}.nuspec
 ${SEDXX} App.cs > ${NAME}.cs
 ${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
 ${SEDXX} pom.xmltemplate > pom.xml
@@ -185,6 +186,7 @@ cp app_${VERSION}.configtemplate app.config
 
 rm App_vs2010.sln
 rm App.csproj
+rm App.nuspec
 rm App.cs
 rm Properties/AssemblyInfo.cstemplate
 rm pom.xmltemplate

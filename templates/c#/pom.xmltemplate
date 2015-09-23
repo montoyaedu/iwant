@@ -8,11 +8,17 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>it.ethiclab</groupId>
+        <groupId>com.github.ethiclab</groupId>
         <artifactId>dotnet-maven-plugin</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.3</version>
         <extensions>true</extensions>
       </plugin>
     </plugins>
   </build>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

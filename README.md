@@ -7,115 +7,124 @@ Requirements.
 1. Unix or Windows system.
 1. maven 3.x
 1. git
-1. https://github.com/ethiclab/dotnet-maven-plugin
 
 Install.
 ========
 
-Download the latest project version and add the folder to your PATH environment variable.
+    1. Download the latest binary release
 
-set the IWANT_HOME environment variable with the path of the iwant folder.
+	https://github.com/montoyaedu/iwant/releases/download/v1.0.0.2/iwant-app.zip
 
-https://github.com/montoyaedu/iwant/releases/download/v1.0.0.1/iwant-app.zip
+    1. Unzip the downloaded package
+
+    1. Add iwant-app/bin to your PATH environment variable.
+
+    1. Set your IWANT_HOME environment variable to the iwant-app folder.
+
+Configure environment (unix/linux/Mac OS X).
+============================================
+
+Assuming that iwant-app package has been unzipped in /opt folder:
 
 `````
-export PATH=$PATH:<iwant-app path>
-export IWANT_HOME=<iwant-app path>
+export PATH=$PATH:/opt/iwant-app/bin
+export IWANT_HOME=/opt/iwant-app
 `````
 
 Create a new project.
 =====================
 
 `````
-    iwant
-    usage Examples
-    iwant c# MyExecutable Com.Company.MySuite v4.0 WinExe 1.0.0.0 -SNAPSHOT exe
-    iwant c# MyLibrary Com.Company.MySuite v4.0 Library 1.0.0.0 -SNAPSHOT dll
-    using template c#
-    using folder MyApp
-    using name MyApp
-    using package MyPackage
-    using version v4.0
-    using type Exe
-    using project guid F8EB9112-8331-4454-8720-8DDCF1A9347C
-    using COM guid 443B8F8F-1622-4B23-821E-84D6D1CBC12F
-    using solution guid 2EC9C0BB-2685-4D6D-8030-AFE16A56E6F3
-    using assembly version 1.0.0.0
-    using assembly version qualifier -SNAPSHOT
-    using substitution command sed -e s/\${AssemblyName}/MyApp/ -e s/\${RootNamespace}/MyPackage/ -e s/\${TargetFrameworkVersion}/v4.0/ -e s/\${OutputType}/Exe/ -e s/\${ProjectName}/MyPackage.MyApp/ -e s/\${ProjectGuid}/F8EB9112-8331-4454-8720-8DDCF1A9347C/ -e s/\${ComGuid}/443B8F8F-1622-4B23-821E-84D6D1CBC12F/ -e s/\${SolutionGuid}/2EC9C0BB-2685-4D6D-8030-AFE16A56E6F3/ -e s/\${AssemblyVersion}/1.0.0.0/ -e s/\${AssemblyVersionQualifier}/-SNAPSHOT/
+    iwant c# MyApp MyPackage v4.0 Exe 1.0.0.0 -SNAPSHOT exe
 `````
+
+Arguments.
+==========
+
+1. Template (folder must exists under ${IWANT_HOME}/templates)
+2. Basename
+3. Namespace
+4. .NET framework version
+5. Output Type
+6. Version
+7. Version Qualifier
+8. Output Assembly Extension
 
 Show created project.
 =====================
 
 `````
-    tree MyApp
-    MyApp
-    ├── MyApp.cs
-    ├── MyPackage.MyApp.csproj
-    ├── Properties
-    │   └── AssemblyInfo.cs
-    └── pom.xml
+MyPackage.MyApp
+├── MyApp.cs
+├── MyPackage.MyApp.csproj
+├── MyPackage.MyApp_vs2010.sln
+├── Properties
+│   └── AssemblyInfo.cs
+├── app.config
+├── buildsetup.iss
+├── issc (folder with embedded innosetup)
+│   └── ... innosetup files and folders.
+├── pom.xml
+├── release
+├── release.bat
+├── setup.ico
+└── version.txt
 `````
 
-Install dotnet-maven-plugin.
-============================
+Building from command-line.
+===========================
+
+You can open the solution file with visual studio or compile from the command-line:
 
 `````
-    git clone https://github.com/ethiclab/dotnet-maven-plugin
-    cd dotnet-maven-plugin
-    mvn clean install
-    cd ..
+    cd MyPackage.MyApp
+    msbuild /t:Rebuild /p:Configuration=Debug MyPackage.MyApp_vs2010.sln
 `````
 
-Version control. (git)
-======================
+On unix systems Xamarin can be used. Just replace msbuild with xbuild.
+
+Git.
+====
+
+It is a good idea to create always a local git repository and add all generated files, so you can keep track of your modifications.
 
 `````
-    cd MyApp
+    cd MyPackage.MyApp
     git init
     git add '*'
     git commit -m "Initial commit"
 `````
 
+Maven.
+======
+
+Optionally, you can use maven to manage your release and development versions. First install this maven plugin on your local maven repository.
+
+Download and install maven from:
+
+https://maven.apache.org/download.cgi
+
+And then follow installation instructions from:
+
+https://maven.apache.org/install.html
+
 Change pom.xml version with maven versions plugin.
-===================================================
+==================================================
+
+This command sets the pom.xml version to the specified version.
 
 `````
-    cd MyApp
+    cd MyPackage.MyApp
     mvn versions:set -DnewVersion=2.0.0.1
 `````
 
-Show modified version.
+Remove backup pom.xml.
 ======================
 
-`````diff
-    diff --git a/pom.xml b/pom.xml
-    index c3283fc..a8b9ff3 100644
-    --- a/pom.xml
-    +++ b/pom.xml
-    @@ -3,7 +3,7 @@
-       <modelVersion>4.0.0</modelVersion>
-       <groupId>MyPackage</groupId>
-       <artifactId>MyApp</artifactId>
-    -  <version>1.0.0.0-SNAPSHOT</version>
-    +  <version>2.0.0.1</version>
-       <packaging>dotnet:library</packaging>
-       <build>
-         <plugins>
-`````
-
-Add file with modified version to staging area.
-===============================================
+The previous command creates a backup file of the old pom.xml file. After successfully setting a version you will need to call the following command.
 
 `````
-    git add pom.xml
-`````
-
-Remove backup files.
-====================
-
-`````
+    cd MyPackage.MyApp
     mvn versions:commit
 `````
 
@@ -123,40 +132,34 @@ Apply version to Properties/AssemblyInfo.cs.
 ============================================
 
 `````
+    cd MyPackage.MyApp
     mvn dotnet:version
 `````
 
-Show modified file.
-===================
-
-`````diff
-    git diff
-    diff --git a/Properties/AssemblyInfo.cs b/Properties/AssemblyInfo.cs
-    index 10d7622..4f1d643 100644
-    --- a/Properties/AssemblyInfo.cs
-    +++ b/Properties/AssemblyInfo.cs
-    @@ -22,9 +22,9 @@ using System.Runtime.InteropServices;
-     // The following GUID is for the ID of the typelib if this project is exposed to COM
-     [assembly: Guid("BC103D59-4F9E-46E8-996A-E2663360A278")]
-
-    -[assembly: AssemblyVersion("1.0.0.0")]
-    -[assembly: AssemblyFileVersion("1.0.0.0")]
-    -[assembly: AssemblyInformationalVersion("1.0.0.0-SNAPSHOT")]
-    +[assembly: AssemblyVersion("2.0.0.1")]
-    +[assembly: AssemblyFileVersion("2.0.0.1")]
-    +[assembly: AssemblyInformationalVersion("2.0.0.1")]
-
-     // The following attributes are used to specify the signing key for the assembly,
-     // if desired. See the Mono documentation for more information about signing.
-`````
-
-Add file to staging area and commit.
-====================================
+Try undocumented scripts.
+=========================
 
 `````
-    git add Properties/AssemblyInfo.cs
-    git commit -m "[RELEASE] - released version 2.0.0.1"
+    cd MyPackage.MyApp
+    ./release
 `````
+
+`````
+    create-windows-app
+    create-console-app
+    create-library
+`````
+
+TODO:
+=====
+
+1. Complete dos batch/linux scripts.
+1. Add documentation for adding releases.
+1. Add support for unit testing to c# template.
+1. Add documentation for innosetup.
+1. Add documentation for adding git remotes.
+1. Add support for deploying nuget packages to c# template.
+1. Add documentation for undocumented scripts.
 
 Acknowledgements.
 =================
@@ -172,4 +175,4 @@ Thanks to (but not limited to) all developers involved in:
 1. https://github.com/
 1. https://git-scm.com/
 1. https://www.visualstudio.com/
-
+1. https://github.com/montoyaedu/Uuidgen.NET

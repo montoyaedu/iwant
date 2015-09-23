@@ -3,7 +3,7 @@
 DIALOG=${DIALOG=dialog}
 INPUT=/tmp/menu.sh.$$
 
-$DIALOG --clear --title "iWant Project Generator" --yesno "Hello, this program will guide you on generating a new project from a template. Do you want to continue?" 10 30
+$DIALOG --clear --title "iWant Project Generator" --yesno "Hello, this program will guide you on generating a new project from a template. Do you want to continue?" 20 40
 
 case $? in
   0)
@@ -51,7 +51,7 @@ IWANT_HOME=`cd ${IWANT_HOME}; pwd -P`
 if [ -z "$1" ]; then
 while :
 do
-$DIALOG --clear --title "iWant Project Generator" --menu "Select template" 40 40 1 c# "CSharp Project Template" 2>"${INPUT}"
+$DIALOG --clear --title "iWant Project Generator" --menu "Select template" 20 40 1 c# "CSharp Project Template" 2>"${INPUT}"
 TEMPLATE=$(<"${INPUT}")
 echo $TEMPLATE
 break
@@ -108,7 +108,7 @@ else
     fi
 fi
 
-$DIALOG --clear --title "iWant Project Generator" --menu "Select .NET framework version" 40 40 6 v2.0 v2.0 v3.0 v3.0 v3.5 v3.5 v4.0 v4.0 v4.5 v4.5 2>"${INPUT}"
+$DIALOG --clear --title "iWant Project Generator" --menu "Select .NET framework version" 20 40 6 v2.0 v2.0 v3.0 v3.0 v3.5 v3.5 v4.0 v4.0 v4.5 v4.5 2>"${INPUT}"
 VERSION=$(<"${INPUT}")
 echo $VERSION
 

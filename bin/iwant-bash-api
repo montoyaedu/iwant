@@ -56,3 +56,18 @@ show_dialog_start() {
 ###
 ###
 
+show_dialog_template() {
+    $DIALOG --clear \
+        --title "iWant Project Generator" \
+        --menu "Select template" \
+        20 40 \
+        2 \
+        c# "CSharp Project Template" \
+        java "Java Project Template" \
+        2>"${INPUT}"
+}
+
+get_dialog_result() {
+    retval=$(<"${INPUT}")
+    echo $retval
+}

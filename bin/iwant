@@ -94,15 +94,8 @@ if (( $# == 0 )); then
 fi
 
 if [ -z "$1" ]; then
-    $DIALOG --clear \
-        --title "iWant Project Generator" \
-        --menu "Select template" \
-        20 40 \
-        2 \
-        c# "CSharp Project Template" \
-        java "Java Project Template" \
-        2>"${INPUT}"
-    TEMPLATE=$(<"${INPUT}")
+    show_dialog_template
+    TEMPLATE=$(get_dialog_result)
 else
     TEMPLATE=$1
 fi

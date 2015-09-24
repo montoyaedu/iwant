@@ -257,7 +257,19 @@ do
     fi
 done
 
-curl --user ${USERNAME} https://api.bitbucket.org/1.0/repositories/ --data name=${PROJECTNAME} --data has_wiki=true --data has_issues=true --data is_private=true
+while :
+do
+    echo "Enter Your bitbucket owner"
+    read OWNER
+    if [[ "${OWNER}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
+       echo "${OWNER} is valid."
+       break
+    else
+       echo "Invalid identifier ${OWNER}"
+    fi
+done
 
-git remote add origin git@bitbucket.org:${USERNAME}/${PROJECTNAME}.git
+curl --user ${USERNAME} https://api.bitbucket.org/1.0/repositories/ --data name=${PROJECTNAME} --data has_wiki=true --data has_issues=true --data is_private=true --data owner=${OWNER}
+
+git remote add origin git@bitbucket.org:${OWNER}/${PROJECTNAME}.git
 git push -u origin --all

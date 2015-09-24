@@ -1,0 +1,22 @@
+#!/bin/bash
+
+###
+###
+### FUNCTION abort_if_commant_does_not_exist
+###
+###
+
+abort_if_commant_does_not_exist() {
+	command -v $1 >/dev/null 2>&1 || \
+		{
+			echo >&2 "I require $1 but it's not installed."
+			echo "Aborting..."
+			exit 1
+		}
+}
+
+###
+###
+### END FUNCTION abort_if_commant_does_not_exist
+###
+###

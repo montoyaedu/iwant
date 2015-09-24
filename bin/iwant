@@ -1,8 +1,98 @@
 #!/bin/sh
 
+###
+###
+### FUNCTION get_script_dir
+### INTERNET COPY&PASTE
+### SOURCE
+### http://www.ostricher.com
+### /2014/10/the-right-way-to-get-the-directory-of-a-bash-script/
+###
+###
+
+get_script_dir () {
+     SOURCE="${BASH_SOURCE[0]}"
+     # While $SOURCE is a symlink,
+     # resolve it
+     while [ -h "$SOURCE" ]; do
+          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+          SOURCE="$( readlink "$SOURCE" )"
+          # If $SOURCE was a relative symlink 
+	  # (so no "/" as prefix,
+	  # need to resolve it relative 
+	  # to the symlink base directory
+          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+     done
+     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+     echo "$DIR"
+}
+
+###
+###
+### END FUNCTION get_script_dir
+###
+###
+
+echo script directory should be "$(get_script_dir)"
+
+###
+###
+### SNIPPET verify_home_directory
+###
+###
+
+if [ -z "${IWANT_HOME}" ]; then
+    echo "IWANT_HOME environment variable is not set."
+    echo "using $(get_script_dir)"
+    IWANT_HOME=$(get_script_dir)/..
+fi
+
+if [ ! -d ${IWANT_HOME} ]; then
+    echo "IWANT_HOME points to an invalid path ${IWANT_HOME}"
+    echo "using $(get_script_dir)/.."
+    IWANT_HOME=$(get_script_dir)/..
+fi
+
+if [ ! -d ${IWANT_HOME} ]; then
+    echo "IWANT_HOME point to an invalid path ${IWANT_HOME}"
+    exit 1
+fi
+
+IWANT_HOME=`cd ${IWANT_HOME}; pwd -P`
+
+echo "IWANT_HOME = ${IWANT_HOME}"
+echo "WORKING DIR = `pwd`"
+echo "SCRIPT DIR = $(get_script_dir)"
+
+###
+###
+### END SNIPPET verify_home_directory
+###
+###
+
+###
+###
+### SNIPPET load_libraries
+###
+###
+
+. ${IWANT_HOME}/bin/iwant-bash-api
+
+###
+###
+### END SNIPPET load_libraries
+###
+###
+
 DIALOG=${DIALOG=dialog}
 INPUT=/tmp/menu.sh.$$
 
+abort_if_commant_does_not_exist ${DIALOG}
+
+echo Script name: $0
+echo $# arguments 
+
+show_dialog_start() {
 $DIALOG --clear --title "iWant Project Generator" --yesno "Hello, this program will guide you on generating a new project from a template. Do you want to continue?" 20 40
 
 case $? in
@@ -13,40 +103,11 @@ case $? in
   255)
     exit 1;;
 esac
-
-get_script_dir () {
-     SOURCE="${BASH_SOURCE[0]}"
-     # While $SOURCE is a symlink, resolve it
-     while [ -h "$SOURCE" ]; do
-          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-          SOURCE="$( readlink "$SOURCE" )"
-          # If $SOURCE was a relative symlink (so no "/" as prefix, need to resolve it relative to the symlink base directory
-          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-     done
-     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-     echo "$DIR"
 }
 
-echo script directory should be "$(get_script_dir)"
-
-if [ -z "${IWANT_HOME}" ]; then
-    echo "IWANT_HOME environment variable is not set."
-    echo "using $(get_script_dir)"
-    IWANT_HOME=$(get_script_dir)/..
+if (( $# == 0 )); then
+    show_dialog_start
 fi
-
-if [ ! -d ${IWANT_HOME} ]; then
-    echo "IWANT_HOME point to an invalid path ${IWANT_HOME}"
-    echo "using $(get_script_dir)"
-    IWANT_HOME=$(get_script_dir)/..
-fi
-
-if [ ! -d ${IWANT_HOME} ]; then
-    echo "IWANT_HOME point to an invalid path ${IWANT_HOME}"
-    exit 1
-fi
-
-IWANT_HOME=`cd ${IWANT_HOME}; pwd -P`
 
 if [ -z "$1" ]; then
 while :

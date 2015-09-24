@@ -11,20 +11,20 @@
 ###
 
 get_script_dir () {
-     SOURCE="${BASH_SOURCE[0]}"
-     # While $SOURCE is a symlink,
-     # resolve it
-     while [ -h "$SOURCE" ]; do
-          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-          SOURCE="$( readlink "$SOURCE" )"
-          # If $SOURCE was a relative symlink 
-	  # (so no "/" as prefix,
-	  # need to resolve it relative 
-	  # to the symlink base directory
-          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-     done
-     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-     echo "$DIR"
+    SOURCE="${BASH_SOURCE[0]}"
+    # While $SOURCE is a symlink,
+    # resolve it
+    while [ -h "$SOURCE" ]; do
+        DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+        SOURCE="$( readlink "$SOURCE" )"
+        # If $SOURCE was a relative symlink 
+        # (so no "/" as prefix,
+        # need to resolve it relative 
+        # to the symlink base directory
+        [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+    done
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    echo "$DIR"
 }
 
 ###
@@ -84,45 +84,27 @@ echo "SCRIPT DIR = $(get_script_dir)"
 ###
 ###
 
-DIALOG=${DIALOG=dialog}
-INPUT=/tmp/menu.sh.$$
-
 abort_if_commant_does_not_exist ${DIALOG}
 
 echo Script name: $0
 echo $# arguments 
-
-show_dialog_start() {
-$DIALOG --clear --title "iWant Project Generator" --yesno "Hello, this program will guide you on generating a new project from a template. Do you want to continue?" 20 40
-
-case $? in
-  0)
-    echo "Yes chosen.";;
-  1)
-    exit 1;;
-  255)
-    exit 1;;
-esac
-}
 
 if (( $# == 0 )); then
     show_dialog_start
 fi
 
 if [ -z "$1" ]; then
-while :
-do
-$DIALOG --clear --title "iWant Project Generator" --menu "Select template" 20 40 1 c# "CSharp Project Template" 2>"${INPUT}"
-TEMPLATE=$(<"${INPUT}")
-echo $TEMPLATE
-break
-done
+    $DIALOG --clear \
+        --title "iWant Project Generator" \
+        --menu "Select template" \
+        20 40 \
+        2 \
+        c# "CSharp Project Template" \
+        java "Java Project Template" \
+        2>"${INPUT}"
+    TEMPLATE=$(<"${INPUT}")
 else
-    TEMPLATEDIR=${IWANT_HOME}/templates/${TEMPLATE}
-    if [ ! -d ${TEMPLATEDIR} ]; then
-        echo "Template ${TEMPLATEDIR} does not exist."
-	exit 1
-    fi
+    TEMPLATE=$1
 fi
 
 if [ -z "$2" ]; then
@@ -200,7 +182,7 @@ echo using assembly version qualifier ${ASSEMBLYVERSIONQUALIFIER}
 echo using artifact extension ${ARTIFACTEXTENSION}
 
 if [ ! -d "$TEMPLATEDIR" ]; then
-  echo template ${TEMPLATE} does not exist.
+  echo template ${TEMPLATEDIR} does not exist.
   exit 1
 fi
 

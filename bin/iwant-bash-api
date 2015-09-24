@@ -1,5 +1,9 @@
 #!/bin/bash
 
+DIALOG=${DIALOG=dialog}
+INPUT=/tmp/menu.sh.$$
+RES=${IWANT_HOME}/bin/resources
+
 ###
 ###
 ### FUNCTION abort_if_commant_does_not_exist
@@ -7,12 +11,12 @@
 ###
 
 abort_if_commant_does_not_exist() {
-	command -v $1 >/dev/null 2>&1 || \
-		{
-			echo >&2 "I require $1 but it's not installed."
-			echo "Aborting..."
-			exit 1
-		}
+    command -v $1 >/dev/null 2>&1 || \
+        {
+            echo >&2 "I require $1 but it's not installed."
+            echo "Aborting..."
+            exit 1
+        }
 }
 
 ###
@@ -20,3 +24,35 @@ abort_if_commant_does_not_exist() {
 ### END FUNCTION abort_if_commant_does_not_exist
 ###
 ###
+
+###
+###
+### FUNCTION show_dialog_start
+###
+###
+
+show_dialog_start() {
+    $DIALOG --clear \
+        --title "`cat ${RES}/dialog.title`" \
+        --yesno "`cat ${RES}/dialog_start.label`" \
+        20 40
+
+    case $? in
+    0)
+        echo "Yes chosen."
+        ;;
+    1)
+        exit 1
+        ;;
+    255)
+        exit 1
+        ;;
+    esac
+}
+
+###
+###
+### FUNCTION show_dialog_start
+###
+###
+

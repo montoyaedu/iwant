@@ -104,8 +104,8 @@ if [ -z "$3" ]; then
     show_dialog_artifact_details
     VALUES=$(get_dialog_result)
     echo VALUES=$VALUES
-    IFS=$' ' read -rd '' -a y <<<"$VALUES"
-    echo array length=${#y[@]} 
+    IFS=$' \n' read -rd '' -a y <<<"$VALUES"
+    #echo array length=${#y[@]} 
     if (( ${#y[@]} != 4 )); then
         echo "invalid array length. should be 4."
         exit 1
@@ -114,6 +114,10 @@ if [ -z "$3" ]; then
     PACKAGE=${y[1]}
     ASSEMBLYVERSION=${y[2]}
     ASSEMBLYVERSIONQUALIFIER=${y[3]}
+    #echo NAME=_"$NAME"_
+    #echo PACKAGE_"$PACKAGE"_
+    #echo ASSEMBLYVERSION=_"$ASSEMBLYVERSION"_
+    #echo ASSEMBLYVERSIONQUALIFIER=_"$ASSEMBLYVERSIONQUALIFIER"_
 else
     NAME=$3
 fi

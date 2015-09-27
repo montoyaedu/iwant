@@ -100,15 +100,29 @@ else
     TEMPLATE=$1
 fi
 
+NAME=
+PACKAGE=
+ASSEMBLYVERSION=1.0.0
+ASSEMBLYVERSIONQUALIFIER=-SNAPSHOT
+
 if [ -z "$3" ]; then
-    show_dialog_artifact_details
+while (( ${#y[@]} != 4 ))
+do
+    show_dialog_artifact_details "$NAME" "$PACKAGE" "$ASSEMBLYVERSION" "$ASSEMBLYVERSIONQUALIFIER"
+    if test $? -eq 0
+    then 
+       echo "ok pressed"
+    else
+       echo "cancel pressed"
+       exit 1
+    fi
     VALUES=$(get_dialog_result)
     echo VALUES=$VALUES
     IFS=$' \n' read -rd '' -a y <<<"$VALUES"
     #echo array length=${#y[@]} 
     if (( ${#y[@]} != 4 )); then
         echo "invalid array length. should be 4."
-        exit 1
+        continue
     fi
     NAME=${y[0]}
     PACKAGE=${y[1]}
@@ -118,6 +132,7 @@ if [ -z "$3" ]; then
     #echo PACKAGE_"$PACKAGE"_
     #echo ASSEMBLYVERSION=_"$ASSEMBLYVERSION"_
     #echo ASSEMBLYVERSIONQUALIFIER=_"$ASSEMBLYVERSIONQUALIFIER"_
+done
 else
     NAME=$3
 fi

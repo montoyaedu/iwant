@@ -73,10 +73,10 @@ get_dialog_result() {
 }
 
 show_dialog_artifact_details () {
-    artifactId=""
-    groupId=""
-    version="1.0.0"
-    versionQualifier="-SNAPSHOT"
+    artifactId=$1
+    groupId=$2
+    version=$3
+    versionQualifier=$4
  
     # Store data to $VALUES variable
     $DIALOG --ok-label "Ok" \

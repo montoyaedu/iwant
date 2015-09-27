@@ -100,48 +100,22 @@ else
     TEMPLATE=$1
 fi
 
-if [ -z "$2" ]; then
-while :
-do
-    echo "Enter Artifact Name"
-    read NAME
-    if [[ "${NAME}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
-       echo "${NAME} is valid."
-       break
-    else
-       echo "Invalid identifier ${NAME}"
-    fi
-done
-else
-    NAME=$2
-    if [[ "${NAME}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
-       echo "${NAME} is valid."
-    else
-       echo "Invalid identifier ${NAME}"
-       exit 1
-    fi
-fi
-
 if [ -z "$3" ]; then
-while :
-do
-    echo "Enter Package Name"
-    read PACKAGE
-    if [[ "${PACKAGE}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
-       echo "${PACKAGE} is valid."
-       break
-    else
-       echo "Invalid identifier ${PACKAGE}"
+    show_dialog_artifact_details
+    VALUES=$(get_dialog_result)
+    echo VALUES=$VALUES
+    IFS=$' ' read -rd '' -a y <<<"$VALUES"
+    echo array length=${#y[@]} 
+    if (( ${#y[@]} != 4 )); then
+        echo "invalid array length. should be 4."
+        exit 1
     fi
-done
+    NAME=${y[0]}
+    PACKAGE=${y[1]}
+    ASSEMBLYVERSION=${y[2]}
+    ASSEMBLYVERSIONQUALIFIER=${y[3]}
 else
-    PACKAGE=$3
-    if [[ "${PACKAGE}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
-       echo "${PACKAGE} is valid."
-    else
-       echo "Invalid identifier ${PACKAGE}"
-       exit 1
-    fi
+    NAME=$3
 fi
 
 $DIALOG --clear --title "iWant Project Generator" --menu "Select .NET framework version" 20 40 6 v2.0 v2.0 v3.0 v3.0 v3.5 v3.5 v4.0 v4.0 v4.5 v4.5 2>"${INPUT}"
@@ -149,8 +123,6 @@ VERSION=$(<"${INPUT}")
 echo $VERSION
 
 [[ -z "$5" ]] && TYPE="Exe" || TYPE="$5"
-[[ -z "$6" ]] && ASSEMBLYVERSION="1.0.0" || ASSEMBLYVERSION="$6"
-[[ -z "$7" ]] && ASSEMBLYVERSIONQUALIFIER="-SNAPSHOT" || ASSEMBLYVERSIONQUALIFIER="$7"
 [[ -z "$8" ]] && ARTIFACTEXTENSION="exe" || ARTIFACTEXTENSION="$8"
 
 PROJECTGUID=`uuidgen`

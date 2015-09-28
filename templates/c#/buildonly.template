@@ -1,4 +1,5 @@
 #!/bin/sh
 nuget restore
 xbuild /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
+nunit-console ${ProjectName}.csproj
 iscc buildsetup.iss

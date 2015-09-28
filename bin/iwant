@@ -100,22 +100,17 @@ else
     TEMPLATE=$1
 fi
 
-NAME=
-PACKAGE=
+NAME=$2
+PACKAGE=$3
 ASSEMBLYVERSION=1.0.0
 ASSEMBLYVERSIONQUALIFIER=-SNAPSHOT
 
-if [ -z "$3" ]; then
+y=
+if [ -z "$2" ] || [ -z "$3" ]; then
 while (( ${#y[@]} != 4 ))
 do
-    show_dialog_artifact_details "$NAME" "$PACKAGE" "$ASSEMBLYVERSION" "$ASSEMBLYVERSIONQUALIFIER"
-    if test $? -eq 0
-    then 
-       echo "ok pressed"
-    else
-       echo "cancel pressed"
-       exit 1
-    fi
+    show_dialog_artifact_details \
+        "$NAME" "$PACKAGE" "$ASSEMBLYVERSION" "$ASSEMBLYVERSIONQUALIFIER"
     VALUES=$(get_dialog_result)
     echo VALUES=$VALUES
     IFS=$' \n' read -rd '' -a y <<<"$VALUES"
@@ -128,21 +123,27 @@ do
     PACKAGE=${y[1]}
     ASSEMBLYVERSION=${y[2]}
     ASSEMBLYVERSIONQUALIFIER=${y[3]}
-    #echo NAME=_"$NAME"_
-    #echo PACKAGE_"$PACKAGE"_
-    #echo ASSEMBLYVERSION=_"$ASSEMBLYVERSION"_
-    #echo ASSEMBLYVERSIONQUALIFIER=_"$ASSEMBLYVERSIONQUALIFIER"_
 done
-else
-    NAME=$3
 fi
 
-$DIALOG --clear --title "iWant Project Generator" --menu "Select .NET framework version" 20 40 6 v2.0 v2.0 v3.0 v3.0 v3.5 v3.5 v4.0 v4.0 v4.5 v4.5 2>"${INPUT}"
-VERSION=$(<"${INPUT}")
-echo $VERSION
+verify_identifier $NAME
+verify_identifier $PACKAGE
 
-[[ -z "$5" ]] && TYPE="Exe" || TYPE="$5"
-[[ -z "$8" ]] && ARTIFACTEXTENSION="exe" || ARTIFACTEXTENSION="$8"
+if [ -z "$4" ]; then
+    show_dialog_dotnet_framework_version
+    VERSION=$(get_dialog_result)
+else
+    VERSION=$4
+fi
+
+if [ -z "$5" ]; then
+    show_dialog_output_type
+    TYPE=$(get_dialog_result)
+else
+    TYPE=$5
+fi
+
+ARTIFACTEXTENSION=$(resolve_artifact_extension $TYPE)
 
 PROJECTGUID=`uuidgen`
 COMGUID=`uuidgen`
@@ -229,29 +230,23 @@ git init
 git add '*'
 git commit -m "Initial commit"
 
-while :
+y=
+while (( ${#y[@]} != 2 ))
 do
-    echo "Enter Your bitbucket username"
-    read USERNAME
-    if [[ "${USERNAME}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
-       echo "${USERNAME} is valid."
-       break
-    else
-       echo "Invalid identifier ${USERNAME}"
+    show_dialog_bitbucket_details
+    VALUES=$(get_dialog_result)
+    echo VALUES=$VALUES
+    IFS=$' \n' read -rd '' -a y <<<"$VALUES"
+    if (( ${#y[@]} != 2 )); then
+        echo "invalid array length. should be 2."
+        continue
     fi
+    USERNAME=${y[0]}
+    OWNER=${y[1]}
 done
 
-while :
-do
-    echo "Enter Your bitbucket owner"
-    read OWNER
-    if [[ "${OWNER}" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
-       echo "${OWNER} is valid."
-       break
-    else
-       echo "Invalid identifier ${OWNER}"
-    fi
-done
+verify_identifier $USERNAME
+verify_identifier $OWNER
 
 curl --user ${USERNAME} https://api.bitbucket.org/1.0/repositories/ --data name=${PROJECTNAME} --data has_wiki=true --data has_issues=true --data is_private=true --data owner=${OWNER}
 

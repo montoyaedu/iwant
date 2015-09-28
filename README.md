@@ -34,7 +34,7 @@ Create a new project.
 =====================
 
 `````
-    iwant c# MyApp MyPackage v4.0 Exe 1.0.0 -SNAPSHOT exe
+    iwant c# MyApp MyPackage v4.0 Exe
 `````
 
 Arguments.
@@ -45,9 +45,6 @@ Arguments.
 3. Namespace
 4. .NET framework version
 5. Output Type
-6. Version
-7. Version Qualifier
-8. Output Assembly Extension
 
 Show created project.
 =====================

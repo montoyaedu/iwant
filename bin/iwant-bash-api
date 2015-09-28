@@ -4,6 +4,15 @@ DIALOG=${DIALOG=dialog}
 INPUT=/tmp/menu.sh.$$
 RES=${IWANT_HOME}/bin/resources
 
+verify_identifier() {
+    if [[ "$1" =~ ^[a-zA-Z_][a-zA-Z0-9_]* ]]; then
+        echo "$1 is valid."
+    else
+        echo "Invalid identifier $1"
+        exit 1
+    fi
+}
+
 ###
 ###
 ### FUNCTION abort_if_commant_does_not_exist
@@ -25,6 +34,18 @@ abort_if_commant_does_not_exist() {
 ###
 ###
 
+verify_cancel() {
+    echo "verify_cancel( arg0 ) where arg0 = $1"
+    echo $INPUT
+    echo `cat $INPUT`
+    if (( $1 == 0 )); then 
+       echo "ok pressed"
+    else
+       echo "cancel pressed"
+       exit 1
+    fi
+}
+
 ###
 ###
 ### FUNCTION show_dialog_start
@@ -33,21 +54,12 @@ abort_if_commant_does_not_exist() {
 
 show_dialog_start() {
     $DIALOG --clear \
+        --backtitle "`cat ${RES}/dialog.title`" \
         --title "`cat ${RES}/dialog.title`" \
         --yesno "`cat ${RES}/dialog_start.label`" \
-        20 40
-
-    case $? in
-    0)
-        echo "Yes chosen."
-        ;;
-    1)
-        exit 1
-        ;;
-    255)
-        exit 1
-        ;;
-    esac
+        20 40 \
+        2>"$INPUT"
+    verify_cancel $?
 }
 
 ###
@@ -58,13 +70,14 @@ show_dialog_start() {
 
 show_dialog_template() {
     $DIALOG --clear \
-        --title "iWant Project Generator" \
-        --menu "Select template" \
-        20 40 \
-        2 \
+        --backtitle "`cat ${RES}/dialog.title`" \
+        --title "`cat ${RES}/dialog.title`" \
+        --menu "`cat ${RES}/dialog_template.label`" \
+        20 40 2 \
         c# "CSharp Project Template" \
         java "Java Project Template" \
         2>"${INPUT}"
+    verify_cancel $?
 }
 
 get_dialog_result() {
@@ -72,21 +85,79 @@ get_dialog_result() {
     echo $retval
 }
 
-show_dialog_artifact_details () {
+show_dialog_artifact_details() {
     artifactId=$1
     groupId=$2
     version=$3
     versionQualifier=$4
  
     # Store data to $VALUES variable
-    $DIALOG --ok-label "Ok" \
-    --backtitle "iWant Project Generator" \
-    --title "Artifact Details" \
-    --form "Enter artifact details..." \
+    $DIALOG \
+    --clear \
+    --ok-label "Ok" \
+    --backtitle "`cat ${RES}/dialog.title`" \
+    --title "`cat ${RES}/dialog.title`" \
+    --form "`cat ${RES}/dialog_artifact_details.label`" \
     15 50 0 \
     "ArtifactId:"           1 1 "$artifactId"         1 20 20 0 \
     "GroupId:"              2 1 "$groupId"            2 20 20 0 \
     "Version:"              3 1 "$version"            3 20 8  0 \
-    "VersionQualifier:"     4 1 "$versionQualifier"   4 20 20 0 \
-    2>"${INPUT}"
+    "VersionQualifier:"     4 1 "$versionQualifier"   4 20 20 0 2>"${INPUT}"
+    verify_cancel $?
+}
+
+show_dialog_dotnet_framework_version() {
+    $DIALOG \
+        --clear \
+        --backtitle "`cat ${RES}/dialog.title`" \
+        --title "`cat ${RES}/dialog.title`" \
+        --menu "Select .NET framework version" \
+        20 40 6 \
+        "v2.0" ".NET v2.0" \
+        "v3.0" ".NET v3.0" \
+        "v3.5" ".NET v3.5" \
+        "v4.0" ".NET v4.0" \
+        "v4.5" ".NET v4.5" \
+        2>"${INPUT}"
+    verify_cancel $?
+}
+
+show_dialog_output_type() {
+    $DIALOG \
+        --clear \
+        --backtitle "`cat ${RES}/dialog.title`" \
+        --title "`cat ${RES}/dialog.title`" \
+        --menu "Select Output Type" \
+        20 40 2 \
+        WinExe "Windows Executable" \
+        Exe "Console Executable" \
+        Library "Windows Library (DLL)" \
+        2>"${INPUT}"
+    verify_cancel $?
+}
+
+resolve_artifact_extension() {
+    outputtype=$1
+    case $outputtype in
+    "Library")
+        retval="dll"
+        ;;
+    *)
+        retval="exe"
+        ;;
+    esac
+    echo $retval
+}
+
+show_dialog_bitbucket_details() {
+    $DIALOG \
+    --clear \
+    --ok-label "Ok" \
+    --backtitle "`cat ${RES}/dialog.title`" \
+    --title "`cat ${RES}/dialog.title`" \
+    --form "`cat ${RES}/dialog_bitbucket_details.label`" \
+    15 50 0 \
+    "Username:"           1 1 ""   1 20 20 0 \
+    "Owner:"              2 1 ""   2 20 20 0 2>"${INPUT}"
+    verify_cancel $?
 }

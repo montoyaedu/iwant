@@ -11,7 +11,7 @@ rem pre-build project
 "%MSBUILDDIR%msbuild.exe" /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
 if ERRORLEVEL 1 goto BuildError
 rem pre-create setup package.
-issc\iscc.exe buildsetup.iss
+iscc.exe buildsetup.iss
 if ERRORLEVEL 1 goto BuildError
 rem change file version.txt from A.B.C-qualifierN-SNAPSHOT to A.B.C-qualifierN
 call mvn dotnet:release
@@ -44,7 +44,7 @@ rem build project after tag
 "%MSBUILDDIR%msbuild.exe" /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
 if ERRORLEVEL 1 goto BuildError
 rem create setup package.
-issc\iscc.exe buildsetup.iss
+iscc.exe buildsetup.iss
 if ERRORLEVEL 1 goto BuildError
 rem deploy setup package to repository.
 rem TODO

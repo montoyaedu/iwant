@@ -198,6 +198,59 @@ TODO:
 1. Add support for deploying nuget packages to c# template.
 1. Add documentation for undocumented scripts.
 
+Configure Jenkins In A Windows Box.
+===================================
+
+There is no a single way to configure a Windows Box in order to use it as a server for continuous integration. Here we explain our setup. Comments are welcome.
+
+You will need administrative rights in order to configure properly you Windows Server.
+
+1. The Server.
+
+    1. Operating System.
+
+    `````
+        Windows 7
+    `````
+
+    1. Configure a CI user. For instance:
+
+    `````
+        net user /add jenkins *
+    `````
+
+    1. User %HOMEPATH%
+
+    `````
+        C:\Users\jenkins
+    `````
+
+    1. Create C:\AppStack folder
+
+    `````
+        MD D:\AppStack
+    `````
+
+1. Jenkins.
+
+    1. Installation Path.
+
+    `````
+        E:\AppStack\Jenkins
+    `````
+
+    1. Version.
+
+    `````
+        1.631
+    `````
+
+    1. Configure Service to be executed by the jenkins user.
+
+1. Install Git.
+
+    1. Download (https://github.com/git-for-windows/git/releases/download/v2.5.3.windows.1/Git-2.5.3-64-bit.exe)
+
 Acknowledgements.
 =================
 

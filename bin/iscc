@@ -27,7 +27,7 @@
 
 
 SCRIPTNAME=$1
-INNO_BIN="iscc.exe"
+INNO_BIN=${INNO_SETUP_HOME}/"iscc.exe"
 
 # Check if variable is set
 [ -z "$SCRIPTNAME" ] && { echo "Usage: $0 <SCRIPT_NAME>"; echo; exit 1; }

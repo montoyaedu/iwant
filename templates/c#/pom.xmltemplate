@@ -21,4 +21,31 @@
       <url>https://jitpack.io</url>
     </pluginRepository>
   </pluginRepositories>
+<!--
+  <scm>
+    <connection>scm:git:ssh://git@host:port/owner/repo.git</connection>
+    <developerConnection>scm:git:ssh://git@host:port/owner/repo.git</developerConnection>
+    <url>https://host:port/owner/repo.git</url>
+    <tag>HEAD</tag>
+  </scm> 
+  <developers>
+    <developer>
+      <email>developer@domain.com</email>
+      <name>Developer Name</name>
+      <url>https://developerdomain.com/developerpage</url>
+      <id>developer</id>
+    </developer>
+  </developers>
+
+  <distributionManagement>
+    <repository>
+      <id>deployment</id>
+      <url>http://host:port/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>deployment</id>
+      <url>http://host:port/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+-->
 </project>

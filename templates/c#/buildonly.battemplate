@@ -14,9 +14,21 @@ rm -fr *.nupkg
 nuget pack ${ProjectName}.csproj
 if ERRORLEVEL 1 goto Error
 
-nuget delete ${ProjectName} ${AssemblyVersion}${AssemblyVersionQualifier}
+set /p VERSION=< version.txt
+if ERRORLEVEL 1 goto Error
 
-nuget push ${ProjectName}-${AssemblyVersion}${AssemblyVersionQualifier}.nupkg -source %NUGET_SOURCE_URL%
+VERIFY OTHER 2>nul
+SETLOCAL ENABLEEXTENSIONS
+IF ERRORLEVEL 1 ECHO Unable to enable extensions
+IF DEFINED NUGET_SOURCE_URL (ECHO NUGET_SOURCE_URL IS defined) ELSE (
+    ECHO NUGET_SOURCE_URL is NOT defined
+    goto Error
+)
+ENDLOCAL
+
+nuget delete ${ProjectName} %VERSION%
+
+nuget push ${ProjectName}-%VERSION%.nupkg -source %NUGET_SOURCE_URL%
 if ERRORLEVEL 1 goto Error
 
 goto:eof

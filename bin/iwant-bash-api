@@ -128,7 +128,7 @@ show_dialog_output_type() {
         --backtitle "`cat ${RES}/dialog.title`" \
         --title "`cat ${RES}/dialog.title`" \
         --menu "Select Output Type" \
-        20 40 2 \
+        40 40 4 \
         WinExe "Windows Executable" \
         Exe "Console Executable" \
         Library "Windows Library (DLL)" \

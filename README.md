@@ -1,11 +1,49 @@
 # iwant
 An effort to create a simple programming project starter. (Something like mvn archetype:generate but easier)
 
+Right now we support only a simple c# template (archetype).
+
 Requirements.
 =============
 
-1. maven 3.x
+Requirements ar for now a description of my development environments. Contributions are welcome.
+
+Servers.
+========
+
+1. jenkins on a windows box. (nuget pack works only on windows)
+2. nexus (should work with any artifact server with nuget support)
+3. bitbucket (should work with any SCM but now we are using and supporting only bitbuck)
+
+Common.
+=======
+
+1. mono
+1. java 1.7+
+1. maven 3.3+
 1. git
+1. nunit 2.6.4+
+1. a bitbucket account (with ssh access)
+
+On Windows.
+===========
+
+1. visual studio 2010
+1. windows sdk 7.1
+1. innosetup 5.5+
+
+On Mac OS X.
+============
+
+1. homebrew
+1. wine 1.7+
+1. innosetup 5.5+ (installed and launched by wine)
+
+On Linux (Ubuntu).
+==================
+
+1. wine 1.7+
+1. innosetup 5.5+ (installed and launched by wine)
 
 Install.
 ========
@@ -172,6 +210,12 @@ Thanks to (but not limited to) all developers involved in:
 1. http://www.jrsoftware.org/files/is/license.txt
 1. https://maven.apache.org/
 1. https://github.com/
+1. https://bitbucket.org/
 1. https://git-scm.com/
 1. https://www.visualstudio.com/
 1. https://github.com/montoyaedu/Uuidgen.NET
+1. https://www.nuget.org/
+1. http://www.mono-project.com/
+1. https://www.java.com/en/
+1. http://www.sonatype.org/nexus/go/
+1. http://jenkins-ci.org/

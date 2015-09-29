@@ -1,24 +1,27 @@
-@echo on
+nuget restore
+if ERRORLEVEL 1 goto Error
 
-reg.exe query "HKLM\SOFTWARE\Microsoft\MSBuild\ToolsVersions\4.0" /v MSBuildToolsPath > nul 2>&1
-if ERRORLEVEL 1 goto BuildError
+msbuild /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
+if ERRORLEVEL 1 goto Error
 
-for /f "skip=2 tokens=2,*" %%A in ('reg.exe query "HKLM\SOFTWARE\Microsoft\MSBuild\ToolsVersions\4.0" /v MSBuildToolsPath') do SET MSBUILDDIR=%%B
-
-IF NOT EXIST %MSBUILDDIR%nul goto BuildError
-IF NOT EXIST %MSBUILDDIR%msbuild.exe goto BuildError
-rem pre-build project
-"%MSBUILDDIR%msbuild.exe" /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
-if ERRORLEVEL 1 goto BuildError
 nunit-console-x86 ${ProjectName}.csproj
-if ERRORLEVEL 1 goto BuildError
-rem pre-create setup package.
+if ERRORLEVEL 1 goto Error
+
 iscc.exe buildsetup.iss
-if ERRORLEVEL 1 goto BuildError
+if ERRORLEVEL 1 goto Error
+
+rm -fr *.nupkg
+nuget pack ${ProjectName}.csproj
+if ERRORLEVEL 1 goto Error
+
+nuget delete ${ProjectName} ${AssemblyVersion}${AssemblyVersionQualifier}
+
+nuget push ${ProjectName}-${AssemblyVersion}${AssemblyVersionQualifier}.nupkg -source %NUGET_SOURCE_URL%
+if ERRORLEVEL 1 goto Error
+
 goto:eof
 
-::ERRORS
-::---------------------
-:BuildError
-echo BuildError. Verify Console Output.
+:Error
+echo Error. Verify Console Output.
+
 goto:eof

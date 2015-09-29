@@ -207,25 +207,25 @@ You will need administrative rights in order to configure properly you Windows S
 
 1. The Server.
 
-    1. Operating System.
+    * Operating System.
 
     `````
-        Windows 7
+        Windows 7 Professional Service Pack 1
     `````
 
-    1. Configure a CI user. For instance:
+    * Configure a CI user. For instance:
 
     `````
         net user /add jenkins *
     `````
 
-    1. User %HOMEPATH%
+    * User %HOMEPATH%
 
     `````
         C:\Users\jenkins
     `````
 
-    1. Create C:\AppStack folder
+    * Create C:\AppStack folder
 
     `````
         MD D:\AppStack
@@ -233,23 +233,40 @@ You will need administrative rights in order to configure properly you Windows S
 
 1. Jenkins.
 
-    1. Installation Path.
+    * Installation Path.
 
     `````
         E:\AppStack\Jenkins
     `````
 
-    1. Version.
+    * Version.
 
     `````
         1.631
     `````
 
-    1. Configure Service to be executed by the jenkins user.
+    * Configure Service to be executed by the jenkins user.
 
 1. Install Git.
 
-    1. Download (https://github.com/git-for-windows/git/releases/download/v2.5.3.windows.1/Git-2.5.3-64-bit.exe)
+    * Download (https://github.com/git-for-windows/git/releases/download/v2.5.3.windows.1/Git-2.5.3-64-bit.exe)
+
+1. Install and configure nexus.
+
+1. Configure NuGet.
+
+    * Set credentials and remembering ApiKey
+
+    `````
+        nuget sources
+        Registered Sources:
+            1.  nuget.org [Enabled]
+                https://www.nuget.org/api/v2/
+            2.  mynexusserver [Enabled]
+                http://address:port/nexus/service/local/nuget/MyNuGetRepo/
+        nuget sources update -name mynexusserver -source http://address:port/nexus/service/local/nuget/MyNuGetRepo/ -username user -password pass
+        nuget setapikey your-api-key -source http://address:port/nexus/service/local/nuget/MyNuGetRepo/
+    `````
 
 Acknowledgements.
 =================

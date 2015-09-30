@@ -68,6 +68,20 @@ export PATH=$PATH:/opt/iwant-app/bin
 export IWANT_HOME=/opt/iwant-app
 `````
 
+Configure $HOME/.iwantprofile.
+==============================
+
+`````bash
+#your default package prefix
+export PACKAGE=Edu
+#your default username at bitbucket
+export USERNAME=montoyaedu
+#your default owner at bitbucket
+export OWNER=montoyaedu
+#your nexus proxy web server
+export WEBSERVER=192.168.1.20
+`````
+
 Create a new project.
 =====================
 

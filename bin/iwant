@@ -160,13 +160,38 @@ if [[ "$TEMPLATE" == "java" ]]; then
     PACKAGE=`echo "${PACKAGE}" | tr '[:upper:]' '[:lower:]'`
 fi
 
-cp -R ${TEMPLATEDIR} ${FOLDER}
-cd ${FOLDER}
-
 if [ -d "$FOLDER" ]; then
   echo destination ${FOLDER} already exists.
   exit 1
 fi
+
+cp -R ${TEMPLATEDIR} ${FOLDER}
+cd ${FOLDER}
+
+show_dialog_remote
+REMOTE=$(get_dialog_result)
+
+echo "using remote ${REMOTE}"
+
+    y=
+    while (( ${#y[@]} != 2 ))
+    do
+        show_dialog_bitbucket_details "${USERNAME}" "${OWNER}"
+        VALUES=$(get_dialog_result)
+        echo VALUES=$VALUES
+        IFS=$' \n' read -rd '' -a y <<<"$VALUES"
+        if (( ${#y[@]} != 2 )); then
+            echo "invalid array length. should be 2."
+            continue
+        fi
+        USERNAME=${y[0]}
+        OWNER=${y[1]}
+    done
+
+    verify_identifier $USERNAME
+    verify_identifier $OWNER
+
+    USEREMAIL=`git config user.email`
 
 if [[ "${TEMPLATE}" == "c#" ]]; then
 SEDXX='sed 
@@ -228,6 +253,11 @@ SEDXX='sed
  -e s/\${RootNamespace}/'${PACKAGE}'/g
  -e s/\${ArtifactExtension}/'${ARTIFACTEXTENSION}'/g 
  -e s/\${ProjectName}/'${PROJECTNAME}'/g 
+ -e s/\${Remote}/'${REMOTE}'/g 
+ -e s/\${UserName}/'${USERNAME}'/g 
+ -e s/\${Owner}/'${OWNER}'/g 
+ -e s/\${UserEmail}/'${USEREMAIL}'/g 
+ -e s/\${WebServer}/'${WEBSERVER}'/g 
  -e s/\${AssemblyVersion}/'${ASSEMBLYVERSION}'/g 
  -e s/\${AssemblyVersionQualifier}/'${ASSEMBLYVERSIONQUALIFIER}'/g'
 
@@ -252,30 +282,7 @@ git init
 git add --all
 git commit -m "Initial commit"
 
-show_dialog_remote
-REMOTE=$(get_dialog_result)
-
-echo "using remote ${REMOTE}"
-
 if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
-    y=
-    while (( ${#y[@]} != 2 ))
-    do
-        show_dialog_bitbucket_details "${USERNAME}" "${OWNER}"
-        VALUES=$(get_dialog_result)
-        echo VALUES=$VALUES
-        IFS=$' \n' read -rd '' -a y <<<"$VALUES"
-        if (( ${#y[@]} != 2 )); then
-            echo "invalid array length. should be 2."
-            continue
-        fi
-        USERNAME=${y[0]}
-        OWNER=${y[1]}
-    done
-
-    verify_identifier $USERNAME
-    verify_identifier $OWNER
-
     curl \
         --user ${USERNAME} \
         https://api.bitbucket.org/1.0/repositories/ \

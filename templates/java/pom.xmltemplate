@@ -77,29 +77,29 @@
   </profiles>
 
   <scm>
-    <connection>scm:git:ssh://git@localhost/owner/${ProjectName}.git</connection>
-    <developerConnection>scm:git:ssh://git@localhost/owner/${ProjectName}.git</developerConnection>
-    <url>https://localhost/owner/${ProjectName}.git</url>
+    <connection>scm:git:ssh://${Remote}/${Owner}/${ProjectName}.git</connection>
+    <developerConnection>scm:git:ssh://${Remote}/${Owner}/${ProjectName}.git</developerConnection>
+    <url>https://${Remote}/${Owner}/${ProjectName}.git</url>
     <tag>HEAD</tag>
   </scm>
 
   <developers>
     <developer>
-      <email>developer@localhost</email>
-      <name>Deve Loper</name>
-      <url>https://localhost/~developer</url>
-      <id>developer</id>
+      <email>${UserEmail}</email>
+      <name>${UserName}</name>
+      <url>https://${Remote}/${UserName}</url>
+      <id>${UserName}</id>
     </developer>
   </developers>
 
   <distributionManagement>
     <repository>
       <id>deployment</id>
-      <url>http://localhost/nexus/content/repositories/releases/</url>
+      <url>http://${WebServer}/nexus/content/repositories/releases/</url>
     </repository>
     <snapshotRepository>
       <id>deployment</id>
-      <url>http://localhost/nexus/content/repositories/snapshots/</url>
+      <url>http://${WebServer}/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 </project>

@@ -198,6 +198,64 @@ TODO:
 1. Add support for deploying nuget packages to c# template.
 1. Add documentation for undocumented scripts.
 
+Going Beyond IWant.
+===================
+
+Apache.
+=======
+
+modify /etc/apache2/sites-enabled/yoursite.conf
+
+`````
+    ProxyPreserveHost On
+    ProxyRequests Off
+    ProxyPass /nexus http://localhost:10035/nexus
+    ProxyPassReverse /nexus http://localhost:10035/nexus
+    ProxyPass /sonar http://localhost:9000/sonar
+    ProxyPassReverse /sonar http://localhost:9000/sonar
+`````
+
+Postgresql.
+===========
+
+`````bash
+    sudo apt-get install postgresql postgresql-contrib
+`````
+
+Sonar.
+======
+
+`````bash
+    sudo apt-get install sonar
+    sudo service sonar stop
+`````
+
+modify /opt/sonar/conf/sonar.properties
+
+`````
+    sonar.jdbc.username=sonar
+    sonar.jdbc.password=sonar
+    sonar.jdbc.url=jdbc:postgresql://localhost/sonar
+    sonar.web.context=/sonar
+`````
+
+restart sonar.
+
+`````
+    sudo service sonar start
+`````
+
+`````
+    sudo su - postgres
+    psql
+`````
+
+`````psql
+    DROP DATABASE sonar;
+    CREATE USER sonar WITH PASSWORD 'sonar';
+    CREATE DATABASE sonar WITH OWNER sonar ENCODING 'UTF8';
+`````
+
 Configure Jenkins In A Windows Box.
 ===================================
 

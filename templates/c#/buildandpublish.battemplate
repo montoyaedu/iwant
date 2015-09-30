@@ -30,8 +30,6 @@ IF DEFINED NUGET_SOURCE_URL (ECHO NUGET_SOURCE_URL IS defined) ELSE (
 )
 ENDLOCAL
 
-nuget delete ${ProjectName} %VERSION% -source %NUGET_SOURCE_URL% -noninteractive
-
 nuget push ${ProjectName}.%VERSION%.nupkg -source %NUGET_SOURCE_URL%
 if ERRORLEVEL 1 goto Error
 

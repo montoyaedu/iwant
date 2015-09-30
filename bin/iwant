@@ -269,6 +269,7 @@ echo using substitution command ${SEDXX}
     ${SEDXX} AppTest.java > ${NAME}Test.java
     ${SEDXX} pom.xmltemplate > pom.xml
     ${SEDXX} config.xmltemplate > config.xml
+    ${SEDXX} release.xmltemplate > release.xml
     ${SEDXX} cover.shtemplate > cover.sh
     mkdir -p src/main/java/$AUXPATH
     mkdir -p src/test/java/$AUXPATH
@@ -278,6 +279,7 @@ echo using substitution command ${SEDXX}
     rm AppTest.java
     rm pom.xmltemplate
     rm config.xmltemplate
+    rm release.xmltemplate
     rm cover.shtemplate
     chmod +x cover.sh
 fi
@@ -307,5 +309,10 @@ if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
         -X POST \
         "http://192.168.1.171:8080/job/${PROJECTNAME}/template/config.xml" \
         --data-binary "@detail.xml" \
+        -H "Content-Type: text/xml"
+    curl \
+        -X POST \
+        "http://192.168.1.171:8080/createItem?name=${PROJECTNAME}-for-release" \
+        --data-binary "@release.xml" \
         -H "Content-Type: text/xml"
 fi

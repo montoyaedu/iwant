@@ -35,7 +35,7 @@
   <allowAnonymousSync>false</allowAnonymousSync>
   <scmSource class="jenkins.plugins.git.GitSCMSource" plugin="git@2.4.0">
     <id>6f95a90e-7f92-4d6f-9333-cdbe6e2cdddf</id>
-    <remote>git@${Remote}:${Owner}/${ProjectName}.git</remote>
+    <remote>${Remote}:${Owner}/${ProjectName}.git</remote>
     <credentialsId>882d2554-c1d0-49e3-8289-364c79f6f631</credentialsId>
     <includes>*</includes>
     <excludes></excludes>

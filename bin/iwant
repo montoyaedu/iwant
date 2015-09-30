@@ -104,22 +104,13 @@ if (( $# == 0 )); then
     show_dialog_start
 fi
 
-if [ -z "$1" ]; then
-    show_dialog_template
-    TEMPLATE=$(get_dialog_result)
-else
-    TEMPLATE=$1
-fi
+show_dialog_template
+TEMPLATE=$(get_dialog_result)
 
-NAME=$2
-if [ ! -z "$3" ]; then
-    PACKAGE=$3
-fi
 ASSEMBLYVERSION=1.0.0
 ASSEMBLYVERSIONQUALIFIER=-SNAPSHOT
 
 y=
-if [ -z "$2" ] || [ -z "$3" ]; then
 while (( ${#y[@]} != 4 ))
 do
     show_dialog_artifact_details \
@@ -137,24 +128,15 @@ do
     ASSEMBLYVERSION=${y[2]}
     ASSEMBLYVERSIONQUALIFIER=${y[3]}
 done
-fi
 
 verify_identifier $NAME
 verify_identifier $PACKAGE
 
-if [ -z "$4" ]; then
-    show_dialog_dotnet_framework_version
-    VERSION=$(get_dialog_result)
-else
-    VERSION=$4
-fi
+show_dialog_dotnet_framework_version
+VERSION=$(get_dialog_result)
 
-if [ -z "$5" ]; then
-    show_dialog_output_type
-    TYPE=$(get_dialog_result)
-else
-    TYPE=$5
-fi
+show_dialog_output_type
+TYPE=$(get_dialog_result)
 
 ARTIFACTEXTENSION=$(resolve_artifact_extension $TYPE)
 

@@ -72,20 +72,10 @@ Create a new project.
 =====================
 
 `````
-    iwant c# MyApp MyPackage v4.0 Exe
+    iwant
 `````
 
-Arguments.
-==========
-
-1. Template (folder must exists under ${IWANT_HOME}/templates)
-2. Basename
-3. Namespace
-4. .NET framework version
-5. Output Type
-
-Show created project.
-=====================
+The follow the instructions on the screen. For instance, if you decided to create a c# project you will have something like this:
 
 `````
 MyPackage.MyApp

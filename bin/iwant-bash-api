@@ -122,6 +122,19 @@ show_dialog_dotnet_framework_version() {
     verify_cancel $?
 }
 
+show_dialog_remote() {
+    $DIALOG \
+        --clear \
+        --backtitle "`cat ${RES}/dialog.title`" \
+        --title "`cat ${RES}/dialog.title`" \
+        --menu "Select a remote" \
+        20 40 3 \
+        "" "None" \
+        "git@bitbucket.org" "git@bitbucket.org" \
+        2>"${INPUT}"
+    verify_cancel $?
+}
+
 show_dialog_output_type() {
     $DIALOG \
         --clear \
@@ -157,7 +170,7 @@ show_dialog_bitbucket_details() {
     --title "`cat ${RES}/dialog.title`" \
     --form "`cat ${RES}/dialog_bitbucket_details.label`" \
     15 50 0 \
-    "Username:"           1 1 ""   1 20 20 0 \
-    "Owner:"              2 1 ""   2 20 20 0 2>"${INPUT}"
+    "Username:"           1 1 "$1"   1 20 20 0 \
+    "Owner:"              2 1 "$2"   2 20 20 0 2>"${INPUT}"
     verify_cancel $?
 }

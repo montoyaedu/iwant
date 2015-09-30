@@ -70,6 +70,15 @@ echo "SCRIPT DIR = $(get_script_dir)"
 ###
 ###
 
+load_file() {
+    if [ -f $1 ]; then
+        echo "loading $1"
+        . $1
+    else
+        echo "file not found $1"
+    fi
+}
+
 ###
 ###
 ### SNIPPET load_libraries
@@ -77,6 +86,8 @@ echo "SCRIPT DIR = $(get_script_dir)"
 ###
 
 . ${IWANT_HOME}/bin/iwant-bash-api
+
+load_file ${HOME}/.iwantprofile
 
 ###
 ###
@@ -101,7 +112,9 @@ else
 fi
 
 NAME=$2
-PACKAGE=$3
+if [ ! -z "$3" ]; then
+    PACKAGE=$3
+fi
 ASSEMBLYVERSION=1.0.0
 ASSEMBLYVERSIONQUALIFIER=-SNAPSHOT
 
@@ -231,28 +244,42 @@ rm buildonly.battemplate
 rm buildandpublish.battemplate
 
 git init
-git add '*'
+git add --all
 git commit -m "Initial commit"
 
-y=
-while (( ${#y[@]} != 2 ))
-do
-    show_dialog_bitbucket_details
-    VALUES=$(get_dialog_result)
-    echo VALUES=$VALUES
-    IFS=$' \n' read -rd '' -a y <<<"$VALUES"
-    if (( ${#y[@]} != 2 )); then
-        echo "invalid array length. should be 2."
-        continue
-    fi
-    USERNAME=${y[0]}
-    OWNER=${y[1]}
-done
+show_dialog_remote
+REMOTE=$(get_dialog_result)
 
-verify_identifier $USERNAME
-verify_identifier $OWNER
+echo "using remote ${REMOTE}"
 
-curl --user ${USERNAME} https://api.bitbucket.org/1.0/repositories/ --data name=${PROJECTNAME} --data has_wiki=true --data has_issues=true --data is_private=true --data owner=${OWNER}
+if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
+    y=
+    while (( ${#y[@]} != 2 ))
+    do
+        show_dialog_bitbucket_details "${USERNAME}" "${OWNER}"
+        VALUES=$(get_dialog_result)
+        echo VALUES=$VALUES
+        IFS=$' \n' read -rd '' -a y <<<"$VALUES"
+        if (( ${#y[@]} != 2 )); then
+            echo "invalid array length. should be 2."
+            continue
+        fi
+        USERNAME=${y[0]}
+        OWNER=${y[1]}
+    done
 
-git remote add origin git@bitbucket.org:${OWNER}/${PROJECTNAME}.git
-git push -u origin --all
+    verify_identifier $USERNAME
+    verify_identifier $OWNER
+
+    curl \
+        --user ${USERNAME} \
+        https://api.bitbucket.org/1.0/repositories/ \
+        --data name=${PROJECTNAME} \
+        --data has_wiki=true \
+        --data has_issues=true \
+        --data is_private=true \
+        --data owner=${OWNER}
+
+    git remote add origin ${REMOTE}:${OWNER}/${PROJECTNAME}.git
+    git push -u origin --all
+fi

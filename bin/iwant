@@ -269,10 +269,10 @@ echo using substitution command ${SEDXX}
     ${SEDXX} AppTest.java > ${NAME}Test.java
     ${SEDXX} pom.xmltemplate > pom.xml
     ${SEDXX} cover.shtemplate > cover.sh
-    mkdir -p src/main/$AUXPATH
-    mkdir -p src/test/$AUXPATH
-    mv ${NAME}.java src/main/$AUXPATH
-    mv ${NAME}Test.java src/test/$AUXPATH
+    mkdir -p src/main/java/$AUXPATH
+    mkdir -p src/test/java/$AUXPATH
+    mv ${NAME}.java src/main/java/$AUXPATH
+    mv ${NAME}Test.java src/test/java/$AUXPATH
     rm App.java
     rm AppTest.java
     rm pom.xmltemplate

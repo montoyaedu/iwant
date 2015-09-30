@@ -207,6 +207,7 @@ ${SEDXX} release.template > release
 ${SEDXX} release.battemplate > release.bat
 ${SEDXX} buildonly.template > buildonly
 ${SEDXX} buildonly.battemplate > buildonly.bat
+${SEDXX} buildandpublish.battemplate > buildandpublish.bat
 
 chmod +x release
 chmod +x buildonly
@@ -227,6 +228,7 @@ rm release.template
 rm release.battemplate
 rm buildonly.template
 rm buildonly.battemplate
+rm buildandpublish.battemplate
 
 git init
 git add '*'

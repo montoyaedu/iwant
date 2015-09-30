@@ -24,7 +24,7 @@ if ERRORLEVEL 1 goto Error
 git tag --file=version.txt %VERSION%
 if ERRORLEVEL 1 goto Error
 
-call buildonly
+call buildandpublish
 if ERRORLEVEL 1 goto Error
 
 rem mvn dotnet:next -DversionQualifier=RC

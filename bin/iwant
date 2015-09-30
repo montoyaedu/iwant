@@ -132,17 +132,19 @@ done
 verify_identifier $NAME
 verify_identifier $PACKAGE
 
-show_dialog_dotnet_framework_version
-VERSION=$(get_dialog_result)
+if [[ "${TEMPLATE}" == "c#" ]]; then
+    show_dialog_dotnet_framework_version
+    VERSION=$(get_dialog_result)
 
-show_dialog_output_type
-TYPE=$(get_dialog_result)
+    show_dialog_output_type
+    TYPE=$(get_dialog_result)
 
-ARTIFACTEXTENSION=$(resolve_artifact_extension $TYPE)
+    ARTIFACTEXTENSION=$(resolve_artifact_extension $TYPE)
 
-PROJECTGUID=`uuidgen`
-COMGUID=`uuidgen`
-SOLUTIONGUID=`uuidgen`
+    PROJECTGUID=`uuidgen`
+    COMGUID=`uuidgen`
+    SOLUTIONGUID=`uuidgen`
+fi
 
 TEMPLATEDIR=${IWANT_HOME}/templates/${TEMPLATE}
 PROJECTNAME=${PACKAGE}.${NAME}
@@ -152,14 +154,17 @@ echo using template ${TEMPLATE}
 echo using folder ${FOLDER}
 echo using name ${NAME}
 echo using package ${PACKAGE}
-echo using version ${VERSION}
-echo using type ${TYPE}
-echo using project guid ${PROJECTGUID}
-echo using COM guid ${COMGUID}
-echo using solution guid ${SOLUTIONGUID}
 echo using assembly version ${ASSEMBLYVERSION}
 echo using assembly version qualifier ${ASSEMBLYVERSIONQUALIFIER}
-echo using artifact extension ${ARTIFACTEXTENSION}
+
+if [[ "${TEMPLATE}" == "c#" ]]; then
+    echo using version ${VERSION}
+    echo using type ${TYPE}
+    echo using project guid ${PROJECTGUID}
+    echo using COM guid ${COMGUID}
+    echo using solution guid ${SOLUTIONGUID}
+    echo using artifact extension ${ARTIFACTEXTENSION}
+fi
 
 if [ ! -d "$TEMPLATEDIR" ]; then
   echo template ${TEMPLATEDIR} does not exist.
@@ -174,6 +179,7 @@ fi
 cp -R ${TEMPLATEDIR} ${FOLDER}
 cd ${FOLDER}
 
+if [[ "${TEMPLATE}" == "c#" ]]; then
 SEDXX='sed 
  -e s/\${AssemblyName}/'${NAME}'/ 
  -e s/\${RootNamespace}/'${PACKAGE}'/ 
@@ -224,6 +230,9 @@ rm release.battemplate
 rm buildonly.template
 rm buildonly.battemplate
 rm buildandpublish.battemplate
+else
+    chmod +x cover.sh
+fi
 
 git init
 git add --all

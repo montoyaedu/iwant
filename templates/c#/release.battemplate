@@ -46,10 +46,7 @@ if ERRORLEVEL 1 goto Error
 git commit -a -m "[RELEASE] - new development version set to %VERSION%"
 if ERRORLEVEL 1 goto Error
 
-git push --all
-if ERRORLEVEL 1 goto Error
-
-git push --tags
+git push --all --follow-tags
 if ERRORLEVEL 1 goto Error
 
 goto:eof

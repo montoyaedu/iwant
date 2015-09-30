@@ -1,23 +1,23 @@
-package it.ethiclab;
+package ${RootNamespace};
 
 import java.util.logging.Logger;
 
 /**
- * Hello world!
+ * ${AssemblyName}
  *
  */
-public class App 
+public class ${AssemblyName}
 {
     private static final Logger LOGGER = 
-        Logger.getLogger(App.class.getName());
+        Logger.getLogger(${AssemblyName}.class.getName());
 
-    private App()
+    private ${AssemblyName}()
     {
     }
 
     public static void main( String[] args )
     {
-        App x = new App();
+        ${AssemblyName} x = new ${AssemblyName}();
         x.sayHello();
     }
 

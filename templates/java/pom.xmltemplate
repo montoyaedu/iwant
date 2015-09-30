@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>it.ethiclab</groupId>
-  <artifactId>app</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <groupId>${RootNamespace}</groupId>
+  <artifactId>${ArtifactId}</artifactId>
+  <version>${AssemblyVersion}${AssemblyVersionQualifier}</version>
   <packaging>jar</packaging>
 
-  <name>app</name>
+  <name>${ArtifactId}</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -77,29 +77,29 @@
   </profiles>
 
   <scm>
-    <connection>scm:git:ssh://git@bitbucket.org/montoyaedu/app.git</connection>
-    <developerConnection>scm:git:ssh://git@bitbucket.org/montoyaedu/app.git</developerConnection>
-    <url>https://bitbucket.org/montoyaedu/app.git</url>
+    <connection>scm:git:ssh://git@localhost/owner/${ProjectName}.git</connection>
+    <developerConnection>scm:git:ssh://git@localhost/owner/${ProjectName}.git</developerConnection>
+    <url>https://localhost/owner/${ProjectName}.git</url>
     <tag>HEAD</tag>
   </scm>
 
   <developers>
     <developer>
-      <email>montoya.edu@gmail.com</email>
-      <name>Montoya Edu</name>
-      <url>https://github.com/montoyaedu</url>
-      <id>montoyaedu</id>
+      <email>developer@localhost</email>
+      <name>Deve Loper</name>
+      <url>https://localhost/~developer</url>
+      <id>developer</id>
     </developer>
   </developers>
 
   <distributionManagement>
     <repository>
       <id>deployment</id>
-      <url>http://192.168.1.20/nexus/content/repositories/releases/</url>
+      <url>http://localhost/nexus/content/repositories/releases/</url>
     </repository>
     <snapshotRepository>
       <id>deployment</id>
-      <url>http://192.168.1.20/nexus/content/repositories/snapshots/</url>
+      <url>http://localhost/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 </project>

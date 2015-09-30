@@ -150,48 +150,37 @@ TEMPLATEDIR=${IWANT_HOME}/templates/${TEMPLATE}
 PROJECTNAME=${PACKAGE}.${NAME}
 FOLDER=${PROJECTNAME}
 
-echo using template ${TEMPLATE}
-echo using folder ${FOLDER}
-echo using name ${NAME}
-echo using package ${PACKAGE}
-echo using assembly version ${ASSEMBLYVERSION}
-echo using assembly version qualifier ${ASSEMBLYVERSIONQUALIFIER}
-
-if [[ "${TEMPLATE}" == "c#" ]]; then
-    echo using version ${VERSION}
-    echo using type ${TYPE}
-    echo using project guid ${PROJECTGUID}
-    echo using COM guid ${COMGUID}
-    echo using solution guid ${SOLUTIONGUID}
-    echo using artifact extension ${ARTIFACTEXTENSION}
-fi
-
 if [ ! -d "$TEMPLATEDIR" ]; then
   echo template ${TEMPLATEDIR} does not exist.
   exit 1
 fi
+
+if [[ "$TEMPLATE" == "java" ]]; then
+    FOLDER=`echo "${FOLDER}" | tr '[:upper:]' '[:lower:]'`
+    PACKAGE=`echo "${PACKAGE}" | tr '[:upper:]' '[:lower:]'`
+fi
+
+cp -R ${TEMPLATEDIR} ${FOLDER}
+cd ${FOLDER}
 
 if [ -d "$FOLDER" ]; then
   echo destination ${FOLDER} already exists.
   exit 1
 fi
 
-cp -R ${TEMPLATEDIR} ${FOLDER}
-cd ${FOLDER}
-
 if [[ "${TEMPLATE}" == "c#" ]]; then
 SEDXX='sed 
- -e s/\${AssemblyName}/'${NAME}'/ 
- -e s/\${RootNamespace}/'${PACKAGE}'/ 
- -e s/\${TargetFrameworkVersion}/'${VERSION}'/ 
- -e s/\${OutputType}/'${TYPE}'/ 
- -e s/\${ArtifactExtension}/'${ARTIFACTEXTENSION}'/ 
- -e s/\${ProjectName}/'${PROJECTNAME}'/ 
- -e s/\${ProjectGuid}/'${PROJECTGUID}'/ 
- -e s/\${ComGuid}/'${COMGUID}'/ 
- -e s/\${SolutionGuid}/'${SOLUTIONGUID}'/ 
- -e s/\${AssemblyVersion}/'${ASSEMBLYVERSION}'/ 
- -e s/\${AssemblyVersionQualifier}/'${ASSEMBLYVERSIONQUALIFIER}'/'
+ -e s/\${AssemblyName}/'${NAME}'/g 
+ -e s/\${RootNamespace}/'${PACKAGE}'/g
+ -e s/\${TargetFrameworkVersion}/'${VERSION}'/g 
+ -e s/\${OutputType}/'${TYPE}'/g
+ -e s/\${ArtifactExtension}/'${ARTIFACTEXTENSION}'/g 
+ -e s/\${ProjectName}/'${PROJECTNAME}'/g 
+ -e s/\${ProjectGuid}/'${PROJECTGUID}'/g 
+ -e s/\${ComGuid}/'${COMGUID}'/g
+ -e s/\${SolutionGuid}/'${SOLUTIONGUID}'/g
+ -e s/\${AssemblyVersion}/'${ASSEMBLYVERSION}'/g 
+ -e s/\${AssemblyVersionQualifier}/'${ASSEMBLYVERSIONQUALIFIER}'/g'
 
 echo using substitution command ${SEDXX}
 
@@ -231,6 +220,31 @@ rm buildonly.template
 rm buildonly.battemplate
 rm buildandpublish.battemplate
 else
+    ARTIFACTID=`echo "${NAME}" | tr '[:upper:]' '[:lower:]'`
+    PROJECTNAME=`echo "${PROJECTNAME}" | tr '[:upper:]' '[:lower:]'`
+SEDXX='sed 
+ -e s/\${AssemblyName}/'${NAME}'/g 
+ -e s/\${ArtifactId}/'${ARTIFACTID}'/g
+ -e s/\${RootNamespace}/'${PACKAGE}'/g
+ -e s/\${ArtifactExtension}/'${ARTIFACTEXTENSION}'/g 
+ -e s/\${ProjectName}/'${PROJECTNAME}'/g 
+ -e s/\${AssemblyVersion}/'${ASSEMBLYVERSION}'/g 
+ -e s/\${AssemblyVersionQualifier}/'${ASSEMBLYVERSIONQUALIFIER}'/g'
+
+echo using substitution command ${SEDXX}
+
+    AUXPATH0=`echo "${PACKAGE}" | tr . /`
+    AUXPATH=`echo "${AUXPATH0}" | tr '[:upper:]' '[:lower:]'`
+    ${SEDXX} App.java > ${NAME}.java
+    ${SEDXX} AppTest.java > ${NAME}Test.java
+    ${SEDXX} pom.xmltemplate > pom.xml
+    mkdir -p src/main/$AUXPATH
+    mkdir -p src/test/$AUXPATH
+    mv ${NAME}.java src/main/$AUXPATH
+    mv ${NAME}Test.java src/test/$AUXPATH
+    rm App.java
+    rm AppTest.java
+    rm pom.xmltemplate
     chmod +x cover.sh
 fi
 

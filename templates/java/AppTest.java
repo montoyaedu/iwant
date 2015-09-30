@@ -1,13 +1,13 @@
-package it.ethiclab;
+package ${RootNamespace};
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Unit test for ${AssemblyName}
  */
-public class AppTest 
+public class ${AssemblyName}Test 
     extends TestCase
 {
     /**
@@ -15,7 +15,7 @@ public class AppTest
      *
      * @param testName name of the test case
      */
-    public AppTest( String testName )
+    public ${AssemblyName}Test( String testName )
     {
         super( testName );
     }
@@ -25,16 +25,16 @@ public class AppTest
      */
     public static Test suite()
     {
-        return new TestSuite( AppTest.class );
+        return new TestSuite( ${AssemblyName}Test.class );
     }
 
     /**
      * Rigourous Test :-)
      */
-    public void testApp()
+    public void test${AssemblyName}()
     {
         String[] args = new String[]{};
-        App.main(args);
+        ${AssemblyName}.main(args);
         assertTrue( true );
     }
 }

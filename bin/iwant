@@ -268,6 +268,7 @@ echo using substitution command ${SEDXX}
     ${SEDXX} App.java > ${NAME}.java
     ${SEDXX} AppTest.java > ${NAME}Test.java
     ${SEDXX} pom.xmltemplate > pom.xml
+    ${SEDXX} cover.shtemplate > cover.sh
     mkdir -p src/main/$AUXPATH
     mkdir -p src/test/$AUXPATH
     mv ${NAME}.java src/main/$AUXPATH
@@ -275,6 +276,7 @@ echo using substitution command ${SEDXX}
     rm App.java
     rm AppTest.java
     rm pom.xmltemplate
+    rm cover.shtemplate
     chmod +x cover.sh
 fi
 

@@ -241,6 +241,7 @@ modify /opt/sonar/conf/sonar.properties
     sonar.jdbc.password=sonar
     sonar.jdbc.url=jdbc:postgresql://localhost/sonar
     sonar.web.context=/sonar
+    sonar.updatecenter.activate=true
 `````
 
 restart sonar.

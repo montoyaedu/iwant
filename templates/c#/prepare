@@ -1,0 +1,15 @@
+#!/bin/sh
+mvn dotnet:release
+VERSION=`cat version.txt`
+mvn versions:set -DnewVersion=${VERSION}
+mvn versions:commit
+mvn dotnet:version
+git commit -a -m "[RELEASE] - released version ${VERSION}"
+git tag --file=version.txt ${VERSION}
+mvn dotnet:next
+VERSION=`cat version.txt`
+mvn versions:set -DnewVersion=${VERSION}
+mvn versions:commit
+mvn dotnet:version
+git commit -a -m "[RELEASE] - new development version set to ${VERSION}"
+git push --all --follow-tags

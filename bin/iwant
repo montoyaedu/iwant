@@ -201,6 +201,11 @@ SEDXX='sed
  -e s/\${OutputType}/'${TYPE}'/g
  -e s/\${ArtifactExtension}/'${ARTIFACTEXTENSION}'/g 
  -e s/\${ProjectName}/'${PROJECTNAME}'/g 
+ -e s/\${Remote}/'${REMOTE}'/g 
+ -e s/\${UserName}/'${USERNAME}'/g 
+ -e s/\${Owner}/'${OWNER}'/g 
+ -e s/\${UserEmail}/'${USEREMAIL}'/g 
+ -e s/\${WebServer}/'${WEBSERVER}'/g 
  -e s/\${ProjectGuid}/'${PROJECTGUID}'/g 
  -e s/\${ComGuid}/'${COMGUID}'/g
  -e s/\${SolutionGuid}/'${SOLUTIONGUID}'/g
@@ -216,6 +221,8 @@ ${SEDXX} App.cs > ${NAME}.cs
 ${SEDXX} AppTests.cs > ${NAME}Tests.cs
 ${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
 ${SEDXX} pom.xmltemplate > pom.xml
+${SEDXX} config.xmltemplate > config.xml
+${SEDXX} release.xmltemplate > release.xml
 ${SEDXX} version.txttemplate > version.txt
 ${SEDXX} buildsetup.isstemplate > buildsetup.iss
 ${SEDXX} release.template > release
@@ -236,6 +243,8 @@ rm App.cs
 rm AppTests.cs
 rm Properties/AssemblyInfo.cstemplate
 rm pom.xmltemplate
+rm config.xmltemplate
+rm release.xmltemplate
 rm *.configtemplate
 rm version.txttemplate
 rm buildsetup.isstemplate

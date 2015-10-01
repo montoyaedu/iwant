@@ -29,6 +29,10 @@
         <hudson.tasks.Shell>
             <command>ls -latrh</command>
         </hudson.tasks.Shell>
+        <hudson.tasks.BatchFile>
+            <command>buildonly</command>
+        </hudson.tasks.BatchFile>
+    </prebuilders>
     </prebuilders>
     <postbuilders/>
     <runPostStepsIfResult>

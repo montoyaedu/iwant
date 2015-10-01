@@ -260,6 +260,11 @@ restart sonar.
     CREATE DATABASE sonar WITH OWNER sonar ENCODING 'UTF8';
 `````
 
+Sonar for MSBuild.
+==================
+
+http://docs.sonarqube.org/display/PLUG/C%23+Plugin
+
 Configure Jenkins In A Windows Box.
 ===================================
 

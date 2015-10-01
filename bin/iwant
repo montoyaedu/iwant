@@ -223,6 +223,7 @@ ${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
 ${SEDXX} pom.xmltemplate > pom.xml
 ${SEDXX} config.xmltemplate > config.xml
 ${SEDXX} release.xmltemplate > release.xml
+${SEDXX} cover.battemplate > cover.bat
 ${SEDXX} version.txttemplate > version.txt
 ${SEDXX} buildsetup.isstemplate > buildsetup.iss
 ${SEDXX} release.template > release
@@ -245,6 +246,7 @@ rm Properties/AssemblyInfo.cstemplate
 rm pom.xmltemplate
 rm config.xmltemplate
 rm release.xmltemplate
+rm cover.battemplate
 rm *.configtemplate
 rm version.txttemplate
 rm buildsetup.isstemplate

@@ -30,7 +30,7 @@
             <command>ls -latrh</command>
         </hudson.tasks.Shell>
         <hudson.tasks.BatchFile>
-            <command>buildonly</command>
+            <command>cover</command>
         </hudson.tasks.BatchFile>
     </prebuilders>
     </prebuilders>

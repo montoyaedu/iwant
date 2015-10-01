@@ -1,0 +1,4 @@
+MSBuild.SonarQube.Runner.exe begin /k:"${ProjectName}" /n:"${ProjectName}" /v:"${AssemblyVersion}${AssemblyVersionQualifier}" /d:sonar.cs.nunit.reportsPaths="%CD%\TestResult.xml" /d:sonar.cs.opencover.reportsPaths="%CD%\opencover.xml"
+call buildonly
+OpenCover.Console.exe -target:"%NUNIT_HOME%\bin\nunit-console-x86.exe" -targetargs:"/nologo /noshadow %CD%\bin\Debug\${ProjectName}.${ArtifactExtension}" -output:"%CD%\opencover.xml" -register:user
+MSBuild.SonarQube.Runner.exe end

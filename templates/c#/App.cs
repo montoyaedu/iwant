@@ -6,7 +6,13 @@ namespace ${RootNamespace}
     {
         public static void Main (string[] args)
         {
-            Console.WriteLine("Hello World!");
+            foreach (var arg in args)
+            {
+                if (arg == "HelloWorld")
+                {
+                    break;
+                }
+            }
         }
     }
 }

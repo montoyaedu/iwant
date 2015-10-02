@@ -8,6 +8,7 @@ namespace ${RootNamespace}
         [Test]
         public void Test1()
         {
+            ${AssemblyName}.Main(new []{"HelloWorld"});
             Assert.IsTrue(true);
         }
     }

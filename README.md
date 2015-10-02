@@ -11,53 +11,53 @@ Servers.
 
 1. Ubuntu Box - ${WEBSERVER}
 
-    1. apache2
-    1. nexus
-    1. sonar
-    1. postgresql
+    * apache2
+    * nexus
+    * sonar
+    * postgresql
 
 1. Windows Box - ${JENKINS_URL}
 
-    1. jenkins. (nuget pack works only on windows)
-    1. .NET Framework 4.0
-    1. .NET Framework 4.5.2+
-    1. InnoSetup 5.5+
-    1. Putty
-    1. java 1.7+
-    1. maven 3.3+
-    1. git 
-    1. nunit 2.6.4+
-    1. windows sdk 7.1+
+    * jenkins. (nuget pack works only on windows)
+    * .NET Framework 4.0
+    * .NET Framework 4.5.2+
+    * InnoSetup 5.5+
+    * Putty
+    * java 1.7+
+    * maven 3.3+
+    * git 
+    * nunit 2.6.4+
+    * windows sdk 7.1+
 
 1. Developer Box (Mac OS X Yosemite)
 
-    1. homebrew
-        1. mono
-        1. maven 3.3+
-        1. wine 1.7+
+    * homebrew
+        * mono
+        * maven 3.3+
+        * wine 1.7+
 
-    1. java 1.7+
+    * java 1.7+
 
 1. Developer Box (Ubuntu)
 
-    1. mono
-    1. java 1.7+
-    1. maven 3.3+
-    1. wine 1.7+
-    1. innosetup 5.5+ (installed and launched by wine)
+    * mono
+    * java 1.7+
+    * maven 3.3+
+    * wine 1.7+
+    * innosetup 5.5+ (installed and launched by wine)
 
 1. Developer Box (Windows)
 
-    1. .NET Framework 4.0
-    1. .NET Framework 4.5.2+
-    1. InnoSetup 5.5+
-    1. Putty
-    1. java 1.7+
-    1. maven 3.3+
-    1. git 
-    1. nunit 2.6.4+
-    1. windows sdk 7.1+
-    1. visual studio 2010+
+    * .NET Framework 4.0
+    * .NET Framework 4.5.2+
+    * InnoSetup 5.5+
+    * Putty
+    * java 1.7+
+    * maven 3.3+
+    * git 
+    * nunit 2.6.4+
+    * windows sdk 7.1+
+    * visual studio 2010+
 
 1. bitbucket.org (should work with any SCM but now we are using and supporting only bitbucket)
 

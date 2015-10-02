@@ -2,7 +2,7 @@
 
 namespace ${RootNamespace}
 {
-    class ${AssemblyName}
+    static class ${AssemblyName}
     {
         public static void Main (string[] args)
         {

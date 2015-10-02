@@ -33,7 +33,6 @@
             <command>cover</command>
         </hudson.tasks.BatchFile>
     </prebuilders>
-    </prebuilders>
     <postbuilders/>
     <runPostStepsIfResult>
         <name>FAILURE</name>

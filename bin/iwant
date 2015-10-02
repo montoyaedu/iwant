@@ -311,6 +311,7 @@ if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
         --data has_issues=true \
         --data is_private=true \
         --data owner=${OWNER}
+    verify_cancel $?
 
     git remote add origin ${REMOTE}:${OWNER}/${PROJECTNAME}.git
     git push -u origin --all
@@ -319,27 +320,32 @@ if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
         "${JENKINS_URL}/createItem?name=${PROJECTNAME}" \
         --data-binary "@config.xml" \
         -H "Content-Type: text/xml"
+    verify_cancel $?
     curl \
         -X POST \
         "${JENKINS_URL}/job/${PROJECTNAME}/template/config.xml" \
         --data-binary "@detail.xml" \
         -H "Content-Type: text/xml"
+    verify_cancel $?
     if [[ "${TEMPLATE}" == "c#" ]]; then
         curl \
             -X POST \
             "${JENKINS_URL}/createItem?name=${PROJECTNAME}-make-new-release" \
             --data-binary "@prepare.xml" \
             -H "Content-Type: text/xml"
+        verify_cancel $?
         curl \
             -X POST \
             "${JENKINS_URL}/createItem?name=${PROJECTNAME}-publish-release" \
             --data-binary "@release.xml" \
             -H "Content-Type: text/xml"
+        verify_cancel $?
     else
         curl \
             -X POST \
             "${JENKINS_URL}/createItem?name=${PROJECTNAME}-for-release" \
             --data-binary "@release.xml" \
             -H "Content-Type: text/xml"
+        verify_cancel $?
     fi
 fi

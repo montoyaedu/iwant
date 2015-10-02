@@ -1,52 +1,14 @@
 @echo on
 
-call buildonly
+rm -fr target                                                                   
+
+git clone --branch %1 ${Remote}:${Owner}/${ProjectName}.git target   
 if ERRORLEVEL 1 goto Error
 
-call mvn dotnet:release
-if ERRORLEVEL 1 goto Error
-
-set /p VERSION=< version.txt
-if ERRORLEVEL 1 goto Error
-
-call mvn versions:set -DnewVersion=%VERSION%
-if ERRORLEVEL 1 goto Error
-
-call mvn versions:commit
-if ERRORLEVEL 1 goto Error
-
-call mvn dotnet:version
-if ERRORLEVEL 1 goto Error
-
-git commit -a -m "[RELEASE] - released version %VERSION%"
-if ERRORLEVEL 1 goto Error
-
-git tag --file=version.txt %VERSION%
+cd target                                                                       
 if ERRORLEVEL 1 goto Error
 
 call buildandpublish
-if ERRORLEVEL 1 goto Error
-
-rem mvn dotnet:next -DversionQualifier=RC
-call mvn dotnet:next
-if ERRORLEVEL 1 goto Error
-
-set /p VERSION=< version.txt
-if ERRORLEVEL 1 goto Error
-
-call mvn versions:set -DnewVersion=%VERSION%
-if ERRORLEVEL 1 goto Error
-
-call mvn versions:commit
-if ERRORLEVEL 1 goto Error
-
-call mvn dotnet:version
-if ERRORLEVEL 1 goto Error
-
-git commit -a -m "[RELEASE] - new development version set to %VERSION%"
-if ERRORLEVEL 1 goto Error
-
-git push --all --follow-tags
 if ERRORLEVEL 1 goto Error
 
 goto:eof

@@ -2,17 +2,6 @@
 <actions/>
 <description/>
 <keepDependencies>false</keepDependencies>
-<properties>
-<hudson.model.ParametersDefinitionProperty>
-<parameterDefinitions>
-<hudson.model.StringParameterDefinition>
-<name>CUSTOM_RELEASE_TAG</name>
-<description>An existing git tag to be released</description>
-<defaultValue/>
-</hudson.model.StringParameterDefinition>
-</parameterDefinitions>
-</hudson.model.ParametersDefinitionProperty>
-</properties>
 <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.0">
 <configVersion>2</configVersion>
 <userRemoteConfigs>
@@ -38,7 +27,7 @@
 <concurrentBuild>false</concurrentBuild>
 <builders>
 <hudson.tasks.BatchFile>
-<command>release %CUSTOM_RELEASE_TAG%</command>
+<command>prepare</command>
 </hudson.tasks.BatchFile>
 </builders>
 <publishers/>

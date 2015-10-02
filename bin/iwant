@@ -222,6 +222,7 @@ ${SEDXX} AppTests.cs > ${NAME}Tests.cs
 ${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
 ${SEDXX} pom.xmltemplate > pom.xml
 ${SEDXX} config.xmltemplate > config.xml
+${SEDXX} prepare.xmltemplate > prepare.xml
 ${SEDXX} release.xmltemplate > release.xml
 ${SEDXX} cover.battemplate > cover.bat
 ${SEDXX} version.txttemplate > version.txt
@@ -233,6 +234,7 @@ ${SEDXX} buildonly.battemplate > buildonly.bat
 ${SEDXX} buildandpublish.battemplate > buildandpublish.bat
 
 chmod +x release
+chmod +x prepare
 chmod +x buildonly
 
 cp app_${VERSION}.configtemplate app.config
@@ -245,6 +247,7 @@ rm AppTests.cs
 rm Properties/AssemblyInfo.cstemplate
 rm pom.xmltemplate
 rm config.xmltemplate
+rm prepare.xmltemplate
 rm release.xmltemplate
 rm cover.battemplate
 rm *.configtemplate
@@ -321,9 +324,22 @@ if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
         "http://192.168.1.171:8080/job/${PROJECTNAME}/template/config.xml" \
         --data-binary "@detail.xml" \
         -H "Content-Type: text/xml"
-    curl \
-        -X POST \
-        "http://192.168.1.171:8080/createItem?name=${PROJECTNAME}-for-release" \
-        --data-binary "@release.xml" \
-        -H "Content-Type: text/xml"
+    if [[ "${TEMPLATE}" == "c#" ]]; then
+        curl \
+            -X POST \
+            "http://192.168.1.171:8080/createItem?name=${PROJECTNAME}-make-new-release" \
+            --data-binary "@prepare.xml" \
+            -H "Content-Type: text/xml"
+        curl \
+            -X POST \
+            "http://192.168.1.171:8080/createItem?name=${PROJECTNAME}-publish-release" \
+            --data-binary "@release.xml" \
+            -H "Content-Type: text/xml"
+    else
+        curl \
+            -X POST \
+            "http://192.168.1.171:8080/createItem?name=${PROJECTNAME}-for-release" \
+            --data-binary "@release.xml" \
+            -H "Content-Type: text/xml"
+    fi
 fi

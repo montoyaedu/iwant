@@ -1,24 +1,5 @@
 #!/bin/sh
-nuget restore
-xbuild /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
-nunit-console ${ProjectName}.csproj
-iscc buildsetup.iss
-mvn dotnet:release
-VERSION=`cat version.txt`
-mvn versions:set -DnewVersion=${VERSION}
-mvn versions:commit
-mvn dotnet:version
-git commit -a -m "[RELEASE] - released version ${VERSION}"
-git tag --file=version.txt ${VERSION}
-xbuild /t:Rebuild /p:Configuration=Debug ${ProjectName}_vs2010.sln
-nunit-console ${ProjectName}.csproj
-iscc buildsetup.iss
-mvn dotnet:next
-#mvn dotnet:next -DversionQualifier=RC
-VERSION=`cat version.txt`
-mvn versions:set -DnewVersion=${VERSION}
-mvn versions:commit
-mvn dotnet:version
-git commit -a -m "[RELEASE] - new development version set to ${VERSION}"
-git push --all
-git push --tags
+rm -fr target
+git clone --branch $1 ${Remote}:${Owner}/${ProjectName}.git target
+cd target
+./buildonly

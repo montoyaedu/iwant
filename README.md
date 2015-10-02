@@ -64,6 +64,12 @@ Servers.
 Install.
 ========
 
+    1. WARNING: SKIP THE FIRST TWO STEPS AS THE LATEST RELEASE IS TOO OLD. PLEASE CLONE FOR NOW THE REPOSITORY TO A LOCAL DIRECTORY AND THEN SET YOUR ENVIRONMENT AS INDICATED BELOW.
+
+    `````
+        git clone https://github.com/montoyaedu/iwant
+    `````
+
     1. Download the latest binary release
 
 	https://github.com/montoyaedu/iwant/releases/download/v1.0.0.2/iwant-app.zip
@@ -103,6 +109,8 @@ export JENKINS_URL=http://192.168.1.171:8080
 Create a new project.
 =====================
 
+WARNING: This command has been tested on a Mac OS X box only. The command iwant.bat for windows command prompt does not work anymore and needs to be updated. (Sorry fot that)
+
 `````
     iwant
 `````
@@ -110,21 +118,30 @@ Create a new project.
 The follow the instructions on the screen. For instance, if you decided to create a c# project you will have something like this:
 
 `````
-MyPackage.MyApp
-├── MyApp.cs
-├── MyPackage.MyApp.csproj
-├── MyPackage.MyApp_vs2010.sln
+Edu.CSharpLibrary
+├── CSharpLibrary.cs
+├── CSharpLibraryTests.cs
+├── Edu.CSharpLibrary.csproj
+├── Edu.CSharpLibrary.nuspec
+├── Edu.CSharpLibrary_vs2010.sln
 ├── Properties
 │   └── AssemblyInfo.cs
 ├── app.config
-├── buildsetup.iss
-├── issc (folder with embedded innosetup)
-│   └── ... innosetup files and folders.
-├── pom.xml
-├── release
+├── buildandpublish.bat
 ├── buildonly
-├── release.bat
 ├── buildonly.bat
+├── buildsetup.iss
+├── config.xml
+├── cover.bat
+├── detail.xml
+├── packages.config
+├── pom.xml
+├── prepare
+├── prepare.bat
+├── prepare.xml
+├── release
+├── release.bat
+├── release.xml
 ├── setup.ico
 └── version.txt
 `````
@@ -165,60 +182,6 @@ https://maven.apache.org/download.cgi
 And then follow installation instructions from:
 
 https://maven.apache.org/install.html
-
-Change pom.xml version with maven versions plugin.
-==================================================
-
-This command sets the pom.xml version to the specified version.
-
-`````
-    cd MyPackage.MyApp
-    mvn versions:set -DnewVersion=2.0.0.1
-`````
-
-Remove backup pom.xml.
-======================
-
-The previous command creates a backup file of the old pom.xml file. After successfully setting a version you will need to call the following command.
-
-`````
-    cd MyPackage.MyApp
-    mvn versions:commit
-`````
-
-Apply version to Properties/AssemblyInfo.cs.
-============================================
-
-`````
-    cd MyPackage.MyApp
-    mvn dotnet:version
-`````
-
-Try undocumented scripts.
-=========================
-
-`````
-    cd MyPackage.MyApp
-    ./release
-    ./buildonly
-`````
-
-`````
-    create-windows-app
-    create-console-app
-    create-library
-`````
-
-TODO:
-=====
-
-1. Complete dos batch/linux scripts.
-1. Add documentation for adding releases.
-1. Add support for unit testing to c# template.
-1. Add documentation for innosetup.
-1. Add documentation for adding git remotes.
-1. Add support for deploying nuget packages to c# template.
-1. Add documentation for undocumented scripts.
 
 Going Beyond IWant.
 ===================
@@ -375,3 +338,12 @@ Thanks to (but not limited to) all developers involved in:
 1. https://www.java.com/en/
 1. http://www.sonatype.org/nexus/go/
 1. http://jenkins-ci.org/
+1. http://www.sonarqube.org/
+1. http://www.postgresql.org/
+1. https://github.com/OpenCover/opencover
+1. http://httpd.apache.org/
+1. http://www.ubuntu.com/
+1. https://www.kernel.org/
+1. http://www.apple.com/osx/
+1. http://brew.sh/
+1. http://www.gnu.org/

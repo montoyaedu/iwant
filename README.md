@@ -82,17 +82,11 @@ Servers.
 Install.
 ========
 
-    1. WARNING: SKIP THE FIRST TWO STEPS AS THE LATEST RELEASE IS TOO OLD. PLEASE CLONE FOR NOW THE REPOSITORY TO A LOCAL DIRECTORY AND THEN SET YOUR ENVIRONMENT AS INDICATED BELOW.
+    1. clone this project
 
     `````
-        git clone https://github.com/montoyaedu/iwant
+        git clone https://github.com/montoyaedu/iwant iwant-app
     `````
-
-    1. Download the latest binary release
-
-	https://github.com/montoyaedu/iwant/releases/download/v1.0.0.2/iwant-app.zip
-
-    1. Unzip the downloaded package
 
     1. Add iwant-app/bin to your PATH environment variable.
 

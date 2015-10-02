@@ -28,6 +28,20 @@ Servers.
     * git 
     * nunit 2.6.4+
     * windows sdk 7.1+
+    * OpenCover
+    * PATH
+        `````
+            C:\Windows\Microsoft.NET\Framework\v4.0.30319
+            E:\apache-maven-3.3.3\bin
+            E:\iwant-app\bin
+            E:\FxCop
+            E:\NUnit2\bin
+            E:\innosetup5
+            E:\AppStack\Nuget
+            E:\AppStack\SonarQube\bin
+            E:\AppStack\OpenCover
+            E:\AppStack\PuTTY
+        `````
 
 1. Developer Box (Mac OS X Yosemite)
 

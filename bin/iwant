@@ -316,29 +316,29 @@ if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
     git push -u origin --all
     curl \
         -X POST \
-        "http://192.168.1.171:8080/createItem?name=${PROJECTNAME}" \
+        "${JENKINS_URL}/createItem?name=${PROJECTNAME}" \
         --data-binary "@config.xml" \
         -H "Content-Type: text/xml"
     curl \
         -X POST \
-        "http://192.168.1.171:8080/job/${PROJECTNAME}/template/config.xml" \
+        "${JENKINS_URL}/job/${PROJECTNAME}/template/config.xml" \
         --data-binary "@detail.xml" \
         -H "Content-Type: text/xml"
     if [[ "${TEMPLATE}" == "c#" ]]; then
         curl \
             -X POST \
-            "http://192.168.1.171:8080/createItem?name=${PROJECTNAME}-make-new-release" \
+            "${JENKINS_URL}/createItem?name=${PROJECTNAME}-make-new-release" \
             --data-binary "@prepare.xml" \
             -H "Content-Type: text/xml"
         curl \
             -X POST \
-            "http://192.168.1.171:8080/createItem?name=${PROJECTNAME}-publish-release" \
+            "${JENKINS_URL}/createItem?name=${PROJECTNAME}-publish-release" \
             --data-binary "@release.xml" \
             -H "Content-Type: text/xml"
     else
         curl \
             -X POST \
-            "http://192.168.1.171:8080/createItem?name=${PROJECTNAME}-for-release" \
+            "${JENKINS_URL}/createItem?name=${PROJECTNAME}-for-release" \
             --data-binary "@release.xml" \
             -H "Content-Type: text/xml"
     fi

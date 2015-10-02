@@ -1,49 +1,65 @@
 # iwant
-An effort to create a simple programming project starter. (Something like mvn archetype:generate but easier)
-
-Right now we support only a simple c# template (archetype).
+How to build a Continuous Integration Network for c# and java.
 
 Requirements.
 =============
 
-Requirements ar for now a description of my development environments. Contributions are welcome.
+Requirements are for now a description of our development environments. Contributions are welcome.
 
 Servers.
 ========
 
-1. jenkins on a windows box. (nuget pack works only on windows)
-2. nexus (should work with any artifact server with nuget support)
-3. bitbucket (should work with any SCM but now we are using and supporting only bitbuck)
+1. Ubuntu Box - ${WEBSERVER}
 
-Common.
-=======
+    1. apache2
+    1. nexus
+    1. sonar
+    1. postgresql
 
-1. mono
-1. java 1.7+
-1. maven 3.3+
-1. git
-1. nunit 2.6.4+
-1. a bitbucket account (with ssh access)
+1. Windows Box - ${JENKINS_URL}
 
-On Windows.
-===========
+    1. jenkins. (nuget pack works only on windows)
+    1. .NET Framework 4.0
+    1. .NET Framework 4.5.2+
+    1. InnoSetup 5.5+
+    1. Putty
+    1. java 1.7+
+    1. maven 3.3+
+    1. git 
+    1. nunit 2.6.4+
+    1. windows sdk 7.1+
 
-1. visual studio 2010
-1. windows sdk 7.1
-1. innosetup 5.5+
+1. Developer Box (Mac OS X Yosemite)
 
-On Mac OS X.
-============
+    1. homebrew
+        1. mono
+        1. maven 3.3+
+        1. wine 1.7+
 
-1. homebrew
-1. wine 1.7+
-1. innosetup 5.5+ (installed and launched by wine)
+    1. java 1.7+
 
-On Linux (Ubuntu).
-==================
+1. Developer Box (Ubuntu)
 
-1. wine 1.7+
-1. innosetup 5.5+ (installed and launched by wine)
+    1. mono
+    1. java 1.7+
+    1. maven 3.3+
+    1. wine 1.7+
+    1. innosetup 5.5+ (installed and launched by wine)
+
+1. Developer Box (Windows)
+
+    1. .NET Framework 4.0
+    1. .NET Framework 4.5.2+
+    1. InnoSetup 5.5+
+    1. Putty
+    1. java 1.7+
+    1. maven 3.3+
+    1. git 
+    1. nunit 2.6.4+
+    1. windows sdk 7.1+
+    1. visual studio 2010+
+
+1. bitbucket.org (should work with any SCM but now we are using and supporting only bitbucket)
 
 Install.
 ========
@@ -80,6 +96,8 @@ export USERNAME=montoyaedu
 export OWNER=montoyaedu
 #your nexus proxy web server
 export WEBSERVER=192.168.1.20
+#your jenkins url
+export JENKINS_URL=http://192.168.1.171:8080
 `````
 
 Create a new project.

@@ -42,6 +42,10 @@ Servers.
             E:\AppStack\OpenCover
             E:\AppStack\PuTTY
         `````
+    * NUNIT_HOME
+        `````
+            E:\NUnit2
+        `````
 
 1. Developer Box (Mac OS X Yosemite)
 

@@ -17,7 +17,12 @@
 </branches>
 <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
 <submoduleCfg class="list"/>
-<extensions/>
+<extensions>
+<hudson.plugins.git.extensions.impl.WipeWorkspace/>
+<hudson.plugins.git.extensions.impl.LocalBranch>
+<localBranch>master</localBranch>
+</hudson.plugins.git.extensions.impl.LocalBranch>
+</extensions>
 </scm>
 <canRoam>true</canRoam>
 <disabled>false</disabled>

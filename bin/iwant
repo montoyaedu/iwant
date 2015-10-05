@@ -111,7 +111,7 @@ ASSEMBLYVERSION=1.0.0
 ASSEMBLYVERSIONQUALIFIER=-SNAPSHOT
 
 y=
-while (( ${#y[@]} != 4 ))
+while true
 do
     show_dialog_artifact_details \
         "$NAME" "$PACKAGE" "$ASSEMBLYVERSION" "$ASSEMBLYVERSIONQUALIFIER"
@@ -127,10 +127,22 @@ do
     PACKAGE=${y[1]}
     ASSEMBLYVERSION=${y[2]}
     ASSEMBLYVERSIONQUALIFIER=${y[3]}
+    echo "verifying artifact id $NAME"
+    verify_identifier $NAME
+    retval=$?
+    echo "retval = $retval"
+    if (( $retval != 0 )); then
+        y=
+        echo "continuing..."
+        continue;
+    fi
+    echo "verifying package name $PACKAGE"
+    verify_namespace_identifier $PACKAGE
+    if (( $? != 0 )); then
+        continue
+    fi
+    break;
 done
-
-verify_identifier $NAME
-verify_identifier $PACKAGE
 
 if [[ "${TEMPLATE}" == "c#" ]]; then
     show_dialog_dotnet_framework_version
@@ -186,10 +198,16 @@ echo "using remote ${REMOTE}"
         fi
         USERNAME=${y[0]}
         OWNER=${y[1]}
-    done
 
-    verify_identifier $USERNAME
-    verify_identifier $OWNER
+        verify_identifier $USERNAME
+        if (( $? != 0 )); then
+            continue;
+        fi
+        verify_identifier $OWNER
+        if (( $? != 0 )); then
+            continue;
+        fi
+    done
 
     USEREMAIL=`git config user.email`
 

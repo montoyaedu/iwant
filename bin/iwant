@@ -110,9 +110,9 @@ TEMPLATE=$(get_dialog_result)
 ASSEMBLYVERSION=1.0.0
 ASSEMBLYVERSIONQUALIFIER=-SNAPSHOT
 
-y=
 while true
 do
+    y=
     show_dialog_artifact_details \
         "$NAME" "$PACKAGE" "$ASSEMBLYVERSION" "$ASSEMBLYVERSIONQUALIFIER"
     VALUES=$(get_dialog_result)
@@ -127,16 +127,10 @@ do
     PACKAGE=${y[1]}
     ASSEMBLYVERSION=${y[2]}
     ASSEMBLYVERSIONQUALIFIER=${y[3]}
-    echo "verifying artifact id $NAME"
     verify_identifier $NAME
-    retval=$?
-    echo "retval = $retval"
-    if (( $retval != 0 )); then
-        y=
-        echo "continuing..."
+    if (( $? != 0 )); then
         continue;
     fi
-    echo "verifying package name $PACKAGE"
     verify_namespace_identifier $PACKAGE
     if (( $? != 0 )); then
         continue

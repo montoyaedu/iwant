@@ -1,6 +1,13 @@
 # iwant
 How to build a Continuous Integration Network for c# and java.
 
+Quick Start.
+============
+
+1. Download and install vagrant for your operating system.
+
+    https://www.vagrantup.com/downloads.html
+
 Requirements.
 =============
 

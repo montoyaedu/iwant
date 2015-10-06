@@ -8,6 +8,10 @@ Quick Start.
 
     https://www.vagrantup.com/downloads.html
 
+1. Download and install virtualbox for your operating system.
+
+    https://www.virtualbox.org/
+
 Requirements.
 =============
 

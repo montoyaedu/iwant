@@ -123,6 +123,8 @@ Create a new project.
 
 WARNING: This command has been tested on a Mac OS X box only. The command iwant.bat for windows command prompt does not work anymore and needs to be updated. (Sorry fot that)
 
+We have started a simple port of the dialog utility for windows. Please see it at https://github.com/montoyaedu/Dialog.DialogNET.
+
 `````
     iwant
 `````

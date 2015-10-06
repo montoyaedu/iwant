@@ -12,6 +12,17 @@ Quick Start.
 
     https://www.virtualbox.org/
 
+1. Download and install a windows box.
+
+    for instace:
+
+    https://vagrantcloud.com/opentable/boxes/win-2012r2-standard-amd64-nocm
+
+    `````bash
+        vagrant init opentable/win-2012r2-standard-amd64-nocm
+        vagrant up --provider virtualbox        
+    `````
+
 Requirements.
 =============
 

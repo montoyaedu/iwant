@@ -6,7 +6,12 @@
     <disabled>true</disabled>
     <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
     <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-    <triggers/>
+    <triggers>
+        <hudson.triggers.SCMTrigger>
+            <spec>* * * * *</spec>
+            <ignorePostCommitHooks>false</ignorePostCommitHooks>
+        </hudson.triggers.SCMTrigger>
+    </triggers>
     <concurrentBuild>false</concurrentBuild>
     <goals>clean deploy</goals>
     <aggregatorStyleBuild>true</aggregatorStyleBuild>

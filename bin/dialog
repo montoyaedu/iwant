@@ -1,0 +1,3 @@
+#!/bin/bash
+Dialog.DialogNET "$@"
+exit $?

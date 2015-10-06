@@ -89,6 +89,14 @@ load_file() {
 
 load_file ${HOME}/.iwantprofile
 
+if is_equal_str "A" "A"; then
+    echo "A == A"
+fi
+
+if ! is_equal_str "A" "B"; then
+    echo "A != B"
+fi
+
 ###
 ###
 ### END SNIPPET load_libraries
@@ -178,6 +186,31 @@ show_dialog_remote
 REMOTE=$(get_dialog_result)
 
 echo "using remote ${REMOTE}"
+
+PRIVATE="true"
+
+if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
+    show_dialog_public_private
+    PRIVATE=$(get_dialog_result)
+fi
+
+REMOTE_URL=${REMOTE}:${OWNER}/${PROJECTNAME}.git
+
+if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
+    curl \
+        --user ${USERNAME} \
+        https://api.bitbucket.org/1.0/repositories/ \
+        --data name=${PROJECTNAME} \
+        --data has_wiki=true \
+        --data has_issues=true \
+        --data is_private=${PRIVATE} \
+        --data owner=${OWNER}
+    if (( $? != 0 )); then
+        show_dialog "Create Remote Manually" "${REMOTE_URL}"
+    fi
+else
+    show_dialog "Create Remote Manually" "${REMOTE_URL}"
+fi
 
     y=
     while (( ${#y[@]} != 2 ))
@@ -314,19 +347,10 @@ git init
 git add --all
 git commit -m "Initial commit"
 
-if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
-    curl \
-        --user ${USERNAME} \
-        https://api.bitbucket.org/1.0/repositories/ \
-        --data name=${PROJECTNAME} \
-        --data has_wiki=true \
-        --data has_issues=true \
-        --data is_private=true \
-        --data owner=${OWNER}
+    git remote add origin ${REMOTE_URL}
     verify_cancel $?
-
-    git remote add origin ${REMOTE}:${OWNER}/${PROJECTNAME}.git
     git push -u origin --all
+    verify_cancel $?
     curl \
         -X POST \
         "${JENKINS_URL}/createItem?name=${PROJECTNAME}" \
@@ -360,4 +384,3 @@ if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
             -H "Content-Type: text/xml"
         verify_cancel $?
     fi
-fi

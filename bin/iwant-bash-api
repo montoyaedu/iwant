@@ -4,6 +4,14 @@ DIALOG=${DIALOG=dialog}
 INPUT=/tmp/menu.sh.$$
 RES=${IWANT_HOME}/bin/resources
 
+is_equal_str() {
+    if [[ "$1" == "$2" ]]; then
+        return 0;
+    else
+        return 1;
+    fi
+}
+
 verify_identifier() {
     if [[ "$1" =~ ^[A-Za-z][A-Za-z0-9_]+$ ]]; then
         return 0;
@@ -58,6 +66,16 @@ verify_cancel() {
 ### FUNCTION show_dialog_start
 ###
 ###
+
+show_dialog() {
+    $DIALOG --clear \
+        --backtitle "$1" \
+        --title "$1" \
+        --yesno "$2" \
+        20 40 \
+        2>"$INPUT"
+    verify_cancel $?
+}
 
 show_dialog_start() {
     $DIALOG --clear \
@@ -129,6 +147,19 @@ show_dialog_dotnet_framework_version() {
     verify_cancel $?
 }
 
+show_dialog_public_private() {
+    $DIALOG \
+        --clear \
+        --backtitle "`cat ${RES}/dialog.title`" \
+        --title "`cat ${RES}/dialog.title`" \
+        --menu "Public/Private Repository Choice" \
+        20 40 3 \
+        "false" "Public" \
+        "true" "private" \
+        2>"${INPUT}"
+    verify_cancel $?
+}
+
 show_dialog_remote() {
     $DIALOG \
         --clear \
@@ -137,7 +168,8 @@ show_dialog_remote() {
         --menu "Select a remote" \
         20 40 3 \
         "" "None" \
-        "git@bitbucket.org" "git@bitbucket.org" \
+        "git@bitbucket.org" "BitBucket SSH" \
+        "git@github.com" "GitHub SSH" \
         2>"${INPUT}"
     verify_cancel $?
 }

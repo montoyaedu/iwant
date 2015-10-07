@@ -20,8 +20,34 @@ Quick Start.
 
     `````bash
         vagrant init opentable/win-2012r2-standard-amd64-nocm
-        vagrant up --provider virtualbox        
+        vagrant up --provider virtualbox
+        vagrant halt
     `````
+
+    configure your Vagrantfile accordingly. For instance:
+
+    `````ruby
+        Vagrant.configure(2) do |config|
+            #...
+            config.vm.box = "opentable/win-2012r2-standard-amd64-nocm"
+            config.vm.box_check_update = false
+            config.vm.network "public_network"
+
+            #...
+            config.vm.provider "virtualbox" do |vb|
+                vb.gui = true
+                vb.memory = "8192"
+                vb.customize ["modifyvm", :id, "--vram", "256"]
+            end
+            #...
+        end
+    `````
+
+    `````bash
+        vagrant up --provider virtualbox
+    `````
+
+    Install the latest virtual guest additions.
 
 Requirements.
 =============

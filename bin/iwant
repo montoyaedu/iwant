@@ -113,6 +113,18 @@ if (( $# == 0 )); then
     show_dialog_start
 fi
 
+is_new=true
+
+if (( $# == 1 )); then
+    if [[ "$1" == "--resume" ]]; then
+        show_dialog_select_folder
+        FOLDER=$(get_dialog_result)
+        is_new=false
+    fi
+fi
+
+if $is_new; then
+
 show_dialog_template
 TEMPLATE=$(get_dialog_result)
 
@@ -350,8 +362,16 @@ git commit -m "Initial commit"
 
     git remote add origin ${REMOTE_URL}
     verify_cancel $?
+else
+    cd ${FOLDER}
+fi
+# end if is_new
+
     git push -u origin --all
-    verify_cancel $?
+    if (( $? != 0 )); then
+        echo oops
+        exit 1
+    fi
     curl \
         -X POST \
         "${JENKINS_URL}/createItem?name=${PROJECTNAME}" \

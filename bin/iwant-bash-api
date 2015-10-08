@@ -77,6 +77,13 @@ show_dialog() {
     verify_cancel $?
 }
 
+show_dialog_select_folder() {
+    $DIALOG --clear \
+        --dselect $HOME 10 10 \
+        2>"$INPUT"
+    verify_cancel $?
+}
+
 show_dialog_start() {
     $DIALOG --clear \
         --backtitle "`cat ${RES}/dialog.title`" \

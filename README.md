@@ -47,7 +47,30 @@ Quick Start.
         vagrant up --provider virtualbox
     `````
 
-    Install the latest virtual guest additions.
+    1. Install the latest virtual guest additions.
+
+    1. Install chocolatey
+
+    https://chocolatey.org
+
+    from powershell
+
+    `````
+        iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
+    `````
+
+    1. restart powershell and test chocolatey
+
+    `````
+        choco
+        Chocolatey v0.9.9.11
+    `````
+
+    1. Install Git
+    
+    `````
+        choco install git
+    `````
 
 Requirements.
 =============

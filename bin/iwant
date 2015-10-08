@@ -183,9 +183,9 @@ if [[ "${TEMPLATE}" == "c#" ]]; then
 
     ARTIFACTEXTENSION=$(resolve_artifact_extension $TYPE)
 
-    PROJECTGUID=`uuidgen`
-    COMGUID=`uuidgen`
-    SOLUTIONGUID=`uuidgen`
+    PROJECTGUID=`uuidgen | tr '[:lower:]' '[:upper:]'`
+    COMGUID=`uuidgen | tr '[:lower:]' '[:upper:]'`
+    SOLUTIONGUID=`uuidgen | tr '[:lower:]' '[:upper:]'`
 fi
 
 TEMPLATEDIR=${IWANT_HOME}/templates/${TEMPLATE}

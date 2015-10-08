@@ -63,6 +63,7 @@ IWANT_HOME=`cd ${IWANT_HOME}; pwd -P`
 echo "IWANT_HOME = ${IWANT_HOME}"
 echo "WORKING DIR = `pwd`"
 echo "SCRIPT DIR = $(get_script_dir)"
+export PATH=${PATH}:${IWANT_HOME}/bin
 
 ###
 ###

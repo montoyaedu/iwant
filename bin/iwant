@@ -379,6 +379,7 @@ git commit -m "Initial commit"
     verify_cancel $?
 else
     cd ${FOLDER}
+    PROJECTNAME=$(basename ${FOLDER})
 fi
 # end if is_new
 

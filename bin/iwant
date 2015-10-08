@@ -180,9 +180,6 @@ if [ -d "$FOLDER" ]; then
   exit 1
 fi
 
-cp -R ${TEMPLATEDIR} ${FOLDER}
-cd ${FOLDER}
-
 show_dialog_remote
 REMOTE=$(get_dialog_result)
 
@@ -193,24 +190,6 @@ PRIVATE="true"
 if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
     show_dialog_public_private
     PRIVATE=$(get_dialog_result)
-fi
-
-REMOTE_URL=${REMOTE}:${OWNER}/${PROJECTNAME}.git
-
-if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
-    curl \
-        --user ${USERNAME} \
-        https://api.bitbucket.org/1.0/repositories/ \
-        --data name=${PROJECTNAME} \
-        --data has_wiki=true \
-        --data has_issues=true \
-        --data is_private=${PRIVATE} \
-        --data owner=${OWNER}
-    if (( $? != 0 )); then
-        show_dialog "Create Remote Manually" "${REMOTE_URL}"
-    fi
-else
-    show_dialog "Create Remote Manually" "${REMOTE_URL}"
 fi
 
     y=
@@ -238,6 +217,27 @@ fi
     done
 
     USEREMAIL=`git config user.email`
+
+REMOTE_URL=${REMOTE}:${OWNER}/${PROJECTNAME}.git
+
+if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
+    curl \
+        --user ${USERNAME} \
+        https://api.bitbucket.org/1.0/repositories/ \
+        --data name=${PROJECTNAME} \
+        --data has_wiki=true \
+        --data has_issues=true \
+        --data is_private=${PRIVATE} \
+        --data owner=${OWNER}
+    if (( $? != 0 )); then
+        show_dialog "Create Remote Manually" "${REMOTE_URL}"
+    fi
+else
+    show_dialog "Create Remote Manually" "${REMOTE_URL}"
+fi
+
+cp -R ${TEMPLATEDIR} ${FOLDER}
+cd ${FOLDER}
 
 if [[ "${TEMPLATE}" == "c#" ]]; then
 SEDXX='sed 

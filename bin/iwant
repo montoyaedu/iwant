@@ -88,6 +88,21 @@ load_file() {
 
 . ${IWANT_HOME}/bin/iwant-bash-api
 
+if [ -f ${HOME}/.iwantprofile ]; then
+    echo "profile found."
+else
+    echo "profile not found."
+    show_dialog_text "Enter your Jenkins URL" "JENKINS_URL" "http://localhost:8080"
+    JENKINS_URL=$(get_dialog_result)
+    show_dialog_text "Enter your Web Server IP Address" "WEBSERVER" "localhost"
+    WEBSERVER=$(get_dialog_result)
+    echo "export JENKINS_URL=${JENKINS_URL}" >> ${HOME}/.iwantprofile
+    echo "export WEBSERVER=${WEBSERVER}" >> ${HOME}/.iwantprofile
+    echo "export USERNAME=`whoami`" >> ${HOME}/.iwantprofile
+    echo "export OWNER=`whoami`" >> ${HOME}/.iwantprofile
+    echo "export PACKAGE=EthicLab" >> ${HOME}/.iwantprofile
+fi
+
 load_file ${HOME}/.iwantprofile
 
 if is_equal_str "A" "A"; then
@@ -107,7 +122,7 @@ fi
 abort_if_commant_does_not_exist ${DIALOG}
 
 echo Script name: $0
-echo $# arguments 
+echo $# arguments
 
 if (( $# == 0 )); then
     show_dialog_start

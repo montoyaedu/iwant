@@ -369,8 +369,7 @@ fi
 
     git push -u origin --all
     if (( $? != 0 )); then
-        echo oops
-        exit 1
+        show_dialog "please do a manual push and press ok"
     fi
     curl \
         -X POST \

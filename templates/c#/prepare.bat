@@ -21,6 +21,8 @@ if ERRORLEVEL 1 goto Error
 git tag --file=version.txt %VERSION%
 if ERRORLEVEL 1 goto Error
 
+set LATEST_TAG=%VERSION%
+
 call mvn dotnet:next
 if ERRORLEVEL 1 goto Error
 
@@ -41,6 +43,8 @@ if ERRORLEVEL 1 goto Error
 
 git push --all --follow-tags
 if ERRORLEVEL 1 goto Error
+
+release.bat %LATEST_TAG%
 
 goto:eof
 

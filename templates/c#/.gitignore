@@ -197,3 +197,6 @@ FakesAssemblies/
 
 # Setup output folder
 dist/
+
+# release folder
+target/

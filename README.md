@@ -78,6 +78,12 @@ This is a work in progress...
         choco install git
     `````
 
+    1. Instal Visual Studio 2015 Community
+
+    `````
+        choco install visualstudio2015community
+    `````
+
 Requirements.
 =============
 

@@ -3,6 +3,7 @@
 #define MyAppPublisher "Your Company Inc."
 #define MyAppURL "http://www.yourcompany.com"
 #define MyAppExeName "${ProjectName}.${ArtifactExtension}"
+#define MyAppPath StringChange(MyAppName, ".", "\")
 
 [Setup]
 AppId={{{#MyAppName}-{#MyAppVersion}}
@@ -12,7 +13,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}\{#MyAppVersion}
+DefaultDirName={drive:}\{#MyAppPath}\{#MyAppVersion}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=dist

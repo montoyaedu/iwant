@@ -158,7 +158,7 @@ Servers.
     * git 
     * nunit 2.6.4+
     * windows sdk 7.1+
-    * visual studio 2010+
+    * visual studio 2015 community
 
 1. bitbucket.org (should work with any SCM but now we are using and supporting only bitbucket)
 

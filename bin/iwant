@@ -402,14 +402,8 @@ fi
     if [[ "${TEMPLATE}" == "c#" ]]; then
         curl \
             -X POST \
-            "${JENKINS_URL}/createItem?name=${PROJECTNAME}-make-new-release" \
+            "${JENKINS_URL}/createItem?name=${PROJECTNAME}-for-release" \
             --data-binary "@prepare.xml" \
-            -H "Content-Type: text/xml"
-        verify_cancel $?
-        curl \
-            -X POST \
-            "${JENKINS_URL}/createItem?name=${PROJECTNAME}-publish-release" \
-            --data-binary "@release.xml" \
             -H "Content-Type: text/xml"
         verify_cancel $?
     else

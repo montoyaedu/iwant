@@ -17,4 +17,7 @@
     <copyright>Copyright 2015</copyright>
     <tags>iwant</tags>
   </metadata>
+  <files>
+    <file src="bin/$configuration$/$id$.pdb" target="lib/net40" />
+  </files>
 </package>

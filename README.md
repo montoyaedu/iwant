@@ -20,7 +20,7 @@ This is a work in progress...
 
 1. Download and install a windows box.
 
-    for instace:
+    for instance:
 
     https://vagrantcloud.com/opentable/boxes/win-2012r2-standard-amd64-nocm
 
@@ -78,7 +78,7 @@ This is a work in progress...
         choco install git
     `````
 
-    1. Instal Visual Studio 2015 Community
+    1. Install Visual Studio 2015 Community
 
     `````
         choco install visualstudio2015community

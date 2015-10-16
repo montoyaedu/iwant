@@ -38,8 +38,8 @@ IF %ERRORLEVEL% NEQ 0 (
     GOTO END
 )
 
-FOR /F %%I IN ('git log -n 1 "--format=%ce"') DO SET LAST_COMMITTER_EMAIL=%%I
-FOR /F %%I IN ('git log -n 1 "--format=%f"') DO SET LAST_SUBJECT=%%I
+FOR /F %%I IN ('git log -n 1 "--format=%%ce"') DO SET LAST_COMMITTER_EMAIL=%%I
+FOR /F %%I IN ('git log -n 1 "--format=%%f"') DO SET LAST_SUBJECT=%%I
 SET LAST_CURRENT_BRANCH=%GIT_BRANCH%
 
 IF "%LAST_SUBJECT%" == "please release" (

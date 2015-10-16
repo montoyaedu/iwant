@@ -1,5 +1,68 @@
-set /p VERSION=< version.txt
+@ECHO OFF
+SETLOCAL ENABLEEXTENSIONS
+
+SET /A errno=0
+SET /A ERROR_READING_VERSION=1
+SET /A ERROR_BEGIN_SONARQUBE_RUNNER=2
+SET /A ERROR_BUILD=3
+SET /A ERROR_OPENCOVER=4
+SET /A ERROR_END_SONARQUBE_RUNNER=5
+
+SET /p VERSION=< version.txt
+IF %ERRORLEVEL% NEQ 0 (
+    SET /A errno^|=%ERROR_READING_VERSION%
+    GOTO END
+)
+
 MSBuild.SonarQube.Runner.exe begin /k:"${ProjectName}" /n:"${ProjectName}" /v:"%VERSION%" /d:sonar.cs.nunit.reportsPaths="%CD%\TestResult.xml" /d:sonar.cs.opencover.reportsPaths="%CD%\opencover.xml"
-call buildonly
+IF %ERRORLEVEL% NEQ 0 (
+    SET /A errno^|=%ERROR_BEGIN_SONARQUBE_RUNNER%
+    GOTO END
+)
+
+CALL buildonly
+IF %ERRORLEVEL% NEQ 0 (
+    SET /A errno^|=%ERROR_BUILD%
+    GOTO END
+)
+
 OpenCover.Console.exe -target:"%NUNIT_HOME%\bin\nunit-console-x86.exe" -targetargs:"/nologo /noshadow %CD%\bin\Debug\${ProjectName}.${ArtifactExtension}" -output:"%CD%\opencover.xml" -register:user
+IF %ERRORLEVEL% NEQ 0 (
+    SET /A errno^|=%ERROR_OPENCOVER%
+    GOTO END
+)
+
 MSBuild.SonarQube.Runner.exe end
+IF %ERRORLEVEL% NEQ 0 (
+    SET /A errno^|=%ERROR_END_SONARQUBE_RUNNER%
+    GOTO END
+)
+
+FOR /F %%I IN ('git log -n 1 --format=%ce') DO SET LAST_COMMITTER_EMAIL=%%I
+FOR /F %%I IN ('git log -n 1 --format=%f') DO SET LAST_SUBJECT=%%I
+FOR /F %%I IN ('git rev-parse --abbrev-ref HEAD') DO SET LAST_CURRENT_BRANCH=%%I
+
+IF "%LAST_SUBJECT%" == "please release" (
+    CALL :GETTEMPNAME
+    ECHO "Temp folder name is %TMPFILE%"
+
+    git clone --branch %LAST_CURRENT_BRANCH% ${Remote}:${Owner}/${ProjectName}.git %TMPFILE%
+
+    CD %TMPFILE%
+
+    CALL prepare
+
+    rm -fr %TMPFILE%
+)
+
+:END
+ECHO EXIT CODE = %errno%
+EXIT /B %errno%
+
+:GETTEMPNAME
+    SET TMPFILE=%TMP%\IWANT-%RANDOM%-%TIME:~6,5%.TMP
+    IF EXIST "%TMPFILE%" GOTO :GETTEMPNAME
+    MKDIR %TMPFILE%
+    GOTO :EOF 
+
+:EOF

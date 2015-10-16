@@ -78,6 +78,23 @@ This is a work in progress...
         choco install git
     `````
 
+    Since this installer adds to the SYSTEM PATH only the GITDIR/cmd it
+    is not possible to execute bash without specifying the full path.
+
+    Please add to your SYSTEM PATH the following paths
+
+        `````
+            GITDIR
+            GITDIR/bin
+            GITDIR/migw64/bin
+        `````
+
+    Where GITDIR is the directory where chocolatey installed Git. for instance:
+
+        `````
+            C:/Program Files/Git
+        `````
+
     1. Install Visual Studio 2015 Community
 
     `````

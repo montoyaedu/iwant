@@ -200,3 +200,9 @@ dist/
 
 # release folder
 target/
+
+# opencover
+opencover.xml
+
+# sonarqube
+.sonarqube/

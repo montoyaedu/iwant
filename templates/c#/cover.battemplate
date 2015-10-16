@@ -63,7 +63,7 @@ IF %ERRORLEVEL% NEQ 0 (
     GOTO END
 )
 
-IF "%LAST_SUBJECT%" == "please release" (
+IF "%LAST_SUBJECT%" == "please-release" (
     IF EXIST target (
         rm -fr target
         IF %ERRORLEVEL% NEQ 0 (

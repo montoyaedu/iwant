@@ -461,3 +461,4 @@ Thanks to (but not limited to) all developers involved in:
 1. http://www.apple.com/osx/
 1. http://brew.sh/
 1. http://www.gnu.org/
+1. http://www.dostips.com/DtTipsStringManipulation.php

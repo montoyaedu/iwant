@@ -6,10 +6,6 @@ Quick Start.
 
 This is a work in progress...
 
-1. A note to myself:
-
-    Remember to add multi job configurations.
-
 1. Download and install vagrant for your operating system.
 
     https://www.vagrantup.com/downloads.html

@@ -6,6 +6,8 @@ Quick Start.
 
 This is a work in progress...
 
+Please feel free to file an issue if you find any problem.
+
 1. Download and install vagrant for your operating system.
 
     https://www.vagrantup.com/downloads.html

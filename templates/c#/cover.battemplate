@@ -72,14 +72,14 @@ IF "%LAST_SUBJECT%" == "please-release" (
         )
     )
 
-    git clone --branch %LAST_CURRENT_BRANCH% ${Remote}:${Owner}/${ProjectName}.git target
+    git clone --branch %LAST_CURRENT_BRANCH% ${Remote}:${Owner}/${ProjectName}.git release
     IF %ERRORLEVEL% NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
         GOTO END
     )
 
-    IF EXIST target (
-    CD target
+    IF EXIST release (
+    CD release
     IF %ERRORLEVEL% NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
         GOTO END
@@ -91,7 +91,7 @@ IF "%LAST_SUBJECT%" == "please-release" (
         GOTO END
     )
 
-    rm -fr target
+    rm -fr release
     IF %ERRORLEVEL% NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
         GOTO END

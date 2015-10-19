@@ -199,10 +199,13 @@ FakesAssemblies/
 dist/
 
 # release folder
-target/
+release/
 
 # opencover
 opencover.xml
 
 # sonarqube
 .sonarqube/
+
+# maven
+target/

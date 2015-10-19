@@ -1,5 +1,0 @@
-#!/bin/sh
-rm -fr target
-git clone --branch $1 ${Remote}:${Owner}/${ProjectName}.git target
-cd target
-./buildonly

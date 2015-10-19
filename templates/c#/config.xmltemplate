@@ -4,7 +4,7 @@
   <description></description>
   <views class="java.util.concurrent.CopyOnWriteArrayList">
     <branch-list-view>
-      <owner class="maven-multi-branch-project" reference="../../.."/>
+      <owner class="freestyle-multi-branch-project" reference="../../.."/>
       <name>All</name>
       <filterExecutors>false</filterExecutors>
       <filterQueue>false</filterQueue>

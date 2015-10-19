@@ -1,5 +1,0 @@
-#!/bin/sh
-rm -fr target
-git clone --branch $1 git@bitbucket.org:ethiclab/EthicLab.API.PersistenceManager.git target
-cd target
-./buildonly

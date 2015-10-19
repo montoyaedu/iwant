@@ -21,30 +21,4 @@
       <url>https://jitpack.io</url>
     </pluginRepository>
   </pluginRepositories>
-  <scm>
-    <connection>scm:git:ssh://${Remote}/${Owner}/${ProjectName}.git</connection>
-    <developerConnection>scm:git:ssh://${Remote}/${Owner}/${ProjectName}.git</developerConnection>
-    <url>https://${Remote}/${Owner}/${ProjectName}.git</url>
-    <tag>HEAD</tag>
-  </scm>
-
-  <developers>
-    <developer>
-      <email>${UserEmail}</email>
-      <name>${UserName}</name>
-      <url>https://${Remote}/${UserName}</url>
-      <id>${UserName}</id>
-    </developer>
-  </developers>
-
-  <distributionManagement>
-    <repository>
-      <id>deployment</id>
-      <url>http://${WebServer}/nexus/content/repositories/releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>deployment</id>
-      <url>http://${WebServer}/nexus/content/repositories/snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
 </project>

@@ -1,5 +1,0 @@
-#!/bin/sh
-nuget restore
-xbuild /t:Rebuild /p:Configuration=Debug EthicLab.API.PersistenceManager_vs2010.sln
-nunit-console EthicLab.API.PersistenceManager.csproj
-iscc buildsetup.iss

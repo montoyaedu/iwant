@@ -295,22 +295,8 @@ ${SEDXX} AppTests.cs > ${NAME}Tests.cs
 ${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
 ${SEDXX} pom.xmltemplate > pom.xml
 ${SEDXX} config.xmltemplate > config.xml
-${SEDXX} prepare.xmltemplate > prepare.xml
-${SEDXX} release.xmltemplate > release.xml
-${SEDXX} cover.battemplate > cover.bat
 ${SEDXX} version.txttemplate > version.txt
 ${SEDXX} buildsetup.isstemplate > buildsetup.iss
-${SEDXX} release.template > release
-${SEDXX} release.battemplate > release.bat
-${SEDXX} buildonly.template > buildonly
-${SEDXX} buildonly.battemplate > buildonly.bat
-${SEDXX} buildandpublish.battemplate > buildandpublish.bat
-
-chmod +x release
-chmod +x prepare
-chmod +x buildonly
-
-cp app_${VERSION}.configtemplate app.config
 
 rm App_vs2010.sln
 rm App.csproj
@@ -320,17 +306,8 @@ rm AppTests.cs
 rm Properties/AssemblyInfo.cstemplate
 rm pom.xmltemplate
 rm config.xmltemplate
-rm prepare.xmltemplate
-rm release.xmltemplate
-rm cover.battemplate
-rm *.configtemplate
 rm version.txttemplate
 rm buildsetup.isstemplate
-rm release.template
-rm release.battemplate
-rm buildonly.template
-rm buildonly.battemplate
-rm buildandpublish.battemplate
 else
     ARTIFACTID=`echo "${NAME}" | tr '[:upper:]' '[:lower:]'`
     PROJECTNAME=`echo "${PROJECTNAME}" | tr '[:upper:]' '[:lower:]'`
@@ -400,12 +377,7 @@ fi
         -H "Content-Type: text/xml"
     verify_cancel $?
     if [[ "${TEMPLATE}" == "c#" ]]; then
-        curl \
-            -X POST \
-            "${JENKINS_URL}/createItem?name=RELEASE_${PROJECTNAME}" \
-            --data-binary "@prepare.xml" \
-            -H "Content-Type: text/xml"
-        verify_cancel $?
+        echo "release job not needed for now..."
     else
         curl \
             -X POST \

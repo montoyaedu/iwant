@@ -2,34 +2,53 @@
 
 SETLOCAL ENABLEEXTENSIONS
 
+REM ---- PRINT CURRENT FOLDER ----
+
+SET CURRENT_FOLDER=%CD%
+ECHO CURRENT FOLDER = %CURRENT_FOLDER%
+
+REM ---- VARIABLES ----
+
+SET PROJECT_FOLDER=%CURRENT_FOLDER%\.iwant
+SET VERSION_FILE=%PROJECT_FOLDER%\version.txt
+SET PROJECTNAME_FILE=%PROJECT_FOLDER%\projectname.txt
+SET REPOSITORY_FILE=%PROJECT_FOLDER%\repository.txt
+
 REM ---- A SIMPLE MAP FOR ERROR DESCRIPTION LOOKUP ----
 
 SET /A errno=0
 
 SET /A ERROR_NOERROR=0
-SET /A ERROR_READING_VERSION=1
 SET /A ERROR_BEGIN_SONARQUBE_RUNNER=2
 SET /A ERROR_BUILD=3
 SET /A ERROR_OPENCOVER=4
 SET /A ERROR_END_SONARQUBE_RUNNER=5
+SET /A ERROR_NUGET_RESTORE=6
+SET /A ERROR_INNOSETUP=7
+SET /A ERROR_GIT_LOG_ACQUIRE_LAST_COMMITTER=8
+SET /A ERROR_GIT_LOG_ACQUIRE_LAST_COMMIT_MESSAGE=9
 
 SET /A ERROR_IWANT_PROJECT_FOLDER_DOES_NOT_EXIST=100
+SET /A ERROR_VERSION_FILE_DOES_NOT_EXIST=101
+SET /A ERROR_PROJECTNAME_FILE_DOES_NOT_EXIST=102
+SET /A ERROR_REPOSITORY_FILE_DOES_NOT_EXIST=103
 
+SET /A ERROR_READING_VERSION=104
+SET /A ERROR_READING_PROJECTNAME=105
+SET /A ERROR_READING_REPOSITORY=106
 
 SET /A ERROR_UNCATEGORIZED=255
 
 SET errormap=^
 %ERROR_NOERROR%-"No errors";^
-%ERROR_READING_VERSION%-"Error reading version file";^
-%ERROR_IWANT_PROJECT_FOLDER_DOES_NOT_EXIST%-"IWANT PROJECT FOLDER .iwant DOES NOT EXIST";^
+%ERROR_PROJECT_FOLDER_DOES_NOT_EXIST%-"Folder %PROJECT_FOLDER% does not exist";^
+%ERROR_VERSION_FILE_DOES_NOT_EXIST%-"File %VERSION_FILE% does not exist";^
+%ERROR_PROJECTNAME_FILE_DOES_NOT_EXIST%-"File %PROJECTNAME_FILE% does not exist";^
+%ERROR_REPOSITORY_FILE_DOES_NOT_EXIST%-"File %REPOSITORY_FILE% does not exist";^
+%ERROR_READING_VERSION%-"Error reading %VERSION_FILE% file";^
+%ERROR_READING_PROJECTNAME%-"Error reading %PROJECTNAME_FILE% file";^
+%ERROR_READING_REPOSITORY%-"Error reading %REPOSITORY_FILE% file";^
 %ERROR_UNCATEGORIZED%-"Generic Error"
-
-ECHO "CURRENT FOLDER = %CD%"
-
-SET IWANT_PROJECT_FOLDER=.iwant
-SET VERSION_FILE=version.txt
-SET PROJECTNAME_FILE=%IWANT_PROJECT_FOLDER%/projectname.txt
-SET REPOSITORY_FILE=%IWANT_PROJECT_FOLDER%/repository.txt
 
 IF NOT EXIST %IWANT_PROJECT_FOLDER% (
     SET /A errno^|=%ERROR_IWANT_PROJECT_FOLDER_DOES_NOT_EXIST%
@@ -37,7 +56,7 @@ IF NOT EXIST %IWANT_PROJECT_FOLDER% (
 )
 
 IF NOT EXIST %VERSION_FILE% (
-    SET /A errno^|=%ERROR_UNCATEGORIZED%
+    SET /A errno^|=%ERROR_VERSION_FILE_DOES_NOT_EXIST%
     GOTO END
 )
 
@@ -56,41 +75,48 @@ IF %ERRORLEVEL% NEQ 0 (
     SET /A errno^|=%ERROR_READING_VERSION%
     GOTO END
 ) ELSE (
-	ECHO "VERSION = %VERSION%"
+    ECHO VERSION = %VERSION%
 )
 
-SET /p PN=< PROJECTNAME_FILE
+SET /p PROJECTNAME=< %PROJECTNAME_FILE%
 IF %ERRORLEVEL% NEQ 0 (
-    SET /A errno^|=%ERROR_UNCATEGORIZED%
+    SET /A errno^|=%ERROR_READING_PROJECTNAME%
     GOTO END
 ) ELSE (
-	ECHO "PROJECT NAME = %PN%"
+	ECHO PROJECT NAME = %PROJECTNAME%
 )
 
-SET /p REPO=< REPOSITORY_FILE
+SET /p REPO=< %REPOSITORY_FILE%
 IF %ERRORLEVEL% NEQ 0 (
-    SET /A errno^|=%ERROR_UNCATEGORIZED%
+    SET /A errno^|=%ERROR_READING_REPOSITORY%
     GOTO END
 ) ELSE (
 	ECHO "REPO = %REPO%"
 )
 
-MSBuild.SonarQube.Runner.exe begin /k:"%PN%" /n:"%PN%" /v:"%VERSION%" /d:sonar.cs.nunit.reportsPaths="%CD%\TestResult.xml" /d:sonar.cs.opencover.reportsPaths="%CD%\opencover.xml"
+MSBuild.SonarQube.Runner.exe begin /k:"%PROJECTNAME%" /n:"%PROJECTNAME%" /v:"%VERSION%" /d:sonar.cs.nunit.reportsPaths="%CD%\TestResult.xml" /d:sonar.cs.opencover.reportsPaths="%CD%\opencover.xml"
 IF %ERRORLEVEL% NEQ 0 (
     SET /A errno^|=%ERROR_BEGIN_SONARQUBE_RUNNER%
     GOTO END
 )
 
 nuget restore
-if ERRORLEVEL 1 goto Error
+IF %ERRORLEVEL% NEQ 0 (
+    SET /A errno^|=%ERROR_NUGET_RESTORE%
+    GOTO END
+)
 
-msbuild /t:Rebuild /p:Configuration=Debug %PN%_vs2010.sln
+rm -fr bin
+rm -fr obj
+rm -fr target
+
+msbuild /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
 IF %ERRORLEVEL% NEQ 0 (
     SET /A errno^|=%ERROR_BUILD%
     GOTO END
 )
 
-OpenCover.Console.exe -target:"%NUNIT_HOME%\bin\nunit-console-x86.exe" -targetargs:"/nologo /noshadow %CD%\bin\Debug\%PN%.dll" -output:"%CD%\opencover.xml" -register:user
+OpenCover.Console.exe -target:"%NUNIT_HOME%\bin\nunit-console-x86.exe" -targetargs:"/nologo /noshadow %CD%\bin\Debug\%PROJECTNAME%.dll" -output:"%CD%\opencover.xml" -register:user
 IF %ERRORLEVEL% NEQ 0 (
     SET /A errno^|=%ERROR_OPENCOVER%
     GOTO END
@@ -103,17 +129,20 @@ IF %ERRORLEVEL% NEQ 0 (
 )
 
 iscc.exe buildsetup.iss
-if ERRORLEVEL 1 goto Error
+IF %ERRORLEVEL% NEQ 0 (
+    SET /A errno^|=%ERROR_INNOSETUP%
+    GOTO END
+)
 
 FOR /F %%I IN ('git log -n 1 "--format=%%ce"') DO SET LAST_COMMITTER_EMAIL=%%I
 IF %ERRORLEVEL% NEQ 0 (
-    SET /A errno^|=%ERROR_UNCATEGORIZED%
+    SET /A errno^|=%ERROR_GIT_LOG_ACQUIRE_LAST_COMMITTER%
     GOTO END
 )
 
 FOR /F %%I IN ('git log -n 1 "--format=%%f"') DO SET LAST_SUBJECT=%%I
 IF %ERRORLEVEL% NEQ 0 (
-    SET /A errno^|=%ERROR_UNCATEGORIZED%
+    SET /A errno^|=%ERROR_GIT_LOG_ACQUIRE_LAST_COMMIT_MESSAGE%
     GOTO END
 )
 
@@ -146,7 +175,7 @@ IF "%LAST_SUBJECT%" == "please-release" (
 	
 	echo "CLONING TAG INTO RELEASE_FOLDER %RELEASE_FOLDER%"
 
-    git clone --branch %LAST_CURRENT_BRANCH% %REPO%/%PN%.git %RELEASE_FOLDER%
+    git clone --branch %LAST_CURRENT_BRANCH% %REPO%/%PROJECTNAME%.git %RELEASE_FOLDER%
     IF %ERRORLEVEL% NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
         GOTO END
@@ -217,19 +246,19 @@ if ERRORLEVEL 1 goto Error
 
 echo "PUBLISHING RELEASE %LATEST_TAG%"
 
-git clone --branch %1 %REPO%/%PN%.git target   
+git clone --branch %1 %REPO%/%PROJECTNAME%.git target   
 if ERRORLEVEL 1 goto Error
 
 cd target                                                                       
 if ERRORLEVEL 1 goto Error
 
-msbuild /t:Rebuild /p:Configuration=Debug %PN%_vs2010.sln
+msbuild /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
 if ERRORLEVEL 1 goto Error
 
 iscc.exe buildsetup.iss
 if ERRORLEVEL 1 goto Error
 
-nuget pack %PN%.csproj
+nuget pack %PROJECTNAME%.csproj
 if ERRORLEVEL 1 goto Error
 
 set /p VERSION=< version.txt
@@ -244,7 +273,7 @@ IF DEFINED NUGET_SOURCE_URL (ECHO NUGET_SOURCE_URL IS defined) ELSE (
 )
 ENDLOCAL
 
-nuget push %PN%.%VERSION%.nupkg -source %NUGET_SOURCE_URL%
+nuget push %PROJECTNAME%.%VERSION%.nupkg -source %NUGET_SOURCE_URL%
 if ERRORLEVEL 1 goto Error
 
 scp dist/*.exe %USERNAME%@192.168.1.20:/var/www/html/releases

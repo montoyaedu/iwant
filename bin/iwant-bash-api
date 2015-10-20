@@ -50,14 +50,8 @@ abort_if_commant_does_not_exist() {
 ###
 
 verify_cancel() {
-    echo "verify_cancel( arg0 ) where arg0 = $1"
-    echo $INPUT
-    echo `cat $INPUT`
-    if (( $1 == 0 )); then 
-       echo "ok pressed"
-    else
-       echo "cancel pressed"
-       exit 1
+    if (( $1 != 0 )); then 
+       exit $1
     fi
 }
 

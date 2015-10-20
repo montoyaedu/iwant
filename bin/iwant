@@ -308,11 +308,9 @@ if $is_new; then
         rm config.xmltemplate
         rm buildsetup.isstemplate
 
-        # CREATE local .iwant folder
-        mkdir .iwant
-        echo ${PROJECTNAME}>.iwant/projectname.txt
-        echo ${REMOTE}:${OWNER}>.iwant/repository.txt
-        echo ${ASSEMBLYVERSION}${ASSEMBLYVERSIONQUALIFIER}>.iwant/version.txt
+        echo ${PROJECTNAME}>projectname.txt
+        echo ${REMOTE}:${OWNER}>repository.txt
+        echo ${ASSEMBLYVERSION}${ASSEMBLYVERSIONQUALIFIER}>version.txt
     else
         ARTIFACTID=`echo "${NAME}" | tr '[:upper:]' '[:lower:]'`
         PROJECTNAME=`echo "${PROJECTNAME}" | tr '[:upper:]' '[:lower:]'`

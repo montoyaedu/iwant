@@ -9,7 +9,7 @@ ECHO CURRENT FOLDER = %CURRENT_FOLDER%
 
 REM ---- VARIABLES ----
 
-SET PROJECT_FOLDER=%CURRENT_FOLDER%\.iwant
+SET PROJECT_FOLDER=%CURRENT_FOLDER%
 SET VERSION_FILE=%PROJECT_FOLDER%\version.txt
 SET PROJECTNAME_FILE=%PROJECT_FOLDER%\projectname.txt
 SET REPOSITORY_FILE=%PROJECT_FOLDER%\repository.txt
@@ -163,7 +163,7 @@ SET RELEASE_FOLDER="releaseFolder"
 ECHO "RELEASE FOLDER = %RELEASE_FOLDER%"
 
 IF "%LAST_SUBJECT%" == "please-release" (
-	ECHO "MAKING RELEASE"
+    ECHO "MAKING RELEASE"
 
     IF EXIST %RELEASE_FOLDER% (
         rm -fr %RELEASE_FOLDER%
@@ -173,7 +173,7 @@ IF "%LAST_SUBJECT%" == "please-release" (
         )
     )
 	
-	echo "CLONING TAG INTO RELEASE_FOLDER %RELEASE_FOLDER%"
+    ECHO "CLONING TAG INTO RELEASE_FOLDER %RELEASE_FOLDER%"
 
     git clone --branch %LAST_CURRENT_BRANCH% %REPO%/%PROJECTNAME%.git %RELEASE_FOLDER%
     IF %ERRORLEVEL% NEQ 0 (
@@ -182,102 +182,172 @@ IF "%LAST_SUBJECT%" == "please-release" (
     )
 
     IF EXIST %RELEASE_FOLDER% (
+
     CD %RELEASE_FOLDER%
     IF %ERRORLEVEL% NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
         GOTO END
     )
 
-echo "REMOVING -SNAPSHOT QUALIFIER FROM version.txt"
+    ECHO "REMOVING -SNAPSHOT QUALIFIER FROM %VERSION_FILE%"
 
-call mvn dotnet:release
-if ERRORLEVEL 1 goto Error
+    CALL mvn dotnet:release
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-set /p VERSION=< version.txt
-if ERRORLEVEL 1 goto Error
+    SET /p VERSION=< %VERSION_FILE%
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-echo "CHANGING POM VERSION TO %VERSION%"
+    ECHO "CHANGING POM VERSION TO %VERSION%"
 
-call mvn versions:set -DnewVersion=%VERSION%
-if ERRORLEVEL 1 goto Error
+    CALL mvn versions:set -DnewVersion=%VERSION%
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-echo "ACCEPTING POM VERSION TO %VERSION%"
+    ECHO "ACCEPTING POM VERSION TO %VERSION%"
 
-call mvn versions:commit
-if ERRORLEVEL 1 goto Error
+    CALL mvn versions:commit
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-echo "APPLYING NEW VERSION TO AssemblyInfo.cs %VERSION%"
+    ECHO "APPLYING NEW VERSION TO AssemblyInfo.cs %VERSION%"
 
-call mvn dotnet:version
-if ERRORLEVEL 1 goto Error
+    CALL mvn dotnet:version
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-echo "COMMITTING RELEASE %VERSION%"
+    ECHO "COMMITTING RELEASE %VERSION%"
 
-git commit -a -m "[RELEASE] - released version %VERSION%"
-if ERRORLEVEL 1 goto Error
+    git commit -a -m "[RELEASE] - released version %VERSION%"
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-echo "TAGGING RELEASE %VERSION%"
+    ECHO "TAGGING RELEASE %VERSION%"
 
-git tag --file=version.txt %VERSION%
-if ERRORLEVEL 1 goto Error
+    git tag --file=%VERSION_FILE% %VERSION%
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-set LATEST_TAG=%VERSION%
+    SET LATEST_TAG=%VERSION%
 
-call mvn dotnet:next
-if ERRORLEVEL 1 goto Error
+    CALL mvn dotnet:next
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-set /p VERSION=< version.txt
-if ERRORLEVEL 1 goto Error
+    SET /p VERSION=< %VERSION_FILE%
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-call mvn versions:set -DnewVersion=%VERSION%
-if ERRORLEVEL 1 goto Error
+    CALL mvn versions:set -DnewVersion=%VERSION%
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-call mvn versions:commit
-if ERRORLEVEL 1 goto Error
+    CALL mvn versions:commit
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-call mvn dotnet:version
-if ERRORLEVEL 1 goto Error
+    CALL mvn dotnet:version
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-git commit -a -m "[RELEASE] - new development version set to %VERSION%"
-if ERRORLEVEL 1 goto Error
+    git commit -a -m "[RELEASE] - new development version set to %VERSION%"
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-git push --all --follow-tags
-if ERRORLEVEL 1 goto Error
+    git push --all --follow-tags
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-echo "PUBLISHING RELEASE %LATEST_TAG%"
+    ECHO "PUBLISHING RELEASE %LATEST_TAG%"
 
-git clone --branch %1 %REPO%/%PROJECTNAME%.git target   
-if ERRORLEVEL 1 goto Error
+    git clone --branch %1 %REPO%/%PROJECTNAME%.git target   
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-cd target                                                                       
-if ERRORLEVEL 1 goto Error
+    cd target
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-msbuild /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
-if ERRORLEVEL 1 goto Error
+    msbuild /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-iscc.exe buildsetup.iss
-if ERRORLEVEL 1 goto Error
+    iscc.exe buildsetup.iss
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-nuget pack %PROJECTNAME%.csproj
-if ERRORLEVEL 1 goto Error
+    nuget pack %PROJECTNAME%.csproj
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-set /p VERSION=< version.txt
-if ERRORLEVEL 1 goto Error
+    SET /p VERSION=< %VERSION_FILE%
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-VERIFY OTHER 2>nul
-SETLOCAL ENABLEEXTENSIONS
-IF ERRORLEVEL 1 ECHO Unable to enable extensions
-IF DEFINED NUGET_SOURCE_URL (ECHO NUGET_SOURCE_URL IS defined) ELSE (
-    ECHO NUGET_SOURCE_URL is NOT defined
-    goto Error
-)
-ENDLOCAL
+    VERIFY OTHER 2>nul
+    SETLOCAL ENABLEEXTENSIONS
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
-nuget push %PROJECTNAME%.%VERSION%.nupkg -source %NUGET_SOURCE_URL%
-if ERRORLEVEL 1 goto Error
+    IF DEFINED NUGET_SOURCE_URL (
+        ECHO NUGET_SOURCE_URL IS defined
+    ) ELSE (
+        ECHO NUGET_SOURCE_URL is NOT defined
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
+    ENDLOCAL
 
-scp dist/*.exe %USERNAME%@192.168.1.20:/var/www/html/releases
-if ERRORLEVEL 1 goto Error
+    nuget push %PROJECTNAME%.%VERSION%.nupkg -source %NUGET_SOURCE_URL%
+    IF %ERRORLEVEL% NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
+
+    scp dist/*.exe %USERNAME%@%WEBSERVER%:/var/www/html/releases
     IF %ERRORLEVEL% NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
         GOTO END
@@ -293,7 +363,7 @@ if ERRORLEVEL 1 goto Error
         GOTO END
     )
 ) ELSE (
-	ECHO "NOT MAKING RELEASE"
+    ECHO "NOT MAKING RELEASE"
 )
 
 :END
@@ -304,4 +374,3 @@ SET errordesc=%errordesc:;=&rem.%
 ECHO.%errordesc%
 
 EXIT /B %errno%
-

@@ -311,6 +311,7 @@ if $is_new; then
         echo ${PROJECTNAME}>projectname.txt
         echo ${REMOTE}:${OWNER}>repository.txt
         echo ${ASSEMBLYVERSION}${ASSEMBLYVERSIONQUALIFIER}>version.txt
+        echo ${WEBSERVER}>webserver.txt
     else
         ARTIFACTID=`echo "${NAME}" | tr '[:upper:]' '[:lower:]'`
         PROJECTNAME=`echo "${PROJECTNAME}" | tr '[:upper:]' '[:lower:]'`

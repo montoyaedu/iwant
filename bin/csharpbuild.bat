@@ -204,6 +204,10 @@ IF %ERRORLEVEL% NEQ 0 (
 	SET LAST_SUBJECT=do-not-release
 )
 
+IF "%1" == "--force" (
+	SET LAST_SUBJECT=please-release
+)
+
 @CALL :LOG LAST_SUBJECT = %LAST_SUBJECT%
 
 IF "%LAST_SUBJECT%" == "please-release" (
@@ -325,7 +329,7 @@ IF "%LAST_SUBJECT%" == "please-release" (
 
     @CALL :LOG "PUBLISHING RELEASE !LATEST_TAG!"
 
-    @CALL :EXEC_CMD git clone --quiet --branch !LATEST_TAG! %REPO%/%PROJECTNAME%.git target   
+    @CALL :EXEC_GIT clone --quiet --branch !LATEST_TAG! %REPO%/%PROJECTNAME%.git target
     IF !ERRORLEVEL! NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
         GOTO END
@@ -336,6 +340,12 @@ IF "%LAST_SUBJECT%" == "please-release" (
 	SET VERSION_FILE=%PROJECT_FOLDER%\%RELEASE_FOLDER%\target\version.txt
 	
 	CALL :LOG NEW VERSION FILE IS !VERSION_FILE!
+	
+	@CALL :EXEC_CMD nuget restore -verbosity quiet
+    IF !ERRORLEVEL! NEQ 0 (
+        SET /A errno^|=%ERROR_UNCATEGORIZED%
+        GOTO END
+    )
 
     @CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
     IF !ERRORLEVEL! NEQ 0 (
@@ -365,13 +375,13 @@ IF "%LAST_SUBJECT%" == "please-release" (
         GOTO END
     )
 
-    @CALL :EXEC_CMD nuget push %PROJECTNAME%.!VERSION!.nupkg -source %NUGET_SOURCE_URL%
+    @CALL :EXEC_CMD nuget push -verbosity quiet %PROJECTNAME%.!VERSION!.nupkg -source %NUGET_SOURCE_URL%
     IF !ERRORLEVEL! NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
         GOTO END
     )
 
-    @CALL :EXEC_CMD scp dist/*.exe %USERNAME%@%WEBSERVER%:/var/www/html/releases
+    @CALL :EXEC_CMD scp -q dist/*.exe %USERNAME%@%WEBSERVER%:/var/www/html/releases
     IF !ERRORLEVEL! NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
         GOTO END
@@ -413,12 +423,21 @@ EXIT /B %errno%
 :EXEC_MVN
   @CALL :LOG mvn %*
   @CALL mvn --batch-mode --log-file MavenLog.txt %*
-  @CALL :LOG %* ERRORLEVEL=!ERRORLEVEL!
+  @CALL :LOG mvn %* ERRORLEVEL=!ERRORLEVEL!
   IF !ERRORLEVEL! NEQ 0 (
     EXIT /B !ERRORLEVEL!
   )
   EXIT /B 0
   
+:EXEC_GIT
+  @CALL :LOG git %*
+  @CALL git %* >NUL 2>NUL
+  @CALL :LOG git %* ERRORLEVEL=!ERRORLEVEL!
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+  EXIT /B 0
+
 :BUILD
 @CALL :LOG Begin SonarQube Runner...
 MSBuild.SonarQube.Runner.exe begin /k:"%PROJECTNAME%" /n:"%PROJECTNAME%" /v:"%VERSION%" /d:sonar.cs.nunit.reportsPaths="%CD%\TestResult.xml" /d:sonar.cs.opencover.reportsPaths="%CD%\opencover.xml" > SonarQubeBeginOut.txt

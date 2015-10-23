@@ -199,7 +199,7 @@ FakesAssemblies/
 dist/
 
 # release folder
-release/
+releaseFolder/
 
 # opencover
 opencover.xml

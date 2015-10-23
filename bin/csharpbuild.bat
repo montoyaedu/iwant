@@ -4,6 +4,18 @@ SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 @CALL :LOG Starting build...
 
+@CALL :EXEC_CMD git fetch --all
+IF %ERRORLEVEL% NEQ 0 (
+	SET /A errno^|=%ERROR_UNCATEGORIZED%
+	GOTO END
+)
+
+@CALL :EXEC_CMD git pull
+IF %ERRORLEVEL% NEQ 0 (
+	SET /A errno^|=%ERROR_UNCATEGORIZED%
+	GOTO END
+)
+
 REM ---- PRINT CURRENT FOLDER ----
 
 SET CURRENT_FOLDER=%CD%
@@ -146,20 +158,17 @@ IF NOT EXIST %SOLUTION_FILE% (
     GOTO END
 )
 
-nuget restore %SOLUTION_FILE% -verbosity quiet
+@CALL :EXEC_CMD nuget restore %SOLUTION_FILE% -verbosity quiet
 IF %ERRORLEVEL% NEQ 0 (
     SET /A errno^|=%ERROR_NUGET_RESTORE%
     GOTO END
 )
 
-@CALL :LOG Remove bin folder...
-rm -fr bin
-
-@CALL :LOG Remove obj folder...
-rm -fr obj
-
-@CALL :LOG Remove target folder...
-rm -fr target
+@CALL :EXEC_BUILDONLY %VERSION%
+IF %ERRORLEVEL% NEQ 0 (
+    SET /A errno^|=%ERROR_BUILD%
+    GOTO END
+)
 
 FOR /F %%I IN ('git log -n 1 "--format=%%ce"') DO SET LAST_COMMITTER_EMAIL=%%I
 IF %ERRORLEVEL% NEQ 0 (
@@ -191,11 +200,6 @@ IF %ERRORLEVEL% NEQ 0 (
 )
 
 @CALL :LOG LAST_SUBJECT = %LAST_SUBJECT%
-SET RELEASE_FOLDER=releaseFolder
-@CALL :LOG RELEASE FOLDER = %RELEASE_FOLDER%
-
-@CALL :LOG Remove target %RELEASE_FOLDER%...
-rm -fr %RELEASE_FOLDER%
 
 ECHO %LAST_SUBJECT% | findstr "[RELEASE]" > NUL
 IF %ERRORLEVEL% NEQ 0 (
@@ -341,6 +345,10 @@ IF "%LAST_SUBJECT%" == "please-release" (
 	
 	CALL :LOG NEW VERSION FILE IS !VERSION_FILE!
 	
+    SET /p VERSION=< !VERSION_FILE!
+
+	CALL :LOG NEW VERSION IS !VERSION!
+
 	@CALL :EXEC_CMD nuget restore -verbosity quiet
     IF !ERRORLEVEL! NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
@@ -365,8 +373,6 @@ IF "%LAST_SUBJECT%" == "please-release" (
         GOTO END
     )
 
-    SET /p VERSION=< !VERSION_FILE!
-
     IF DEFINED NUGET_SOURCE_URL (
         @CALL :LOG "NUGET_SOURCE_URL is defined as %NUGET_SOURCE_URL%"
     ) ELSE (
@@ -388,6 +394,33 @@ IF "%LAST_SUBJECT%" == "please-release" (
     )
 	POPD
 	POPD
+	
+	@CALL :EXEC_CMD git fetch --all
+	IF !ERRORLEVEL! NEQ 0 (
+		SET /A errno^|=%ERROR_UNCATEGORIZED%
+		GOTO END
+	)
+
+	@CALL :EXEC_CMD git pull
+	IF !ERRORLEVEL! NEQ 0 (
+		SET /A errno^|=%ERROR_UNCATEGORIZED%
+		GOTO END
+	)
+	
+	SET VERSION_FILE=%PROJECT_FOLDER%\version.txt
+	
+	CALL :LOG NEW VERSION FILE IS !VERSION_FILE!
+	
+    SET /p VERSION=< !VERSION_FILE!
+
+	CALL :LOG NEW VERSION IS !VERSION!
+	
+	@CALL :EXEC_BUILDONLY !VERSION!
+	IF !ERRORLEVEL! NEQ 0 (
+		SET /A errno^|=%ERROR_BUILD%
+		GOTO END
+	)
+	
 ) ELSE (
     @CALL :LOG NOT MAKING RELEASE
 )
@@ -413,7 +446,7 @@ EXIT /B %errno%
 
 :EXEC_CMD
   @CALL :LOG %*
-  @CALL %*
+  @CALL %* >NUL 2>NUL
   @CALL :LOG %* ERRORLEVEL=!ERRORLEVEL!
   IF !ERRORLEVEL! NEQ 0 (
     EXIT /B !ERRORLEVEL!
@@ -422,7 +455,7 @@ EXIT /B %errno%
   
 :EXEC_MVN
   @CALL :LOG mvn %*
-  @CALL mvn --batch-mode --log-file MavenLog.txt %*
+  @CALL mvn --batch-mode %* >NUL 2>NUL
   @CALL :LOG mvn %* ERRORLEVEL=!ERRORLEVEL!
   IF !ERRORLEVEL! NEQ 0 (
     EXIT /B !ERRORLEVEL!
@@ -438,36 +471,83 @@ EXIT /B %errno%
   )
   EXIT /B 0
 
-:BUILD
-@CALL :LOG Begin SonarQube Runner...
-MSBuild.SonarQube.Runner.exe begin /k:"%PROJECTNAME%" /n:"%PROJECTNAME%" /v:"%VERSION%" /d:sonar.cs.nunit.reportsPaths="%CD%\TestResult.xml" /d:sonar.cs.opencover.reportsPaths="%CD%\opencover.xml" > SonarQubeBeginOut.txt
-IF %ERRORLEVEL% NEQ 0 (
-    SET /A errno^|=%ERROR_BEGIN_SONARQUBE_RUNNER%
-    GOTO END
-)
+:EXEC_BUILDONLY
 
-@CALL :LOG Begin Build...
-msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
-IF %ERRORLEVEL% NEQ 0 (
-    SET /A errno^|=%ERROR_BUILD%
-    GOTO END
-)
+  @CALL :EXEC_CLEAN
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
 
-OpenCover.Console.exe -target:"%NUNIT_HOME%\bin\nunit-console-x86.exe" -targetargs:"/nologo /trace:Off /out:TestResultOut.txt /err:TestResultErr.txt /noshadow %CD%\bin\Debug\%PROJECTNAME%.dll" -output:"%CD%\opencover.xml" -register:user -log:Off
-IF %ERRORLEVEL% NEQ 0 (
-    SET /A errno^|=%ERROR_OPENCOVER%
-    GOTO END
-)
+  @CALL :EXEC_CMD MSBuild.SonarQube.Runner.exe begin /k:"%PROJECTNAME%" /n:"%PROJECTNAME%" /v:"%1" /d:sonar.cs.nunit.reportsPaths="%CD%\TestResult.xml" /d:sonar.cs.opencover.reportsPaths="%CD%\opencover.xml"
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
 
-MSBuild.SonarQube.Runner.exe end > SonarQubeEndOut.txt
-IF %ERRORLEVEL% NEQ 0 (
-    SET /A errno^|=%ERROR_END_SONARQUBE_RUNNER%
-    GOTO END
-)
+  @CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
 
-iscc.exe /Q buildsetup.iss
-IF %ERRORLEVEL% NEQ 0 (
-    SET /A errno^|=%ERROR_INNOSETUP%
-    GOTO END
-)
-GOTO :EOF
+  @CALL :EXEC_CMD OpenCover.Console.exe -target:"%NUNIT_HOME%\bin\nunit-console-x86.exe" -targetargs:"/nologo /trace:Off /noshadow %CD%\bin\Debug\%PROJECTNAME%.dll" -output:"%CD%\opencover.xml" -register:user -log:Off
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+
+  @CALL :EXEC_CMD MSBuild.SonarQube.Runner.exe end
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+
+  @CALL :EXEC_CMD iscc.exe /Q buildsetup.iss
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+  
+  @CALL :EXEC_CLEAN
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+  
+  EXIT /B 0
+  
+:EXEC_CLEAN
+  @CALL :LOG Remove bin folder...
+  @CALL :EXEC_CMD rm -fr bin
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+
+  @CALL :LOG Remove obj folder...
+  @CALL :EXEC_CMD rm -fr obj
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+
+  @CALL :LOG Remove target folder...
+  @CALL :EXEC_CMD rm -fr target
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+
+  @CALL :LOG Remove dist folder...
+  @CALL :EXEC_CMD rm -fr dist
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+
+  @CALL :LOG Remove *.nupkg folder...
+  @CALL :EXEC_CMD rm -fr *.nupkg
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+  
+  SET RELEASE_FOLDER=releaseFolder
+  @CALL :LOG RELEASE FOLDER = %RELEASE_FOLDER%
+
+  @CALL :LOG Remove folder %RELEASE_FOLDER%...
+  @CALL :EXEC_CMD rm -fr %RELEASE_FOLDER%
+  IF !ERRORLEVEL! NEQ 0 (
+    EXIT /B !ERRORLEVEL!
+  )
+  
+  EXIT /B 0

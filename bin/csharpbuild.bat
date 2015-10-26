@@ -214,10 +214,13 @@ IF %ERRORLEVEL% NEQ 0 (
 
 @CALL :LOG LAST_SUBJECT = %LAST_SUBJECT%
 
-ECHO %LAST_SUBJECT% | findstr "[RELEASE]" > NUL
+@CALL :LOG LOOK FOR RELEASE...
+ECHO %LAST_SUBJECT% | findstr "RELEASE" > NUL
 IF %ERRORLEVEL% NEQ 0 (
+    @CALL :LOG RELEASE NOT FOUND...
 	SET LAST_SUBJECT=please-release
 ) ELSE (
+    @CALL :LOG RELEASE FOUND...
 	SET LAST_SUBJECT=do-not-release
 )
 
@@ -368,11 +371,19 @@ IF "%LAST_SUBJECT%" == "please-release" (
         GOTO END
     )
 
-    @CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Platform=%PLATFORM% /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
-    IF !ERRORLEVEL! NEQ 0 (
-        SET /A errno^|=%ERROR_UNCATEGORIZED%
-        GOTO END
-    )
+	IF "%PLATFORM%"=="" (
+        @CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
+		IF !ERRORLEVEL! NEQ 0 (
+			SET /A errno^|=%ERROR_UNCATEGORIZED%
+			GOTO END
+		)
+	) ELSE (
+        @CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Platform=%PLATFORM% /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
+		IF !ERRORLEVEL! NEQ 0 (
+			SET /A errno^|=%ERROR_UNCATEGORIZED%
+			GOTO END
+		)
+	)
 
     @CALL :EXEC_CMD iscc.exe /Q buildsetup.iss
     IF !ERRORLEVEL! NEQ 0 (
@@ -496,9 +507,17 @@ EXIT /B %errno%
     EXIT /B !ERRORLEVEL!
   )
 
-  @CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Configuration=Debug /p:Platform=%PLATFORM% %PROJECTNAME%_vs2010.sln
-  IF !ERRORLEVEL! NEQ 0 (
-    EXIT /B !ERRORLEVEL!
+  
+  IF "%PLATFORM%"=="" (
+	@CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
+	  IF !ERRORLEVEL! NEQ 0 (
+		EXIT /B !ERRORLEVEL!
+	  )
+  ) ELSE (
+	@CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Platform=%PLATFORM% /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
+	  IF !ERRORLEVEL! NEQ 0 (
+		EXIT /B !ERRORLEVEL!
+	  )
   )
 
   @CALL :EXEC_CMD OpenCover.Console.exe -target:"%NUNIT_HOME%\bin\nunit-console-x86.exe" -targetargs:"/nologo /trace:Off /noshadow %CD%\bin\Debug\%PROJECTNAME%.dll" -output:"%CD%\opencover.xml" -register:user -log:Off

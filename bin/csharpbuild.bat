@@ -82,6 +82,19 @@ SET errormap=^
 %ERROR_SCM_CHECKOUT%-"Error checking out project from SCM";^
 %ERROR_UNCATEGORIZED%-"Generic Error"
 
+:loop
+IF NOT "%1"=="" (
+	IF "%1"=="--force" (
+		SET FORCE=%1
+	)
+	IF "%1"=="--platform" (
+		SET PLATFORM=%2
+		SHIFT
+	)
+	SHIFT
+	GOTO :loop
+)
+
 @CALL :LOG VALIDATING FILESYSTEM STRUCTURE...
 
 @CALL :LOG VERIFYING PROJECT_FOLDER %PROJECT_FOLDER%
@@ -208,7 +221,7 @@ IF %ERRORLEVEL% NEQ 0 (
 	SET LAST_SUBJECT=do-not-release
 )
 
-IF "%1" == "--force" (
+IF "%FORCE%" == "--force" (
 	SET LAST_SUBJECT=please-release
 )
 
@@ -355,7 +368,7 @@ IF "%LAST_SUBJECT%" == "please-release" (
         GOTO END
     )
 
-    @CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
+    @CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Platform=%PLATFORM% /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
     IF !ERRORLEVEL! NEQ 0 (
         SET /A errno^|=%ERROR_UNCATEGORIZED%
         GOTO END
@@ -483,7 +496,7 @@ EXIT /B %errno%
     EXIT /B !ERRORLEVEL!
   )
 
-  @CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Configuration=Debug %PROJECTNAME%_vs2010.sln
+  @CALL :EXEC_CMD msbuild /nologo /noconsolelogger /m /t:Rebuild /p:Configuration=Debug /p:Platform=%PLATFORM% %PROJECTNAME%_vs2010.sln
   IF !ERRORLEVEL! NEQ 0 (
     EXIT /B !ERRORLEVEL!
   )

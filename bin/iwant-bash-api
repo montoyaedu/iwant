@@ -143,8 +143,8 @@ show_dialog_artifact_details() {
     --title "`cat ${RES}/dialog.title`" \
     --form "`cat ${RES}/dialog_artifact_details.label`" \
     15 50 0 \
-    "ArtifactId:"           1 1 "$artifactId"         1 20 20 0 \
-    "GroupId:"              2 1 "$groupId"            2 20 20 0 \
+    "ArtifactId:"           1 1 "$artifactId"         1 20 25 0 \
+    "GroupId:"              2 1 "$groupId"            2 20 25 0 \
     "Version:"              3 1 "$version"            3 20 8  0 \
     "VersionQualifier:"     4 1 "$versionQualifier"   4 20 20 0 2>"${INPUT}"
     verify_cancel $?

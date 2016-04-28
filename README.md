@@ -5,9 +5,7 @@ Install.
 
     1. clone this project
 
-    `````
         git clone https://github.com/montoyaedu/iwant iwant-app
-    `````
 
     1. Add iwant-app/bin to your PATH environment variable.
 
@@ -18,7 +16,7 @@ Configure environment (unix/linux/Mac OS X).
 
 Assuming that iwant-app package has been unzipped in /opt folder:
 
-`````
+`````bash
 export PATH=$PATH:/opt/iwant-app/bin
 export IWANT_HOME=/opt/iwant-app
 `````

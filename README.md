@@ -1,90 +1,4 @@
 # iwant
-How to build a Continuous Integration Network for c# and java.
-
-Quick Start.
-============
-
-This is a work in progress...
-
-Please feel free to file an issue if you find any problem.
-
-Requirements.
-=============
-
-Requirements are for now a description of our development environments. Contributions are welcome.
-
-Servers.
-========
-
-1. Ubuntu Box - ${WEBSERVER}
-
-    * apache2
-    * nexus
-    * sonar
-    * postgresql
-
-1. Windows Box - ${JENKINS_URL}
-
-    * jenkins. (nuget pack works only on windows)
-    * .NET Framework 4.0
-    * .NET Framework 4.5.2+
-    * InnoSetup 5.5+
-    * Putty
-    * java 1.7+
-    * maven 3.3+
-    * git 
-    * nunit 2.6.4+
-    * windows sdk 7.1+
-    * OpenCover
-    * PATH
-        `````
-            C:\Windows\Microsoft.NET\Framework\v4.0.30319
-            E:\apache-maven-3.3.3\bin
-            E:\iwant-app\bin
-            E:\FxCop
-            E:\NUnit2\bin
-            E:\innosetup5
-            E:\AppStack\Nuget
-            E:\AppStack\SonarQube\bin
-            E:\AppStack\OpenCover
-            E:\AppStack\PuTTY
-        `````
-    * NUNIT_HOME
-        `````
-            E:\NUnit2
-        `````
-
-1. Developer Box (Mac OS X Yosemite)
-
-    * homebrew
-        * mono
-        * maven 3.3+
-        * wine 1.7+
-
-    * java 1.7+
-
-1. Developer Box (Ubuntu)
-
-    * mono
-    * java 1.7+
-    * maven 3.3+
-    * wine 1.7+
-    * innosetup 5.5+ (installed and launched by wine)
-
-1. Developer Box (Windows)
-
-    * .NET Framework 4.0
-    * .NET Framework 4.5.2+
-    * InnoSetup 5.5+
-    * Putty
-    * java 1.7+
-    * maven 3.3+
-    * git 
-    * nunit 2.6.4+
-    * windows sdk 7.1+
-    * visual studio 2015 community
-
-1. bitbucket.org (should work with any SCM but now we are using and supporting only bitbucket)
 
 Install.
 ========
@@ -128,7 +42,7 @@ export JENKINS_URL=http://192.168.1.171:8080
 Create a new project.
 =====================
 
-WARNING: This command has been tested on a Mac OS X box only. The command iwant.bat for windows command prompt does not work anymore and needs to be updated. (Sorry fot that)
+WARNING: This command has been tested on a Mac OS X box only. The command iwant.bat for windows command prompt does not work anymore and needs to be updated. (Sorry for that)
 
 We have started a simple port of the dialog utility for windows. Please see it at https://github.com/montoyaedu/Dialog.DialogNET.
 
@@ -136,48 +50,7 @@ We have started a simple port of the dialog utility for windows. Please see it a
     iwant
 `````
 
-The follow the instructions on the screen. For instance, if you decided to create a c# project you will have something like this:
-
-`````
-Edu.CSharpLibrary
-├── CSharpLibrary.cs
-├── CSharpLibraryTests.cs
-├── Edu.CSharpLibrary.csproj
-├── Edu.CSharpLibrary.nuspec
-├── Edu.CSharpLibrary_vs2010.sln
-├── Properties
-│   └── AssemblyInfo.cs
-├── app.config
-├── buildandpublish.bat
-├── buildonly
-├── buildonly.bat
-├── buildsetup.iss
-├── config.xml
-├── cover.bat
-├── detail.xml
-├── packages.config
-├── pom.xml
-├── prepare
-├── prepare.bat
-├── prepare.xml
-├── release
-├── release.bat
-├── release.xml
-├── setup.ico
-└── version.txt
-`````
-
-Building from command-line.
-===========================
-
-You can open the solution file with visual studio or compile from the command-line:
-
-`````
-    cd MyPackage.MyApp
-    msbuild /t:Rebuild /p:Configuration=Debug MyPackage.MyApp_vs2010.sln
-`````
-
-On unix systems Xamarin can be used. Just replace msbuild with xbuild.
+The follow the instructions on the screen.
 
 Git.
 ====
@@ -204,8 +77,17 @@ And then follow installation instructions from:
 
 https://maven.apache.org/install.html
 
-Going Beyond IWant.
-===================
+Building from command-line.
+===========================
+
+You can open the solution file with visual studio or compile from the command-line:
+
+`````
+    cd MyPackage.MyApp
+    msbuild /t:Rebuild /p:Configuration=Debug MyPackage.MyApp_vs2010.sln
+`````
+
+On unix systems Xamarin can be used. Just replace msbuild with xbuild.
 
 Apache.
 =======

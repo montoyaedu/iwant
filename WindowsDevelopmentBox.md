@@ -73,4 +73,4 @@
 
     1. Install Visual Studio 2015 Community
 
-        choco install visualstudio2015community
+          choco install visualstudio2015community

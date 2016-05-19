@@ -270,7 +270,36 @@ if $is_new; then
         if (( $? != 0 )); then
             show_dialog "Create Remote Manually" "${REMOTE_URL}"
         fi
-        curl -i -u "ethiclab:`cat $HOME/.config/${OWNER}.github.oauth`" -X PUT -d '' 'https://api.github.com/repos/'"${OWNER}/${PROJECTNAME}"'/collaborators/'"$USERNAME"
+        while true
+        do
+        if [ -f $HOME/.config/${OWNER}.github.oauth ]; then
+            echo "oauth file found."
+        else
+            echo "oauth not found."
+            read -s  -p "${OWNER} Password:" PASSWD
+            while true
+            do
+                ghcreatetoken --username ${OWNER} --password $PASSWD --scopes repo --note iwant > $HOME/.config/${OWNER}.github.oauth.iwant
+                if (( $? != 0 )); then
+                    show_dialog "Remove your iwant token from github and retry again." "${REMOTE_URL}"
+                else
+                    break;
+                fi
+            done
+            jsawk -i $HOME/.config/${OWNER}.github.oauth.iwant "return this.token" > $HOME/.config/${OWNER}.github.oauth
+        fi
+        OUT=`mktemp`
+        curl -u "${OWNER}:`cat $HOME/.config/${OWNER}.github.oauth`" -X PUT -d '' 'https://api.github.com/repos/'"${OWNER}/${PROJECTNAME}"'/collaborators/'"$USERNAME" > $OUT 
+        RC=`jsawk -i $OUT 'return this.message'`
+        rm -f $OUT
+        if [[ ! "${RC}" == "" ]]; then
+            rm -f $HOME/.config/${OWNER}.github.oauth
+            show_dialog "Remove your iwant token from github and retry again." "${REMOTE_URL}"
+        else
+            echo $RC
+            break;
+        fi
+        done
     fi
 
     show_dialog "Please verify that the following remote has been created" "${REMOTE_URL}"

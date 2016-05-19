@@ -8,6 +8,7 @@ Dependencies.
 1. dialog
 1. SpiderMonkey
 1. hub
+1. node & npm
 
 Install Dependencies.
 =====================
@@ -18,6 +19,8 @@ Install Dependencies.
     brew install dialog
     brew install SpiderMonkey
     brew install hub
+    brew install node
+    npm install -g github-create-token
     `````
 
 Install.
@@ -43,9 +46,9 @@ Configure $HOME/.iwantprofile.
 `````bash
 #your default package prefix
 export PACKAGE=Edu
-#your default username at bitbucket
+#your default username at bitbucket or github
 export USERNAME=montoyaedu
-#your default owner at bitbucket
+#your default owner at bitbucket or github
 export OWNER=montoyaedu
 #your nexus proxy web server
 export WEBSERVER=192.168.1.20

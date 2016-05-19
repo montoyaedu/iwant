@@ -3,6 +3,7 @@ Acknowledgements.
 
 Thanks to (but not limited to) all developers involved in:
 
+1. http://www.google.com
 1. http://gnuwin32.sourceforge.net/packages/sed.htm
 1. https://gist.github.com/derekstavis/8288379
 1. https://github.com/ethiclab/dotnet-maven-plugin
@@ -34,3 +35,5 @@ Thanks to (but not limited to) all developers involved in:
 1. https://coderwall.com/p/mnwcog/create-new-github-repo-from-command-line
 1. https://hub.github.com/
 1. http://stackoverflow.com/questions/13004061/how-does-one-add-a-collaborator-in-github-using-the-command-line
+1. https://www.npmjs.com/package/github-create-token
+1. http://stackoverflow.com/questions/2654009/how-to-make-bash-script-ask-for-a-password

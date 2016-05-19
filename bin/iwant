@@ -264,10 +264,13 @@ if $is_new; then
         if [[ "${PRIVATE}" == "true" ]]; then
             PRIV_FLAG=-p
         fi
+        #FIXME: what to do if oauth token is not valid and needs to be generated?
+        rm -f $HOME/.config/hub
         hub create $PRIV_FLAG ${OWNER}/${PROJECTNAME}
         if (( $? != 0 )); then
             show_dialog "Create Remote Manually" "${REMOTE_URL}"
         fi
+        curl -i -u "ethiclab:`cat $HOME/.config/${OWNER}.github.oauth`" -X PUT -d '' 'https://api.github.com/repos/'"${OWNER}/${PROJECTNAME}"'/collaborators/'"$USERNAME"
     fi
 
     show_dialog "Please verify that the following remote has been created" "${REMOTE_URL}"

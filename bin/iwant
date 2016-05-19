@@ -188,7 +188,7 @@ if $is_new; then
         SOLUTIONGUID=`uuidgen | tr '[:lower:]' '[:upper:]'`
     fi
 
-    TEMPLATEDIR=${IWANT_HOME}/templates/${TEMPLATE}
+    TEMPLATEDIR=${IWANT_HOME}/.templates/${TEMPLATE}
     PROJECTNAME=${PACKAGE}.${NAME}
     FOLDER=${PROJECTNAME}
 
@@ -214,10 +214,8 @@ if $is_new; then
 
     PRIVATE="true"
 
-    if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
-        show_dialog_public_private
-        PRIVATE=$(get_dialog_result)
-    fi
+    show_dialog_public_private
+    PRIVATE=$(get_dialog_result)
 
     y=
     while (( ${#y[@]} != 2 ))
@@ -260,12 +258,23 @@ if $is_new; then
         if (( $? != 0 )); then
             show_dialog "Create Remote Manually" "${REMOTE_URL}"
         fi
-    else
-        show_dialog "Create Remote Manually" "${REMOTE_URL}"
     fi
+
+    if [[ "${REMOTE}" == "git@github.com" ]]; then
+        if [[ "${PRIVATE}" == "true" ]]; then
+            PRIV_FLAG=-p
+        fi
+        hub create $PRIV_FLAG ${OWNER}/${PROJECTNAME}
+        if (( $? != 0 )); then
+            show_dialog "Create Remote Manually" "${REMOTE_URL}"
+        fi
+    fi
+
+    show_dialog "Please verify that the following remote has been created" "${REMOTE_URL}"
 
     cp -R ${TEMPLATEDIR} ${FOLDER}
     cd ${FOLDER}
+    rm -fr .git
 
     if [[ "${TEMPLATE}" == "c#" ]]; then
         SEDXX='sed 
@@ -368,6 +377,8 @@ git push -u origin --all
 if (( $? != 0 )); then
     show_dialog "please do a manual push and press ok"
 fi
+
+exit 0
 
 curl \
     -X POST \

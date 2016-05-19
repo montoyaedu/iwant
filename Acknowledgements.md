@@ -31,3 +31,5 @@ Thanks to (but not limited to) all developers involved in:
 1. http://www.dostips.com/DtTipsStringManipulation.php
 1. https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey
 1. https://github.com/micha/jsawk
+1. https://coderwall.com/p/mnwcog/create-new-github-repo-from-command-line
+1. https://hub.github.com/

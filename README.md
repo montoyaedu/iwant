@@ -1,5 +1,14 @@
 # iwant
 
+Dependencies.
+=============
+
+1. curl
+1. git
+1. dialog
+1. SpiderMonkey
+1. hub
+
 Install Dependencies.
 =====================
 
@@ -8,6 +17,7 @@ Install Dependencies.
     `````bash
     brew install dialog
     brew install SpiderMonkey
+    brew install hub
     `````
 
 Install.

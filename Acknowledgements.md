@@ -33,3 +33,4 @@ Thanks to (but not limited to) all developers involved in:
 1. https://github.com/micha/jsawk
 1. https://coderwall.com/p/mnwcog/create-new-github-repo-from-command-line
 1. https://hub.github.com/
+1. http://stackoverflow.com/questions/13004061/how-does-one-add-a-collaborator-in-github-using-the-command-line

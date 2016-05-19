@@ -9,6 +9,8 @@ Dependencies.
 1. SpiderMonkey
 1. hub
 1. node & npm
+1. velocityjs
+1. github-create-token
 
 Install Dependencies.
 =====================
@@ -21,6 +23,7 @@ Install Dependencies.
     brew install hub
     brew install node
     npm install -g github-create-token
+    npm install -g velocityjs
     `````
 
 Install.

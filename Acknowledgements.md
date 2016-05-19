@@ -39,3 +39,4 @@ Thanks to (but not limited to) all developers involved in:
 1. http://stackoverflow.com/questions/2654009/how-to-make-bash-script-ask-for-a-password
 1. http://stackoverflow.com/questions/10982911/creating-temporary-files-in-bash
 1. http://stackoverflow.com/questions/24044573/stripping-http-response-and-getting-only-contents-in-curl
+1. https://github.com/shepherdwind/velocity.js

@@ -1,17 +1,19 @@
 # iwant
 
+Install Dependencies.
+=====================
+
+1. Mac OS X
+
+    brew install dialog
+    brew install SpiderMonkey
+
 Install.
 ========
 
-    1. clone this project
-
-        git clone https://github.com/montoyaedu/iwant iwant-app
-        cd iwant-app
-        bin/gettemplates.sh
-
-    1. Add iwant-app/bin to your PATH environment variable.
-
-    1. Set your IWANT_HOME environment variable to the iwant-app folder.
+    git clone https://github.com/montoyaedu/iwant iwant-app
+    cd iwant-app
+    bin/gettemplates.sh
 
 Configure environment (unix/linux/Mac OS X).
 ============================================

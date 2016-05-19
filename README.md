@@ -15,7 +15,7 @@ Install.
 
     git clone https://github.com/montoyaedu/iwant iwant-app
     cd iwant-app
-    bin/gettemplates.sh
+    bin/gettemplates.sh | bash
 
 Configure environment (unix/linux/Mac OS X).
 ============================================

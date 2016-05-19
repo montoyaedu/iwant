@@ -1,4 +1,10 @@
 [
-  "https://github.com/montoyaedu/iwant-template-csharp",
-  "https://github.com/montoyaedu/iwant-template-java"
+  {
+    "id": "c#",
+    "url": "https://github.com/montoyaedu/iwant-template-csharp"
+  },
+  {
+    "id": "java",
+    "url": "https://github.com/montoyaedu/iwant-template-java"
+  }
 ]

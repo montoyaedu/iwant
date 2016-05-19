@@ -6,6 +6,8 @@ Install.
     1. clone this project
 
         git clone https://github.com/montoyaedu/iwant iwant-app
+        cd iwant-app
+        bin/gettemplates.sh
 
     1. Add iwant-app/bin to your PATH environment variable.
 

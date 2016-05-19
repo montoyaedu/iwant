@@ -29,3 +29,5 @@ Thanks to (but not limited to) all developers involved in:
 1. http://brew.sh/
 1. http://www.gnu.org/
 1. http://www.dostips.com/DtTipsStringManipulation.php
+1. https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey
+1. https://github.com/micha/jsawk

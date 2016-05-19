@@ -100,7 +100,6 @@ else
     echo "export WEBSERVER=${WEBSERVER}" >> ${HOME}/.iwantprofile
     echo "export USERNAME=`whoami`" >> ${HOME}/.iwantprofile
     echo "export OWNER=`whoami`" >> ${HOME}/.iwantprofile
-    echo "export PACKAGE=EthicLab" >> ${HOME}/.iwantprofile
 fi
 
 load_file ${HOME}/.iwantprofile
@@ -174,20 +173,6 @@ if $is_new; then
         break;
     done
 
-    if [[ "${TEMPLATE}" == "c#" ]]; then
-        show_dialog_dotnet_framework_version
-        VERSION=$(get_dialog_result)
-
-        show_dialog_output_type
-        TYPE=$(get_dialog_result)
-
-        ARTIFACTEXTENSION=$(resolve_artifact_extension $TYPE)
-
-        PROJECTGUID=`uuidgen | tr '[:lower:]' '[:upper:]'`
-        COMGUID=`uuidgen | tr '[:lower:]' '[:upper:]'`
-        SOLUTIONGUID=`uuidgen | tr '[:lower:]' '[:upper:]'`
-    fi
-
     TEMPLATEDIR=${IWANT_HOME}/.templates/${TEMPLATE}
     PROJECTNAME=${PACKAGE}.${NAME}
     FOLDER=${PROJECTNAME}
@@ -195,11 +180,6 @@ if $is_new; then
     if [ ! -d "$TEMPLATEDIR" ]; then
         echo template ${TEMPLATEDIR} does not exist.
         exit 1
-    fi
-
-    if [[ "$TEMPLATE" == "java" ]]; then
-        FOLDER=`echo "${FOLDER}" | tr '[:upper:]' '[:lower:]'`
-        PACKAGE=`echo "${PACKAGE}" | tr '[:upper:]' '[:lower:]'`
     fi
 
     if [ -d "$FOLDER" ]; then
@@ -308,90 +288,7 @@ if $is_new; then
     cd ${FOLDER}
     rm -fr .git
 
-    if [[ "${TEMPLATE}" == "c#" ]]; then
-        SEDXX='sed 
-         -e s/\${AssemblyName}/'${NAME}'/g 
-         -e s/\${RootNamespace}/'${PACKAGE}'/g
-         -e s/\${TargetFrameworkVersion}/'${VERSION}'/g 
-         -e s/\${OutputType}/'${TYPE}'/g
-         -e s/\${ArtifactExtension}/'${ARTIFACTEXTENSION}'/g 
-         -e s/\${ProjectName}/'${PROJECTNAME}'/g 
-         -e s/\${Remote}/'${REMOTE}'/g 
-         -e s/\${UserName}/'${USERNAME}'/g 
-         -e s/\${Owner}/'${OWNER}'/g 
-         -e s/\${UserEmail}/'${USEREMAIL}'/g 
-         -e s/\${WebServer}/'${WEBSERVER}'/g 
-         -e s/\${ProjectGuid}/'${PROJECTGUID}'/g 
-         -e s/\${ComGuid}/'${COMGUID}'/g
-         -e s/\${SolutionGuid}/'${SOLUTIONGUID}'/g
-         -e s/\${AssemblyVersion}/'${ASSEMBLYVERSION}'/g 
-         -e s/\${AssemblyVersionQualifier}/'${ASSEMBLYVERSIONQUALIFIER}'/g'
-
-        echo using substitution command ${SEDXX}
-
-        ${SEDXX} App_vs2010.sln > ${PROJECTNAME}_vs2010.sln
-        ${SEDXX} App.csproj > ${PROJECTNAME}.csproj
-        ${SEDXX} App.nuspec > ${PROJECTNAME}.nuspec
-        ${SEDXX} App.cs > ${NAME}.cs
-        ${SEDXX} AppTests.cs > ${NAME}Tests.cs
-        ${SEDXX} Properties/AssemblyInfo.cstemplate > Properties/AssemblyInfo.cs
-        ${SEDXX} pom.xmltemplate > pom.xml
-        ${SEDXX} config.xmltemplate > config.xml
-        ${SEDXX} buildsetup.isstemplate > buildsetup.iss
-
-        rm App_vs2010.sln
-        rm App.csproj
-        rm App.nuspec
-        rm App.cs
-        rm AppTests.cs
-        rm Properties/AssemblyInfo.cstemplate
-        rm pom.xmltemplate
-        rm config.xmltemplate
-        rm buildsetup.isstemplate
-
-        echo ${PROJECTNAME}>projectname.txt
-        echo ${REMOTE}:${OWNER}>repository.txt
-        echo ${ASSEMBLYVERSION}${ASSEMBLYVERSIONQUALIFIER}>version.txt
-        echo ${WEBSERVER}>webserver.txt
-    else
-        ARTIFACTID=`echo "${NAME}" | tr '[:upper:]' '[:lower:]'`
-        PROJECTNAME=`echo "${PROJECTNAME}" | tr '[:upper:]' '[:lower:]'`
-        SEDXX='sed 
-         -e s/\${AssemblyName}/'${NAME}'/g 
-         -e s/\${ArtifactId}/'${ARTIFACTID}'/g
-         -e s/\${RootNamespace}/'${PACKAGE}'/g
-         -e s/\${ArtifactExtension}/'${ARTIFACTEXTENSION}'/g 
-         -e s/\${ProjectName}/'${PROJECTNAME}'/g 
-         -e s/\${Remote}/'${REMOTE}'/g 
-         -e s/\${UserName}/'${USERNAME}'/g 
-         -e s/\${Owner}/'${OWNER}'/g 
-         -e s/\${UserEmail}/'${USEREMAIL}'/g 
-         -e s/\${WebServer}/'${WEBSERVER}'/g 
-         -e s/\${AssemblyVersion}/'${ASSEMBLYVERSION}'/g 
-         -e s/\${AssemblyVersionQualifier}/'${ASSEMBLYVERSIONQUALIFIER}'/g'
-
-        echo using substitution command ${SEDXX}
-
-        AUXPATH0=`echo "${PACKAGE}" | tr . /`
-        AUXPATH=`echo "${AUXPATH0}" | tr '[:upper:]' '[:lower:]'`
-        ${SEDXX} App.java > ${NAME}.java
-        ${SEDXX} AppTest.java > ${NAME}Test.java
-        ${SEDXX} pom.xmltemplate > pom.xml
-        ${SEDXX} config.xmltemplate > config.xml
-        ${SEDXX} release.xmltemplate > release.xml
-        ${SEDXX} cover.shtemplate > cover.sh
-        mkdir -p src/main/java/$AUXPATH
-        mkdir -p src/test/java/$AUXPATH
-        mv ${NAME}.java src/main/java/$AUXPATH
-        mv ${NAME}Test.java src/test/java/$AUXPATH
-        rm App.java
-        rm AppTest.java
-        rm pom.xmltemplate
-        rm config.xmltemplate
-        rm release.xmltemplate
-        rm cover.shtemplate
-        chmod +x cover.sh
-    fi
+    #TODO: rewrite all transformations
 
     git init
     git add --all
@@ -407,7 +304,7 @@ fi
 
 git push -u origin --all
 if (( $? != 0 )); then
-    show_dialog "please do a manual push and press ok"
+    show_dialog "please do a manual push from another terminal and then press ok"
 fi
 
 exit 0
@@ -426,13 +323,9 @@ curl \
     -H "Content-Type: text/xml"
 verify_cancel $?
 
-if [[ "${TEMPLATE}" == "c#" ]]; then
-    echo "release job not needed for now..."
-else
-    curl \
-        -X POST \
-        "${JENKINS_URL}/createItem?name=RELEASE_${PROJECTNAME}" \
-        --data-binary "@release.xml" \
-        -H "Content-Type: text/xml"
-    verify_cancel $?
-fi
+curl \
+    -X POST \
+    "${JENKINS_URL}/createItem?name=RELEASE_${PROJECTNAME}" \
+    --data-binary "@release.xml" \
+    -H "Content-Type: text/xml"
+verify_cancel $?

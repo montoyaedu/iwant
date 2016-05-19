@@ -1,0 +1,21 @@
+#!/bin/sh
+curl \
+    -X POST \
+    "${JENKINS_URL}/createItem?name=${PROJECTNAME}" \
+    --data-binary "@config.xml" \
+    -H "Content-Type: text/xml"
+verify_cancel $?
+
+curl \
+    -X POST \
+    "${JENKINS_URL}/job/${PROJECTNAME}/template/config.xml" \
+    --data-binary "@detail.xml" \
+    -H "Content-Type: text/xml"
+verify_cancel $?
+
+curl \
+    -X POST \
+    "${JENKINS_URL}/createItem?name=RELEASE_${PROJECTNAME}" \
+    --data-binary "@release.xml" \
+    -H "Content-Type: text/xml"
+verify_cancel $?

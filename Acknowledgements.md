@@ -37,3 +37,5 @@ Thanks to (but not limited to) all developers involved in:
 1. http://stackoverflow.com/questions/13004061/how-does-one-add-a-collaborator-in-github-using-the-command-line
 1. https://www.npmjs.com/package/github-create-token
 1. http://stackoverflow.com/questions/2654009/how-to-make-bash-script-ask-for-a-password
+1. http://stackoverflow.com/questions/10982911/creating-temporary-files-in-bash
+1. http://stackoverflow.com/questions/24044573/stripping-http-response-and-getting-only-contents-in-curl

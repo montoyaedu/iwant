@@ -6,8 +6,8 @@ Install Dependencies.
 1. Mac OS X
 
     `````bash
-        brew install dialog
-        brew install SpiderMonkey
+    brew install dialog
+    brew install SpiderMonkey
     `````
 
 Install.

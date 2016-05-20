@@ -121,17 +121,8 @@ if $is_new; then
     export ArtifactId=${NAME}
     node $IWANT_HOME/applytemplate.js
     verify_cancel $?
-    FILES="./*"
-    for f in $FILES
-    do
-        echo "Processing $f"
-        TMP=`mktemp`
-        cp $f $TMP
-        rm -f $f
-        velocity $TMP $IWANT_HOME/.context.js > $f
-        rm -f $TMP
-        verify_cancel $?
-    done
+
+    iwant-visit iwant-velocity
 
     mvn clean
     verify_cancel $?

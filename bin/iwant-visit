@@ -1,0 +1,18 @@
+#!/bin/bash
+cmd="${1}"
+for f in `ls -p`
+do
+	a="DIR: `pwd`"
+	echo $a
+    if [ -d "$f" ]
+    then
+        for ff in $f/*
+        do      
+            echo "Processing $ff"
+            ( cd ${f} && iwant-visit "${cmd}" )
+        done
+    else
+        echo "Processing file $f"
+        ( ${cmd} $f )
+    fi
+done

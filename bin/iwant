@@ -90,14 +90,6 @@ if $is_new; then
         PACKAGE=${y[1]}
         ASSEMBLYVERSION=${y[2]}
         ASSEMBLYVERSIONQUALIFIER=${y[3]}
-        verify_identifier $NAME
-        if (( $? != 0 )); then
-            continue;
-        fi
-        verify_namespace_identifier $PACKAGE
-        if (( $? != 0 )); then
-            continue
-        fi
         break;
     done
 
@@ -153,16 +145,6 @@ if $is_new; then
         fi
         USERNAME=${y[0]}
         OWNER=${y[1]}
-
-        verify_identifier $USERNAME
-        if (( $? != 0 )); then
-            continue;
-        fi
-
-        verify_identifier $OWNER
-        if (( $? != 0 )); then
-            continue;
-        fi
     done
 
     USEREMAIL=`git config user.email`

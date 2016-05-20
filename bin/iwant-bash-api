@@ -95,6 +95,12 @@ show_dialog_start() {
 ###
 
 show_dialog_template() {
+    echo $DIALOG --clear \
+        --backtitle "`cat ${RES}/dialog.title` ${IWANT_HOME}" \
+        --title "`cat ${RES}/dialog.title`" \
+        --menu "`cat ${RES}/dialog_template.label`" \
+        50 100 20 `listtemplates.sh` \
+        2>"${INPUT}"
     $DIALOG --clear \
         --backtitle "`cat ${RES}/dialog.title` ${IWANT_HOME}" \
         --title "`cat ${RES}/dialog.title`" \

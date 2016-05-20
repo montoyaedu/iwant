@@ -112,13 +112,32 @@ if $is_new; then
     rm -fr .git
 
     #TODO: rewrite all transformations
+    export ProjectName=${PROJECTNAME}
+    export RootNamespace=${PACKAGE}
+    export AssemblyName=${NAME}
+    export AssemblyName=${NAME}
+    export AssemblyVersion=${ASSEMBLYVERSION}
+    export AssemblyVersionQualifier=${ASSEMBLYVERSIONQUALIFIER}
+    export ArtifactId=${NAME}
+    node $IWANT_HOME/applytemplate.js
+    verify_cancel $?
     FILES="./*"
     for f in $FILES
     do
         echo "Processing $f"
-        velocity $f $IWANT_HOME/context.js
+        TMP=`mktemp`
+        cp $f $TMP
+        rm -f $f
+        velocity $TMP $IWANT_HOME/.context.js > $f
+        rm -f $TMP
         verify_cancel $?
     done
+
+    mvn clean
+    verify_cancel $?
+
+    mvn package
+    verify_cancel $?
 
     show_dialog_start
 

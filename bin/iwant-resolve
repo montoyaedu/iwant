@@ -58,7 +58,7 @@ if [ ! -d ${IWANT_HOME} ]; then
     exit 1
 fi
 
-IWANT_HOME=`cd ${IWANT_HOME}; pwd -P`
+export IWANT_HOME=`cd ${IWANT_HOME}; pwd -P`
 
 echo "IWANT_HOME = ${IWANT_HOME}"
 echo "WORKING DIR = `pwd`"

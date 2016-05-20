@@ -120,7 +120,7 @@ if $is_new; then
         verify_cancel $?
     done
 
-    exit 0
+    show_dialog_start
 
     show_dialog_remote
     REMOTE=$(get_dialog_result)

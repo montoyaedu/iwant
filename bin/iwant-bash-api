@@ -96,12 +96,10 @@ show_dialog_start() {
 
 show_dialog_template() {
     $DIALOG --clear \
-        --backtitle "`cat ${RES}/dialog.title`" \
+        --backtitle "`cat ${RES}/dialog.title` ${IWANT_HOME}" \
         --title "`cat ${RES}/dialog.title`" \
         --menu "`cat ${RES}/dialog_template.label`" \
-        20 40 2 \
-        c# "CSharp Project Template" \
-        java "Java Project Template" \
+        50 100 20 `listtemplates.sh` \
         2>"${INPUT}"
     verify_cancel $?
 }

@@ -1,90 +1,12 @@
 #!/bin/bash
 
-###
-###
-### FUNCTION get_script_dir
-### INTERNET COPY&PASTE
-### SOURCE
-### http://www.ostricher.com
-### /2014/10/the-right-way-to-get-the-directory-of-a-bash-script/
-###
-###
-
-get_script_dir () {
-    SOURCE="${BASH_SOURCE[0]}"
-    # While $SOURCE is a symlink,
-    # resolve it
-    while [ -h "$SOURCE" ]; do
-        DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-        SOURCE="$( readlink "$SOURCE" )"
-        # If $SOURCE was a relative symlink 
-        # (so no "/" as prefix,
-        # need to resolve it relative 
-        # to the symlink base directory
-        [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-    done
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-    echo "$DIR"
-}
-
-###
-###
-### END FUNCTION get_script_dir
-###
-###
-
-echo script directory should be "$(get_script_dir)"
-
-###
-###
-### SNIPPET verify_home_directory
-###
-###
-
+. iwant-resolve
 if [ -z "${IWANT_HOME}" ]; then
     echo "IWANT_HOME environment variable is not set."
-    echo "using $(get_script_dir)"
-    IWANT_HOME=$(get_script_dir)/..
-fi
-
-if [ ! -d ${IWANT_HOME} ]; then
-    echo "IWANT_HOME points to an invalid path ${IWANT_HOME}"
-    echo "using $(get_script_dir)/.."
-    IWANT_HOME=$(get_script_dir)/..
-fi
-
-if [ ! -d ${IWANT_HOME} ]; then
-    echo "IWANT_HOME points to an invalid path ${IWANT_HOME}"
+    echo "Please execute:"
+    echo "    source IWANT_HOME/bin/iwant-resolve"
     exit 1
 fi
-
-IWANT_HOME=`cd ${IWANT_HOME}; pwd -P`
-
-echo "IWANT_HOME = ${IWANT_HOME}"
-echo "WORKING DIR = `pwd`"
-echo "SCRIPT DIR = $(get_script_dir)"
-export PATH=${PATH}:${IWANT_HOME}/bin
-
-###
-###
-### END SNIPPET verify_home_directory
-###
-###
-
-load_file() {
-    if [ -f $1 ]; then
-        echo "loading $1"
-        . $1
-    else
-        echo "file not found $1"
-    fi
-}
-
-###
-###
-### SNIPPET load_libraries
-###
-###
 
 . ${IWANT_HOME}/bin/iwant-bash-api
 
@@ -101,6 +23,12 @@ else
     echo "export USERNAME=`whoami`" >> ${HOME}/.iwantprofile
     echo "export OWNER=`whoami`" >> ${HOME}/.iwantprofile
 fi
+
+###
+###
+### SNIPPET load_libraries
+###
+###
 
 load_file ${HOME}/.iwantprofile
 
@@ -186,6 +114,21 @@ if $is_new; then
         echo destination ${FOLDER} already exists.
         exit 1
     fi
+
+    cp -R ${TEMPLATEDIR} ${FOLDER}
+    cd ${FOLDER}
+    rm -fr .git
+
+    #TODO: rewrite all transformations
+    FILES="./*"
+    for f in $FILES
+    do
+        echo "Processing $f"
+        velocity $f $IWANT_HOME/context.js
+        verify_cancel $?
+    done
+
+    exit 0
 
     show_dialog_remote
     REMOTE=$(get_dialog_result)
@@ -284,11 +227,8 @@ if $is_new; then
 
     show_dialog "Please verify that the following remote has been created" "${REMOTE_URL}"
 
-    cp -R ${TEMPLATEDIR} ${FOLDER}
-    cd ${FOLDER}
-    rm -fr .git
 
-    #TODO: rewrite all transformations
+    exit 0
 
     git init
     git add --all

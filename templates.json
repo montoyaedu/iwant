@@ -6,5 +6,9 @@
   {
     "id": "java",
     "url": "https://github.com/montoyaedu/iwant-template-java"
+  },
+  {
+    "id": "vaadin",
+    "url": "https://github.com/montoyaedu/iwant-template-vaadin"
   }
 ]

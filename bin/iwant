@@ -107,14 +107,13 @@ if $is_new; then
         exit 1
     fi
 
-    cp -R ${TEMPLATEDIR} ${FOLDER}
+    git clone ${TEMPLATEDIR} ${FOLDER}
     cd ${FOLDER}
     rm -fr .git
 
     #TODO: rewrite all transformations
     export ProjectName=${PROJECTNAME}
     export RootNamespace=${PACKAGE}
-    export AssemblyName=${NAME}
     export AssemblyName=${NAME}
     export AssemblyVersion=${ASSEMBLYVERSION}
     export AssemblyVersionQualifier=${ASSEMBLYVERSIONQUALIFIER}
@@ -123,6 +122,12 @@ if $is_new; then
     verify_cancel $?
 
     iwant-visit iwant-velocity
+
+    sh finish
+    verify_cancel $?
+
+    rm -fr finish
+    verify_cancel $?
 
     mvn clean
     verify_cancel $?
@@ -219,8 +224,6 @@ if $is_new; then
 
     show_dialog "Please verify that the following remote has been created" "${REMOTE_URL}"
 
-
-    exit 0
 
     git init
     git add --all

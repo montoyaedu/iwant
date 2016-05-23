@@ -112,6 +112,19 @@ if $is_new; then
     rm -fr .git
 
     #TODO: rewrite all transformations
+    show_dialog_dotnet_framework_version
+    export TargetFrameworkVersion=$(get_dialog_result)
+
+    show_dialog_output_type
+    export OutputType=$(get_dialog_result)
+    show_dialog_remote
+    export Remote=$(get_dialog_result)
+
+    export ArtifactExtension=$(resolve_artifact_extension $OutputType)
+    export ProjectGuid=`uuidgen | tr '[:lower:]' '[:upper:]'`
+    export ComGuid=`uuidgen | tr '[:lower:]' '[:upper:]'`
+    export SolutionGuid=`uuidgen | tr '[:lower:]' '[:upper:]'`
+
     export ProjectName=${PROJECTNAME}
     export RootNamespace=${PACKAGE}
     export AssemblyName=${NAME}
@@ -137,10 +150,7 @@ if $is_new; then
 
     show_dialog_start
 
-    show_dialog_remote
-    REMOTE=$(get_dialog_result)
-
-    echo "using remote ${REMOTE}"
+    echo "using remote ${Remote}"
 
     PRIVATE="true"
 
@@ -164,9 +174,9 @@ if $is_new; then
 
     USEREMAIL=`git config user.email`
 
-    REMOTE_URL=${REMOTE}:${OWNER}/${PROJECTNAME}.git
+    REMOTE_URL=${Remote}:${OWNER}/${PROJECTNAME}.git
 
-    if [[ "${REMOTE}" == "git@bitbucket.org" ]]; then
+    if [[ "${Remote}" == "git@bitbucket.org" ]]; then
         curl \
             --user ${USERNAME} \
             https://api.bitbucket.org/1.0/repositories/ \
@@ -180,7 +190,7 @@ if $is_new; then
         fi
     fi
 
-    if [[ "${REMOTE}" == "git@github.com" ]]; then
+    if [[ "${Remote}" == "git@github.com" ]]; then
         if [[ "${PRIVATE}" == "true" ]]; then
             PRIV_FLAG=-p
         fi

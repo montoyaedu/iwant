@@ -3,6 +3,7 @@ module.exports = {
     "RootNamespace" : "",
     "TargetFrameworkVersion" : "",
     "OutputFile" : "",
+    "OutputType" : "",
     "ArtifactId" : "",
     "ArtifactExtension" : "",
     "Remote" : "",

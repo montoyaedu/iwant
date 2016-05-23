@@ -1,10 +1,15 @@
 #!/bin/sh
 . iwant-resolve > /dev/null
 f=$1
-echo "iwant-velocity $f"
-TMP=`mktemp`
-cp $f $TMP
-rm -f $f
-velocity $TMP $IWANT_HOME/.context.js > $f
-rm -f $TMP
+t=`file --mime $1`
+echo $1 $t
+if [[ $t != *"charset=binary"* ]]
+then
+    echo "iwant-velocity $f"
+    TMP=`mktemp`
+    cp $f $TMP
+    rm -f $f
+    velocity $TMP $IWANT_HOME/.context.js > $f
+    rm -f $TMP
+fi
 exit 0
